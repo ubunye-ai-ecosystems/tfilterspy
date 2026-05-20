@@ -1,184 +1,259 @@
 import numpy as np
-import dask.array as da
-from tfilterspy.utils.optimisation_utils import ParameterEstimator
+import dask
+from scipy import linalg
 
-class DaskParticleFilter(ParameterEstimator):
+from tfilterspy.base_estimator import BaseEstimator
+
+
+class ParticleFilter(BaseEstimator):
+    r"""
+    Sequential Importance Resampling (SIR) Particle Filter.
+
+    Represents the posterior distribution using a set of weighted particles.
+    Handles nonlinear, non-Gaussian state-space models where Kalman-based
+    approaches fail.
+
+    Supports both callable and matrix-based transition/observation models.
+    When matrices are provided, particle propagation is vectorized for speed.
+
+    State-space model::
+
+        x_{k+1} = f(x_k) + w_k,    w_k ~ N(0, Q)
+        z_k     = h(x_k) + v_k,     v_k ~ N(0, R)
+
+    Parameters
+    ----------
+    f : callable or ndarray
+        State transition. If callable: ``f(x) -> x_next``.
+        If ndarray (n_state, n_state): linear transition matrix.
+    h : callable or ndarray
+        Observation model. If callable: ``h(x) -> z``.
+        If ndarray (n_obs, n_state): linear observation matrix.
+    Q : ndarray, shape (n_state, n_state)
+        Process noise covariance.
+    R : ndarray, shape (n_obs, n_obs)
+        Observation noise covariance.
+    x0 : ndarray, shape (n_state,)
+        Initial state estimate.
+    n_particles : int, optional
+        Number of particles (default 1000).
+    resample_threshold : float, optional
+        ESS ratio below which resampling triggers (default 0.5).
+    use_dask : bool, optional
+        Parallelize particle propagation with Dask (default False).
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from tfilterspy import ParticleFilter
+    >>> F = np.eye(2)
+    >>> H = np.eye(2)
+    >>> pf = ParticleFilter(F, H, Q=np.eye(2)*0.1, R=np.eye(2)*0.5,
+    ...     x0=np.zeros(2), n_particles=500)
+    >>> pf.fit(np.random.randn(100, 2))
+    >>> states = pf.predict()
     """
-    A multivariate, scalable particle filter using Dask. Inherits parameter estimation 
-    methods from ParameterEstimator.
-    """
-    def __init__(self, state_transition, observation_model, process_noise_cov, 
-                 observation_noise_cov, initial_state, num_particles=1000, use_dask=True, 
-                 estimation_strategy="residual_analysis"):
-        """
-        Initialize the DaskParticleFilter. In addition to particle filter parameters, 
-        we specify whether to use Dask for scalability and which parameter estimation 
-        strategy to use.
-        """
-        # Initialize the ParameterEstimator
-        super().__init__(estimation_strategy=estimation_strategy)
+
+    def __init__(self, f, h, Q, R, x0, n_particles=1000,
+                 resample_threshold=0.5, use_dask=False):
+        super().__init__()
+        self.Q = np.asarray(Q, dtype=np.float64)
+        self.R = np.asarray(R, dtype=np.float64)
+        self.x0 = np.asarray(x0, dtype=np.float64)
+        self.n_particles = n_particles
+        self.resample_threshold = resample_threshold
         self.use_dask = use_dask
-        self.state_dim = initial_state.shape[0]
-        self.num_particles = num_particles
+        self.n_state = len(self.x0)
+        self.n_obs = self.R.shape[0]
+        self.is_fitted_ = False
 
-        # Convert inputs to Dask arrays if scalability is desired
-        if self.use_dask:
-            self.state_transition = da.from_array(state_transition, chunks=state_transition.shape)
-            self.observation_model = da.from_array(observation_model, chunks=observation_model.shape)
-            self.process_noise_cov = da.from_array(process_noise_cov, chunks=process_noise_cov.shape)
-            self.observation_noise_cov = da.from_array(observation_noise_cov, chunks=observation_noise_cov.shape)
-            self.initial_state = da.from_array(initial_state, chunks=initial_state.shape)
+        # Support both callable and matrix-based models
+        if isinstance(f, np.ndarray):
+            self._F_matrix = np.asarray(f, dtype=np.float64)
+            self.f = lambda x: self._F_matrix @ x
+            self._f_vectorized = True
         else:
-            self.state_transition = state_transition
-            self.observation_model = observation_model
-            self.process_noise_cov = process_noise_cov
-            self.observation_noise_cov = observation_noise_cov
-            self.initial_state = initial_state
+            self._F_matrix = None
+            self.f = f
+            self._f_vectorized = False
 
-        # Step 1: Initialization - all particles start at the same known state
-        particles_np = np.repeat(initial_state.reshape(1, self.state_dim), num_particles, axis=0)
-        if self.use_dask:
-            self.particles = da.from_array(particles_np, chunks=(num_particles // 10, self.state_dim))
+        if isinstance(h, np.ndarray):
+            self._H_matrix = np.asarray(h, dtype=np.float64)
+            self.h = lambda x: self._H_matrix @ x
+            self._h_vectorized = True
         else:
-            self.particles = particles_np
-        
-        # Uniform weights
-        weights_np = np.ones(num_particles) / num_particles
-        if self.use_dask:
-            self.weights = da.from_array(weights_np, chunks=(num_particles // 10,))
+            self._H_matrix = None
+            self.h = h
+            self._h_vectorized = False
+
+    def _init_particles(self):
+        self._particles = np.tile(self.x0, (self.n_particles, 1))
+        self._weights = np.ones(self.n_particles) / self.n_particles
+
+    def _propagate(self):
+        """Propagate particles through state transition + process noise."""
+        L_Q = linalg.cholesky(self.Q + 1e-10 * np.eye(self.n_state), lower=True)
+        noise = (L_Q @ np.random.randn(self.n_state, self.n_particles)).T
+
+        if self._f_vectorized:
+            self._particles = self._particles @ self._F_matrix.T + noise
+        elif self.use_dask:
+            delayed = [dask.delayed(self.f)(self._particles[j])
+                       for j in range(self.n_particles)]
+            self._particles = np.array(dask.compute(*delayed)) + noise
         else:
-            self.weights = weights_np
+            self._particles = np.array(
+                [self.f(self._particles[j]) for j in range(self.n_particles)]
+            ) + noise
 
-        # Current state estimate (initially set to the initial state)
-        self.state = self.initial_state.compute() if self.use_dask else self.initial_state
+    def _compute_predicted_obs(self):
+        """Compute predicted observations for all particles."""
+        if self._h_vectorized:
+            return self._particles @ self._H_matrix.T
+        elif self.use_dask:
+            delayed = [dask.delayed(self.h)(self._particles[j])
+                       for j in range(self.n_particles)]
+            return np.array(dask.compute(*delayed))
+        else:
+            return np.array(
+                [self.h(self._particles[j]) for j in range(self.n_particles)]
+            )
 
-        # For parameter estimation methods, we store a copy of Q and R (could be updated later)
-        # For demonstration, we initialize them as given.
-        self.Q = self.process_noise_cov
-        self.R = self.observation_noise_cov
+    def _update_weights(self, z, predicted_obs):
+        """Update particle weights based on measurement likelihood."""
+        R_inv = linalg.inv(self.R)
+        _, logdet_R = np.linalg.slogdet(self.R)
+        log_norm = -0.5 * (self.n_obs * np.log(2 * np.pi) + logdet_R)
+
+        diff = predicted_obs - z
+        # Vectorized log-likelihood for all particles
+        log_likelihoods = log_norm - 0.5 * np.sum(diff @ R_inv * diff, axis=1)
+
+        # Numerical stability: subtract max before exp
+        log_likelihoods -= log_likelihoods.max()
+        likelihoods = np.exp(log_likelihoods)
+
+        self._weights *= likelihoods
+        self._weights += 1e-300
+        self._weights /= self._weights.sum()
+
+    def _systematic_resample(self):
+        """Systematic resampling — lower variance than multinomial."""
+        N = self.n_particles
+        positions = (np.arange(N) + np.random.uniform()) / N
+        cumsum = np.cumsum(self._weights)
+        cumsum[-1] = 1.0  # ensure no floating-point overshoot
+        indices = np.searchsorted(cumsum, positions)
+        self._particles = self._particles[indices].copy()
+        self._weights = np.ones(N) / N
+
+    def _effective_sample_size(self):
+        return 1.0 / np.sum(self._weights ** 2)
+
+    def fit(self, X):
+        """
+        Run the particle filter on measurements.
+
+        Parameters
+        ----------
+        X : ndarray, shape (n_timesteps, n_obs)
+
+        Returns
+        -------
+        self
+        """
+        if hasattr(X, "compute"):
+            X = X.compute()
+        X = np.asarray(X, dtype=np.float64)
+        if X.ndim == 1:
+            X = X.reshape(-1, 1)
+
+        self.measurements_ = X
+        self._init_particles()
+
+        n = len(X)
+        ns = self.n_state
+
+        self.filtered_states_ = np.empty((n, ns))
+        self.filtered_covs_ = np.empty((n, ns, ns))
+        self.effective_sample_sizes_ = np.empty(n)
+
+        for i in range(n):
+            self._propagate()
+
+            predicted_obs = self._compute_predicted_obs()
+            self._update_weights(X[i], predicted_obs)
+
+            # State estimate
+            self.filtered_states_[i] = self._weights @ self._particles
+            diff = self._particles - self.filtered_states_[i]
+            self.filtered_covs_[i] = (diff * self._weights[:, None]).T @ diff
+
+            # ESS-based resampling
+            ess = self._effective_sample_size()
+            self.effective_sample_sizes_[i] = ess
+            if ess < self.resample_threshold * self.n_particles:
+                self._systematic_resample()
+
+        self.is_fitted_ = True
+        return self
 
     def predict(self):
+        """Return filtered state estimates."""
+        self._check_fitted()
+        return self.filtered_states_
+
+    def filter_step(self, z):
         """
-        Step 2: Prediction. Propagate each particle using the state transition model plus 
-        Gaussian process noise.
+        Single-step online particle filter update.
+
+        Parameters
+        ----------
+        z : ndarray, shape (n_obs,)
+            Single measurement.
+
+        Returns
+        -------
+        state : ndarray, shape (n_state,)
+            Weighted mean state estimate.
         """
-        noise_np = np.random.multivariate_normal(
-            np.zeros(self.state_dim),
-            self.process_noise_cov.compute() if self.use_dask else self.process_noise_cov,
-            self.num_particles
+        if not hasattr(self, "_online_init"):
+            self._init_particles()
+            self._online_init = True
+
+        z = np.asarray(z, dtype=np.float64)
+
+        self._propagate()
+        predicted_obs = self._compute_predicted_obs()
+        self._update_weights(z, predicted_obs)
+
+        state = self._weights @ self._particles
+
+        ess = self._effective_sample_size()
+        if ess < self.resample_threshold * self.n_particles:
+            self._systematic_resample()
+
+        return state
+
+
+class DaskParticleFilter(ParticleFilter):
+    """
+    Backward-compatible Particle Filter wrapper.
+
+    Accepts the original DaskParticleFilter constructor signature
+    and delegates to the new ParticleFilter implementation.
+    """
+
+    def __init__(self, state_transition, observation_model, process_noise_cov,
+                 observation_noise_cov, initial_state, num_particles=1000,
+                 use_dask=True, estimation_strategy="residual_analysis"):
+        super().__init__(
+            f=np.asarray(state_transition, dtype=np.float64),
+            h=np.asarray(observation_model, dtype=np.float64),
+            Q=process_noise_cov,
+            R=observation_noise_cov,
+            x0=initial_state,
+            n_particles=num_particles,
+            use_dask=use_dask,
         )
-        if self.use_dask:
-            noise = da.from_array(noise_np, chunks=self.particles.chunksize)
-        else:
-            noise = noise_np
-        
-        if self.use_dask:
-            self.particles = da.dot(self.particles, self.state_transition.T) + noise
-            self.particles = self.particles.persist()
-        else:
-            self.particles = (self.state_transition @ self.particles.T).T + noise
-
-    def update(self, measurement):
-        """
-        Step 3: Measurement Update. Update particle weights based on the likelihood 
-        of the observed measurement.
-        
-        Parameters:
-            measurement (np.ndarray): The observed measurement.
-        """
-        if self.use_dask and not isinstance(measurement, da.Array):
-            measurement = da.from_array(measurement, chunks=measurement.shape)
-        
-        if self.use_dask:
-            predicted_measurements = da.dot(self.particles, self.observation_model.T)
-        else:
-            predicted_measurements = (self.observation_model @ self.particles.T).T
-        
-        diff = predicted_measurements - measurement
-        
-        R_val = self.observation_noise_cov[0, 0].compute() if self.use_dask else self.observation_noise_cov[0, 0]
-        if self.use_dask:
-            likelihood = da.exp(-0.5 * da.sum(diff**2, axis=1) / R_val)
-        else:
-            likelihood = np.exp(-0.5 * np.sum(diff**2, axis=1) / R_val)
-        
-        self.weights = self.weights * likelihood
-        self.weights = self.weights + 1e-300  # Avoid zero weights
-        self.weights = self.weights / self.weights.sum()
-        
-        self.resample()
-        self.estimate_state()
-
-    def resample(self):
-        """
-        Step 4: Resampling. Multinomial resampling to refocus on high-probability particles.
-        """
-        weights_np = self.weights.compute() if self.use_dask else self.weights
-        indices = np.random.choice(np.arange(self.num_particles), size=self.num_particles, p=weights_np)
-        if self.use_dask:
-            particles_np = self.particles.compute()
-            particles_resampled = particles_np[indices]
-            self.particles = da.from_array(particles_resampled, chunks=self.particles.chunksize)
-            self.weights = da.from_array(np.ones(self.num_particles) / self.num_particles, chunks=self.weights.chunksize)
-        else:
-            self.particles = self.particles[indices]
-            self.weights = np.ones(self.num_particles) / self.num_particles
-
-    def estimate_state(self):
-        """
-        Step 5: State Estimation. Compute the state estimate as the weighted average of particles.
-        """
-        if self.use_dask:
-            self.state = da.average(self.particles, weights=self.weights, axis=0).compute()
-        else:
-            self.state = np.average(self.particles, weights=self.weights, axis=0)
-
-    def step(self, measurement):
-        """
-        Step 6: Iteration. Run one full filter cycle: predict, update, resample, and state estimation.
-        
-        Parameters:
-            measurement (np.ndarray): The observed measurement.
-        
-        Returns:
-            np.ndarray: The estimated state.
-        """
-        self.predict()
-        self.update(measurement)
-        return self.state
-
-    def run_filter(self, measurements):
-        """
-        This method is required for parameter estimation routines. It should run the filter 
-        over a sequence of measurements and return both the state estimates and the residuals.
-        
-        Parameters:
-            measurements (da.Array): Array of measurements over time, shape (n_timesteps, n_obs).
-        
-        Returns:
-            state_estimates (da.Array): Filtered state estimates, shape (n_timesteps, n_state).
-            residuals (da.Array): Residuals (measurement - predicted_measurement), same shape as measurements.
-        
-        For this simple example, we run the filter sequentially over the measurements.
-        """
-        n_timesteps = measurements.shape[0]
-        state_estimates = []
-        residuals = []
-        for i in range(n_timesteps):
-            meas = measurements[i]
-            # Predict and update for current measurement
-            self.step(meas)
-            state_estimates.append(self.state)
-            # Compute predicted measurement from the current state estimate
-            if self.use_dask:
-                pred_meas = da.dot(da.from_array(self.state, chunks=self.state.shape), self.observation_model.T).compute()
-            else:
-                pred_meas = self.observation_model @ self.state
-            # Residual is difference between actual measurement and predicted measurement
-            res = (meas.compute() if self.use_dask else meas) - pred_meas
-            residuals.append(res)
-        # Convert lists to dask arrays (or numpy arrays)
-        state_estimates = da.from_array(np.vstack(state_estimates)) if self.use_dask else np.vstack(state_estimates)
-        residuals = da.from_array(np.vstack(residuals)) if self.use_dask else np.vstack(residuals)
-        return state_estimates, residuals
-
+        self.estimation_strategy = estimation_strategy

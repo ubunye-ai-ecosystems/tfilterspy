@@ -5,7 +5,7 @@
 
 import os
 import sys
-sys.path.insert(0, os.path.abspath('../'))
+sys.path.insert(0, os.path.abspath('../../'))
 
 # -- Project information -----------------------------------------------------
 project = 'tfilterspy'
@@ -18,7 +18,7 @@ release = '1.0.0'
 extensions = [
     'sphinx.ext.autodoc',           # Automatically document modules
     'sphinx.ext.napoleon',          # Support for Google/NumPy-style docstrings
-    'sphinx.ext.autodoc.typehints', # Add type hints to the documentation
+    'sphinx.ext.intersphinx',       # Cross-reference external projects
     'sphinx.ext.viewcode',          # Link source code in the docs
      'nbsphinx',                    # Add this line to use nbsphinx
      'sphinx.ext.githubpages',      # For GitHub Pages integration

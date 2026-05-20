@@ -1,265 +1,317 @@
 import numpy as np
 import dask.array as da
-import dask
+from scipy import linalg
 
-from typing import Union
-
-from tfilterspy.utils.optimisation_utils import ParameterEstimator
+from tfilterspy.base_estimator import BaseEstimator
 
 
-class DaskKalmanFilter(ParameterEstimator):
+class KalmanFilter(BaseEstimator):
     r"""
-    Dask-based implementation of a Kalman Filter that supports distributed computing for
-    large datasets. This class extends the ParameterEstimator to estimate the process
-    noise covariance (Q) and observation noise covariance (R) while applying Kalman Filtering
-    on incoming measurements.
+    Kalman Filter for linear Gaussian state-space models.
 
-    The Kalman Filter is a recursive algorithm that estimates the state of a linear dynamic
-    system from noisy measurements. This implementation leverages Dask to scale computations
-    across distributed systems.
+    Efficient numpy core with optional Dask support for batch processing.
+    Implements the full sklearn-compatible API: fit / predict / score.
+
+    State-space model::
+
+        x_{k+1} = F @ x_k + w_k,    w_k ~ N(0, Q)
+        z_k     = H @ x_k + v_k,     v_k ~ N(0, R)
 
     Parameters
     ----------
-    state_transition_matrix : np.ndarray or da.Array, shape (n_features, n_features)
-        The state transition matrix (F) representing how the system evolves between states.
+    F : ndarray, shape (n_state, n_state)
+        State transition matrix.
+    H : ndarray, shape (n_obs, n_state)
+        Observation matrix mapping state to measurement space.
+    Q : ndarray, shape (n_state, n_state)
+        Process noise covariance.
+    R : ndarray, shape (n_obs, n_obs)
+        Observation noise covariance.
+    x0 : ndarray, shape (n_state,)
+        Initial state estimate.
+    P0 : ndarray, shape (n_state, n_state)
+        Initial state covariance.
+    store_covariances : bool, optional
+        If True (default), stores full covariance history. Set to False
+        to save memory on very long time series (disables smooth()).
 
-    observation_matrix : np.ndarray or da.Array, shape (n_observations, n_features)
-        The observation matrix (H) that maps the true state space into the observed space.
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from tfilterspy import KalmanFilter
+    >>> F = np.eye(2); H = np.eye(2)
+    >>> Q = np.eye(2) * 0.1; R = np.eye(2) * 0.5
+    >>> kf = KalmanFilter(F, H, Q, R, np.zeros(2), np.eye(2))
+    >>> kf.fit(np.random.randn(100, 2))
+    >>> states = kf.predict()
+    >>> smoothed, _ = kf.smooth()
+    """
 
-    process_noise_cov : np.ndarray or da.Array, shape (n_features, n_features)
-        Covariance matrix (Q) representing the process noise.
+    def __init__(self, F, H, Q, R, x0, P0, store_covariances=True):
+        super().__init__()
+        F, H, Q, R, x0, P0 = (np.asarray(a, dtype=np.float64) for a in [F, H, Q, R, x0, P0])
 
-    observation_noise_cov : np.ndarray or da.Array, shape (n_observations, n_observations)
-        Covariance matrix (R) representing the observation noise.
+        n_state = F.shape[0]
+        if F.shape != (n_state, n_state):
+            raise ValueError("State transition matrix (F) must be square.")
+        if H.shape[1] != n_state:
+            raise ValueError("Observation matrix (H) columns must match state dimension.")
+        if Q.shape != (n_state, n_state):
+            raise ValueError("Process noise covariance (Q) dimensions must match F.")
+        if R.shape[0] != R.shape[1] or R.shape[0] != H.shape[0]:
+            raise ValueError("Observation noise covariance (R) must be square with dimension matching H rows.")
+        if x0.shape != (n_state,):
+            raise ValueError("Initial state (x0) must have length n_state.")
+        if P0.shape != (n_state, n_state):
+            raise ValueError("Initial covariance (P0) dimensions must match F.")
 
-    initial_state : np.ndarray or da.Array, shape (n_features,)
-        Initial state vector (x0) of the system.
+        self.F = F
+        self.H = H
+        self.Q = Q
+        self.R = R
+        self.x0 = x0
+        self.P0 = P0
+        self.n_state = n_state
+        self.n_obs = H.shape[0]
+        self.store_covariances = store_covariances
+        self.is_fitted_ = False
 
-    initial_covariance : np.ndarray or da.Array, shape (n_features, n_features)
-        Initial state covariance matrix (P0), representing initial uncertainty in the state.
+    def fit(self, X):
+        """
+        Run the Kalman filter forward pass on measurements.
 
-    estimation_strategy : str, optional, default="residual_analysis"
-        The strategy for estimating Q and R. Can be one of:
-        - "residual_analysis"
-        - "mle"
-        - "cross_validation"
-        - "adaptive_filtering"
+        Parameters
+        ----------
+        X : ndarray or dask.array, shape (n_timesteps, n_obs)
+            Measurement sequence. 1-D arrays are reshaped to (n, 1).
 
-    Raises
-    ------
-    ValueError
-        If matrix dimensions do not conform to Kalman Filter requirements.
+        Returns
+        -------
+        self
+        """
+        if isinstance(X, da.Array):
+            X = X.compute()
+        X = np.asarray(X, dtype=np.float64)
+        if X.ndim == 1:
+            X = X.reshape(-1, 1)
+        if X.shape[1] != self.n_obs:
+            raise ValueError(
+                f"Expected {self.n_obs} observation dimensions, got {X.shape[1]}."
+            )
 
-    References
-    ----------
-    Welch, G., & Bishop, G. (1995). An Introduction to the Kalman Filter.
+        self.measurements_ = X
+        self._forward_pass()
+        return self
+
+    def _forward_pass(self):
+        n = len(self.measurements_)
+        ns = self.n_state
+        no = self.n_obs
+        F, H, Q, R = self.F, self.H, self.Q, self.R
+        I_ns = np.eye(ns)
+
+        self.filtered_states_ = np.empty((n, ns))
+        self.predicted_states_ = np.empty((n, ns))
+        self.innovations_ = np.empty((n, no))
+        self.log_likelihood_ = 0.0
+
+        if self.store_covariances:
+            self.filtered_covs_ = np.empty((n, ns, ns))
+            self.predicted_covs_ = np.empty((n, ns, ns))
+            self.innovation_covs_ = np.empty((n, no, no))
+
+        x = self.x0.copy()
+        P = self.P0.copy()
+
+        for i in range(n):
+            # --- Predict ---
+            x_pred = F @ x
+            P_pred = F @ P @ F.T + Q
+
+            self.predicted_states_[i] = x_pred
+            if self.store_covariances:
+                self.predicted_covs_[i] = P_pred
+
+            # --- Innovation ---
+            z = self.measurements_[i]
+            y = z - H @ x_pred
+            S = H @ P_pred @ H.T + R
+
+            self.innovations_[i] = y
+            if self.store_covariances:
+                self.innovation_covs_[i] = S
+
+            # --- Update (Joseph form for numerical stability) ---
+            S_inv = linalg.solve(S, np.eye(no), assume_a="pos")
+            K = P_pred @ H.T @ S_inv
+
+            x = x_pred + K @ y
+            IKH = I_ns - K @ H
+            P = IKH @ P_pred @ IKH.T + K @ R @ K.T
+
+            self.filtered_states_[i] = x
+            if self.store_covariances:
+                self.filtered_covs_[i] = P
+
+            # --- Log-likelihood ---
+            sign, logdet = np.linalg.slogdet(S)
+            if sign > 0:
+                self.log_likelihood_ += -0.5 * (
+                    logdet + y @ S_inv @ y + no * np.log(2 * np.pi)
+                )
+
+        self.is_fitted_ = True
+
+    def predict(self):
+        """
+        Return filtered state estimates.
+
+        Returns
+        -------
+        filtered_states : ndarray, shape (n_timesteps, n_state)
+        """
+        self._check_fitted()
+        return self.filtered_states_
+
+    def smooth(self):
+        """
+        Rauch-Tung-Striebel (RTS) backward smoothing pass.
+
+        Requires ``store_covariances=True`` (the default).
+
+        Returns
+        -------
+        smoothed_states : ndarray, shape (n_timesteps, n_state)
+        smoothed_covs : ndarray, shape (n_timesteps, n_state, n_state)
+        """
+        self._check_fitted()
+        if not self.store_covariances:
+            raise RuntimeError("smooth() requires store_covariances=True.")
+
+        n = len(self.filtered_states_)
+        ns = self.n_state
+
+        smoothed_states = np.empty((n, ns))
+        smoothed_covs = np.empty((n, ns, ns))
+        smoothed_states[-1] = self.filtered_states_[-1]
+        smoothed_covs[-1] = self.filtered_covs_[-1]
+
+        for i in range(n - 2, -1, -1):
+            P_pred_inv = linalg.inv(self.predicted_covs_[i + 1])
+            C = self.filtered_covs_[i] @ self.F.T @ P_pred_inv
+            smoothed_states[i] = (
+                self.filtered_states_[i]
+                + C @ (smoothed_states[i + 1] - self.predicted_states_[i + 1])
+            )
+            smoothed_covs[i] = (
+                self.filtered_covs_[i]
+                + C @ (smoothed_covs[i + 1] - self.predicted_covs_[i + 1]) @ C.T
+            )
+
+        return smoothed_states, smoothed_covs
+
+    def filter_step(self, z):
+        """
+        Single-step online filtering.
+
+        Parameters
+        ----------
+        z : ndarray, shape (n_obs,)
+            Single measurement vector.
+
+        Returns
+        -------
+        x : ndarray, shape (n_state,)
+            Updated state estimate.
+        P : ndarray, shape (n_state, n_state)
+            Updated covariance.
+        """
+        if not hasattr(self, "_online_x"):
+            self._online_x = self.x0.copy()
+            self._online_P = self.P0.copy()
+
+        z = np.asarray(z, dtype=np.float64)
+        F, H, Q, R = self.F, self.H, self.Q, self.R
+
+        x_pred = F @ self._online_x
+        P_pred = F @ self._online_P @ F.T + Q
+
+        y = z - H @ x_pred
+        S = H @ P_pred @ H.T + R
+        K = P_pred @ H.T @ linalg.inv(S)
+
+        self._online_x = x_pred + K @ y
+        IKH = np.eye(self.n_state) - K @ H
+        self._online_P = IKH @ P_pred @ IKH.T + K @ R @ K.T
+
+        return self._online_x.copy(), self._online_P.copy()
+
+    def forecast(self, n_steps):
+        """
+        Forecast future states beyond the observed data.
+
+        Parameters
+        ----------
+        n_steps : int
+            Number of steps to forecast.
+
+        Returns
+        -------
+        forecasted_states : ndarray, shape (n_steps, n_state)
+        forecasted_covs : ndarray, shape (n_steps, n_state, n_state)
+        """
+        self._check_fitted()
+        x = self.filtered_states_[-1].copy()
+        P = self.filtered_covs_[-1].copy() if self.store_covariances else self.P0.copy()
+
+        forecasted_states = np.empty((n_steps, self.n_state))
+        forecasted_covs = np.empty((n_steps, self.n_state, self.n_state))
+
+        for i in range(n_steps):
+            x = self.F @ x
+            P = self.F @ P @ self.F.T + self.Q
+            forecasted_states[i] = x
+            forecasted_covs[i] = P
+
+        return forecasted_states, forecasted_covs
+
+    def run_filter(self, measurements):
+        """Legacy method. Use fit() + predict() instead."""
+        self.fit(measurements)
+        return self.filtered_states_, self.innovations_
+
+
+class DaskKalmanFilter(KalmanFilter):
+    """
+    Backward-compatible Kalman Filter wrapper.
+
+    Accepts the same constructor signature as the original DaskKalmanFilter
+    and delegates to the new efficient KalmanFilter implementation.
     """
 
     def __init__(
         self,
-        state_transition_matrix: Union[np.ndarray, da.Array],
-        observation_matrix: Union[np.ndarray, da.Array],
-        process_noise_cov: Union[np.ndarray, da.Array],
-        observation_noise_cov: Union[np.ndarray, da.Array],
-        initial_state: Union[np.ndarray, da.Array],
-        initial_covariance: Union[np.ndarray, da.Array],
-        chunk_size: int = 64,
-        estimation_strategy: str = "residual_analysis",
+        state_transition_matrix,
+        observation_matrix,
+        process_noise_cov,
+        observation_noise_cov,
+        initial_state,
+        initial_covariance,
+        chunk_size=64,
+        estimation_strategy="residual_analysis",
     ):
-
-        # Initialize the parent class (ParameterEstimator)
-        super().__init__(estimation_strategy)
-
-        # Input validation and conversion to Dask arrays
-        if state_transition_matrix.shape[0] != state_transition_matrix.shape[1]:
-            raise ValueError("State transition matrix (F) must be square.")
-        if observation_matrix.shape[1] != state_transition_matrix.shape[0]:
-            raise ValueError(
-                "Observation matrix (H) dimensions must be compatible with F."
-            )
-        if process_noise_cov.shape != state_transition_matrix.shape:
-            raise ValueError("Process noise covariance (Q) dimensions must match F.")
-        if observation_noise_cov.shape[0] != observation_noise_cov.shape[1]:
-            raise ValueError("Observation noise covariance (R) must be square.")
-        if initial_state.shape[0] != state_transition_matrix.shape[0]:
-            raise ValueError("Initial state (x0) dimensions must match F.")
-        if initial_covariance.shape != state_transition_matrix.shape:
-            raise ValueError("Initial covariance (P0) dimensions must match F.")
-
-        # Convert to Dask arrays if necessary
-        self.F = (
-            self.to_dask_array(state_transition_matrix, chunk_size)
-            if isinstance(state_transition_matrix, np.ndarray)
-            else state_transition_matrix
+        super().__init__(
+            F=state_transition_matrix,
+            H=observation_matrix,
+            Q=process_noise_cov,
+            R=observation_noise_cov,
+            x0=initial_state,
+            P0=initial_covariance,
         )
-        self.H = (
-            self.to_dask_array(observation_matrix, chunk_size)
-            if isinstance(observation_matrix, np.ndarray)
-            else observation_matrix
-        )
-        self.Q = (
-            self.to_dask_array(process_noise_cov, chunk_size)
-            if isinstance(process_noise_cov, np.ndarray)
-            else process_noise_cov
-        )
-        self.R = (
-            self.to_dask_array(observation_noise_cov, chunk_size)
-            if isinstance(observation_noise_cov, np.ndarray)
-            else observation_noise_cov
-        )
-        self.x = (
-            self.to_dask_array(initial_state, chunk_size)
-            if isinstance(initial_state, np.ndarray)
-            else initial_state
-        )
-        self.P = (
-            self.to_dask_array(initial_covariance, chunk_size)
-            if isinstance(initial_covariance, np.ndarray)
-            else initial_covariance
-        )
+        self.chunk_size = chunk_size
+        self.estimation_strategy = estimation_strategy
 
-    def fit(self, X: Union[np.ndarray, da.Array]) -> "DaskKalmanFilter":
-        r"""
-        Prepare the Kalman Filter by storing the measurements as a Dask array.
-
-        Parameters
-        ----------
-        X : np.ndarray or da.Array, shape (n_timesteps, n_observations)
-            Array of measurements over time.
-
-        Returns
-        -------
-        self : DaskKalmanFilter
-            The fitted Kalman Filter instance.
-
-        Raises
-        ------
-        ValueError
-            If the input measurements are not 2-dimensional.
-        """
-        if X.ndim != 2:
-            raise ValueError(
-                f"Measurements must be a 2D array. Received array with shape {X.shape}."
-            )
-
-        if isinstance(X, da.Array):
-            self.X = X
-        else:
-            self.X = da.from_array(X, chunks=(X.shape[0] // 4, X.shape[1]))
-        return self
-
-    def predict(self) -> da.Array:
-        r"""
-        Perform state estimation over all time steps using the Kalman Filter algorithm.
-
-        This method constructs a Dask computation graph to process the entire measurement
-        sequence in parallel using delayed execution.
-
-        Returns
-        -------
-        state_estimates : da.Array, shape (n_timesteps, n_features)
-            The estimated state at each time step.
-
-        Notes
-        -----
-        - The Kalman Filter operates in two steps: prediction and update.
-        - Predictions are made using the state transition matrix F.
-        - Updates are performed using the observation matrix H and Kalman Gain K.
-        - This method leverages Dask to parallelize the filter process over multiple time steps.
-        """
-
-        @dask.delayed
-        def kalman_step(i, x, P, F, H, Q, R, measurements):
-            x = da.dot(F, x)
-            P = da.dot(da.dot(F, P), F.T) + Q
-
-            y = measurements[i] - da.dot(H, x)
-            S = da.dot(da.dot(H, P), H.T) + R
-            K = da.dot(da.dot(P, H.T), da.linalg.inv(S))
-            x = x + da.dot(K, y)
-            I = da.eye(P.shape[0], chunks=P.chunks[0][0])
-            P = da.dot(I - da.dot(K, H), P)
-            return (x, P)
-
-        n_timesteps = self.X.shape[0]
-        state_estimates = []
-        x, P = self.x, self.P
-
-        for i in range(n_timesteps):
-            delayed_result = kalman_step(
-                i, x, P, self.F, self.H, self.Q, self.R, self.X
-            )
-            x, P = dask.compute(delayed_result)[0]
-            state_estimates.append(x)
-
-        state_estimates = da.stack(state_estimates, axis=0)
-        return state_estimates
-
-    def run_filter(self, measurements: da.Array) -> tuple:
-        r"""
-        Apply the Kalman Filter on measurements to compute state estimates and residuals.
-
-        Parameters
-        ----------
-        measurements : da.Array, shape (n_timesteps, n_observations)
-            Observed measurements over time.
-
-        Returns
-        -------
-        state_estimates : da.Array, shape (n_timesteps, n_features)
-            Estimated states over the measurement timeline.
-        residuals : da.Array, shape (n_timesteps, n_observations)
-            Difference between observed and predicted measurements (innovations).
-
-        Notes
-        -----
-        - This function is used by parameter estimation strategies to compute residuals.
-        - Residuals are used for adaptive filtering and cross-validation strategies.
-        """
-        n_timesteps = measurements.shape[0]
-        state_estimates = []
-        residuals = []
-
-        x, P = self.x, self.P
-
-        for i in range(n_timesteps):
-            x = da.dot(self.F, x)
-            P = da.dot(da.dot(self.F, P), self.F.T) + self.Q
-
-            y = measurements[i] - da.dot(self.H, x)
-            S = da.dot(da.dot(self.H, P), self.H.T) + self.R
-            K = da.dot(da.dot(P, self.H.T), da.linalg.inv(S))
-            x = x + da.dot(K, y)
-            I = da.eye(P.shape[0], chunks=P.chunks[0][0])
-            P = da.dot(I - da.dot(K, self.H), P)
-
-            state_estimates.append(x)
-            residuals.append(y)
-
-        state_estimates = da.stack(state_estimates, axis=0)
-        residuals = da.stack(residuals, axis=0)
-        return state_estimates, residuals
-
-    def estimate_parameters(self, measurements: da.Array) -> tuple:
-        """
-        Estimate process (Q) and observation (R) noise covariances using the specified strategy.
-
-        Parameters
-        ----------
-        measurements : da.Array, shape (n_timesteps, n_observations)
-            Observed measurements over time.
-
-        Returns
-        -------
-        Q : da.Array, shape (n_features, n_features)
-            Estimated process noise covariance matrix.
-        R : da.Array, shape (n_features, n_features)
-            Estimated observation noise covariance matrix.
-
-        Notes
-        -----
-        - This method calls the appropriate estimation strategy from the parent class.
-        - The available strategies include residual analysis, MLE, cross-validation,
-          and adaptive filtering.
-        """
-        return super().estimate_parameters(measurements)
+    def predict(self):
+        """Return filtered states as a Dask array for backward compatibility."""
+        self._check_fitted()
+        return da.from_array(self.filtered_states_, chunks="auto")

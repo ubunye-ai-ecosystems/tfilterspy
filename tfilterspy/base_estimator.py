@@ -1,54 +1,31 @@
+import numpy as np
 import dask.array as da
 
 
 class BaseEstimator:
     """
-    Base class for all estimators in the TFilterPy package.
-    Provides common functionality such as parameter handling and validation.
+    Base class for all estimators in TFiltersPy.
+
+    Provides sklearn-compatible parameter handling, Dask array conversion,
+    and shared methods for all filter implementations.
     """
 
     def __init__(self, name=None):
-        """
-        Initialize the BaseEstimator.
-
-        Args:
-            name (str): Optional name for the estimator.
-        """
         self.name = name or self.__class__.__name__
 
     @staticmethod
     def to_dask_array(numpy_array, chunk_size=None):
-        """
-        Convert a NumPy array to a Dask array with specified chunking.
-        If chunk_size is None, use Dask's automatic chunking.
-        
-        Parameters:
-            numpy_array (np.ndarray): Input array.
-            chunk_size (int or tuple, optional): Desired chunk size.
-            
-        Returns:
-            da.Array: Dask array version of numpy_array.
-        """
+        """Convert a NumPy array to a Dask array with specified chunking."""
         if chunk_size is None:
             return da.from_array(numpy_array, chunks="auto")
+        if isinstance(chunk_size, int):
+            chunks = tuple(chunk_size for _ in range(numpy_array.ndim))
         else:
-            # If a single integer is provided, use it for all dimensions.
-            if isinstance(chunk_size, int):
-                chunks = tuple(chunk_size for _ in range(numpy_array.ndim))
-            else:
-                chunks = chunk_size
-            return da.from_array(numpy_array, chunks=chunks)
-    
+            chunks = chunk_size
+        return da.from_array(numpy_array, chunks=chunks)
+
     def get_params(self, deep=True):
-        """
-        Get parameters of the estimator.
-
-        Args:
-            deep (bool): If True, retrieves parameters of nested objects.
-
-        Returns:
-            dict: A dictionary of parameter names mapped to their values.
-        """
+        """Get parameters of the estimator (sklearn-compatible)."""
         params = {}
         for key, value in self.__dict__.items():
             if deep and hasattr(value, "get_params"):
@@ -59,40 +36,43 @@ class BaseEstimator:
         return params
 
     def set_params(self, **params):
-        """
-        Set parameters of the estimator.
-
-        Args:
-            **params: Arbitrary keyword arguments of parameters to set.
-
-        Returns:
-            self: Returns the instance itself.
-        """
+        """Set parameters of the estimator (sklearn-compatible)."""
         for key, value in params.items():
             if not hasattr(self, key):
                 raise ValueError(f"Invalid parameter: {key}")
             setattr(self, key, value)
         return self
 
+    def fit_predict(self, X):
+        """Fit the filter and return state estimates."""
+        return self.fit(X).predict()
+
+    def score(self, X_true):
+        """
+        Negative MSE between filtered states and ground truth.
+
+        Returns a negative value so that higher is better (sklearn convention).
+        """
+        self._check_fitted()
+        X_true = np.asarray(X_true)
+        if X_true.ndim == 1:
+            X_true = X_true.reshape(-1, 1)
+        states = self.filtered_states_
+        if X_true.shape[1] != states.shape[1]:
+            X_true = X_true[:, :states.shape[1]]
+        return -np.mean((states - X_true[:len(states)]) ** 2)
+
     def validate_matrices(self, matrices):
-        """
-        Validate that matrices have consistent shapes.
-
-        Args:
-            matrices (dict): A dictionary of matrix names and their values.
-
-        Raises:
-            ValueError: If the matrices are inconsistent.
-        """
+        """Validate that matrices are NumPy or Dask arrays."""
         for name, matrix in matrices.items():
             if not isinstance(matrix, (np.ndarray, da.Array)):
                 raise ValueError(f"{name} must be a NumPy or Dask array.")
 
-    def __repr__(self):
-        """
-        String representation of the estimator.
+    def _check_fitted(self):
+        if not getattr(self, "is_fitted_", False):
+            raise RuntimeError(
+                f"{self.__class__.__name__} not fitted. Call fit() first."
+            )
 
-        Returns:
-            str: A string representation of the estimator.
-        """
-        return f"{self.name}({self.get_params(deep=False)})"
+    def __repr__(self):
+        return f"{self.__class__.__name__}()"

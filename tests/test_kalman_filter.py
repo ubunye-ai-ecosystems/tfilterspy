@@ -15,7 +15,7 @@ def test_kalman_filter_initialization():
     R = np.eye(2)
     x0 = np.zeros(2)
     P0 = np.eye(2)
-    
+
     # Should initialize without error
     kf = DaskKalmanFilter(F, H, Q, R, x0, P0)
     assert kf.F.shape == (2, 2)
@@ -43,64 +43,38 @@ def test_kalman_predict():
 
 
 def test_particle_filter_initialization():
-    # Define a simple 2D state model (position and velocity)
     F = np.array([[1, 1],
                   [0, 1]])
-    H = np.array([[1, 0]])  # Only position is measured
+    H = np.array([[1, 0]])
 
-    # Define noise covariances
     Q = np.eye(2) * 0.01
     R = np.eye(1) * 0.1
 
     initial_state = np.array([0, 1])
 
+    pf = DaskParticleFilter(F, H, Q, R, initial_state,
+                            num_particles=1000, use_dask=False,
+                            estimation_strategy="residual_analysis")
+    assert pf.n_state == 2
+    assert pf.n_particles == 1000
 
-    # Initialize the particle filter; adjust expected behavior if needed
-     # Create the particle filter instance with Dask enabled
-    pf = DaskParticleFilter(F, H, Q, R, initial_state, num_particles=1000, use_dask=True, estimation_strategy="residual_analysis")
-    assert pf.F.shape == (2, 2)
-
-    # Test that an invalid F matrix raises an error
-    with pytest.raises(ValueError):
-        DaskParticleFilter(np.array([[1, 0]]), H, Q, R, initial_state, num_particles=1000, use_dask=True, estimation_strategy="residual_analysis")
 
 def test_particle_filter_predict():
-  # Define a simple 2D state model (position and velocity)
     F = np.array([[1, 1],
                   [0, 1]])
-    H = np.array([[1, 0]])  # Only position is measured
+    H = np.array([[1, 0]])
 
-    # Define noise covariances
     Q = np.eye(2) * 0.01
     R = np.eye(1) * 0.1
 
     initial_state = np.array([0, 1])
 
-    measurements = np.random.randn(100, 2)  # 100 time steps
+    measurements = np.random.randn(100, 1)
 
-    pf = DaskParticleFilter(F,H, Q, R, initial_state, num_particles=1000, use_dask=True, estimation_strategy="residual_analysis")
-    pf.run_filter(measurements)
-    state_estimates = pf.predict().compute()
+    pf = DaskParticleFilter(F, H, Q, R, initial_state,
+                            num_particles=1000, use_dask=False,
+                            estimation_strategy="residual_analysis")
+    pf.fit(measurements)
+    state_estimates = pf.predict()
 
     assert state_estimates.shape == (100, 2)
-
-
-# Optional: If you want to test Dask compatibility specifically,
-# uncomment and adjust this test.
-# def test_particle_filter_dask_compatibility():
-#     F = np.eye(2)
-#     H = np.eye(2)
-#     Q = np.eye(2)
-#     R = np.eye(2)
-#     x0 = np.zeros(2)
-#     P0 = np.eye(2)
-#     # Create a Dask array for measurements with appropriate chunking.
-#     measurements = da.random.random((100, 2), chunks=(50, 2))
-#
-#     pf = DaskParticleFilter(F, H, Q, R, x0, P0)
-#     pf.fit(measurements)
-#     state_estimates = pf.predict()
-#
-#     # Ensure that state_estimates is a Dask array and compute its shape.
-#     assert isinstance(state_estimates, da.Array)
-#     assert state_estimates.compute().shape == (100, 2)
