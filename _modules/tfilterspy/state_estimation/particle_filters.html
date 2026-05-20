@@ -1,19 +1,21 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>tfilterspy.state_estimation.particle_filters &mdash; tfilterspy 1.0.0 documentation</title>
-      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="../../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+
   
-        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/doctools.js"></script>
-        <script src="../../../_static/sphinx_highlight.js"></script>
-        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=8d563738"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -41,12 +43,12 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../examples.html">Real World Usecases 🎢</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../literature.html">Understanding the Kalman Filter</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../literature.html#understanding-particle-filters">Understanding  Particle Filters</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../literature.html#parameter-estimation-methods">Parameter Estimation Methods</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../api_cheatsheet.html">API Reference</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../filter_guide.html">Choosing a Filter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api_reference.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../literature.html">Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Module Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../CONTRIBUTING.html">Contributing to TFiltersPy</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../MAINTAINERS.html">Maintainers of TFilterPy</a></li>
 </ul>
@@ -77,188 +79,278 @@
              
   <h1>Source code for tfilterspy.state_estimation.particle_filters</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">dask.array</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">da</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">tfilterspy.utils.optimisation_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">ParameterEstimator</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">dask</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy</span><span class="w"> </span><span class="kn">import</span> <span class="n">linalg</span>
 
-<div class="viewcode-block" id="DaskParticleFilter"><a class="viewcode-back" href="../../../modules.html#tfilterspy.state_estimation.DaskParticleFilter">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">DaskParticleFilter</span><span class="p">(</span><span class="n">ParameterEstimator</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    A multivariate, scalable particle filter using Dask. Inherits parameter estimation </span>
-<span class="sd">    methods from ParameterEstimator.</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tfilterspy.base_estimator</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseEstimator</span>
+
+
+<div class="viewcode-block" id="ParticleFilter">
+<a class="viewcode-back" href="../../../modules.html#tfilterspy.state_estimation.ParticleFilter">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ParticleFilter</span><span class="p">(</span><span class="n">BaseEstimator</span><span class="p">):</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Sequential Importance Resampling (SIR) Particle Filter.</span>
+
+<span class="sd">    Represents the posterior distribution using a set of weighted particles.</span>
+<span class="sd">    Handles nonlinear, non-Gaussian state-space models where Kalman-based</span>
+<span class="sd">    approaches fail.</span>
+
+<span class="sd">    Supports both callable and matrix-based transition/observation models.</span>
+<span class="sd">    When matrices are provided, particle propagation is vectorized for speed.</span>
+
+<span class="sd">    State-space model::</span>
+
+<span class="sd">        x_{k+1} = f(x_k) + w_k,    w_k ~ N(0, Q)</span>
+<span class="sd">        z_k     = h(x_k) + v_k,     v_k ~ N(0, R)</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    f : callable or ndarray</span>
+<span class="sd">        State transition. If callable: ``f(x) -&gt; x_next``.</span>
+<span class="sd">        If ndarray (n_state, n_state): linear transition matrix.</span>
+<span class="sd">    h : callable or ndarray</span>
+<span class="sd">        Observation model. If callable: ``h(x) -&gt; z``.</span>
+<span class="sd">        If ndarray (n_obs, n_state): linear observation matrix.</span>
+<span class="sd">    Q : ndarray, shape (n_state, n_state)</span>
+<span class="sd">        Process noise covariance.</span>
+<span class="sd">    R : ndarray, shape (n_obs, n_obs)</span>
+<span class="sd">        Observation noise covariance.</span>
+<span class="sd">    x0 : ndarray, shape (n_state,)</span>
+<span class="sd">        Initial state estimate.</span>
+<span class="sd">    n_particles : int, optional</span>
+<span class="sd">        Number of particles (default 1000).</span>
+<span class="sd">    resample_threshold : float, optional</span>
+<span class="sd">        ESS ratio below which resampling triggers (default 0.5).</span>
+<span class="sd">    use_dask : bool, optional</span>
+<span class="sd">        Parallelize particle propagation with Dask (default False).</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">    &gt;&gt;&gt; from tfilterspy import ParticleFilter</span>
+<span class="sd">    &gt;&gt;&gt; F = np.eye(2)</span>
+<span class="sd">    &gt;&gt;&gt; H = np.eye(2)</span>
+<span class="sd">    &gt;&gt;&gt; pf = ParticleFilter(F, H, Q=np.eye(2)*0.1, R=np.eye(2)*0.5,</span>
+<span class="sd">    ...     x0=np.zeros(2), n_particles=500)</span>
+<span class="sd">    &gt;&gt;&gt; pf.fit(np.random.randn(100, 2))</span>
+<span class="sd">    &gt;&gt;&gt; states = pf.predict()</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state_transition</span><span class="p">,</span> <span class="n">observation_model</span><span class="p">,</span> <span class="n">process_noise_cov</span><span class="p">,</span> 
-                 <span class="n">observation_noise_cov</span><span class="p">,</span> <span class="n">initial_state</span><span class="p">,</span> <span class="n">num_particles</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">use_dask</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
-                 <span class="n">estimation_strategy</span><span class="o">=</span><span class="s2">&quot;residual_analysis&quot;</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Initialize the DaskParticleFilter. In addition to particle filter parameters, </span>
-<span class="sd">        we specify whether to use Dask for scalability and which parameter estimation </span>
-<span class="sd">        strategy to use.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># Initialize the ParameterEstimator</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">estimation_strategy</span><span class="o">=</span><span class="n">estimation_strategy</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">n_particles</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+                 <span class="n">resample_threshold</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">use_dask</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">Q</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">R</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_particles</span> <span class="o">=</span> <span class="n">n_particles</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resample_threshold</span> <span class="o">=</span> <span class="n">resample_threshold</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">use_dask</span> <span class="o">=</span> <span class="n">use_dask</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">state_dim</span> <span class="o">=</span> <span class="n">initial_state</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">num_particles</span> <span class="o">=</span> <span class="n">num_particles</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_state</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_obs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_fitted_</span> <span class="o">=</span> <span class="kc">False</span>
 
-        <span class="c1"># Convert inputs to Dask arrays if scalability is desired</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_dask</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">state_transition</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">from_array</span><span class="p">(</span><span class="n">state_transition</span><span class="p">,</span> <span class="n">chunks</span><span class="o">=</span><span class="n">state_transition</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">observation_model</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">from_array</span><span class="p">(</span><span class="n">observation_model</span><span class="p">,</span> <span class="n">chunks</span><span class="o">=</span><span class="n">observation_model</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">process_noise_cov</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">from_array</span><span class="p">(</span><span class="n">process_noise_cov</span><span class="p">,</span> <span class="n">chunks</span><span class="o">=</span><span class="n">process_noise_cov</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">observation_noise_cov</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">from_array</span><span class="p">(</span><span class="n">observation_noise_cov</span><span class="p">,</span> <span class="n">chunks</span><span class="o">=</span><span class="n">observation_noise_cov</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">initial_state</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">from_array</span><span class="p">(</span><span class="n">initial_state</span><span class="p">,</span> <span class="n">chunks</span><span class="o">=</span><span class="n">initial_state</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="c1"># Support both callable and matrix-based models</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_F_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">f</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_F_matrix</span> <span class="o">@</span> <span class="n">x</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_f_vectorized</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">state_transition</span> <span class="o">=</span> <span class="n">state_transition</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">observation_model</span> <span class="o">=</span> <span class="n">observation_model</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">process_noise_cov</span> <span class="o">=</span> <span class="n">process_noise_cov</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">observation_noise_cov</span> <span class="o">=</span> <span class="n">observation_noise_cov</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">initial_state</span> <span class="o">=</span> <span class="n">initial_state</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_F_matrix</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">f</span> <span class="o">=</span> <span class="n">f</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_f_vectorized</span> <span class="o">=</span> <span class="kc">False</span>
 
-        <span class="c1"># Step 1: Initialization - all particles start at the same known state</span>
-        <span class="n">particles_np</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">initial_state</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">state_dim</span><span class="p">),</span> <span class="n">num_particles</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_dask</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">particles</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">from_array</span><span class="p">(</span><span class="n">particles_np</span><span class="p">,</span> <span class="n">chunks</span><span class="o">=</span><span class="p">(</span><span class="n">num_particles</span> <span class="o">//</span> <span class="mi">10</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">state_dim</span><span class="p">))</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_H_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">h</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_H_matrix</span> <span class="o">@</span> <span class="n">x</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_h_vectorized</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">particles</span> <span class="o">=</span> <span class="n">particles_np</span>
-        
-        <span class="c1"># Uniform weights</span>
-        <span class="n">weights_np</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">num_particles</span><span class="p">)</span> <span class="o">/</span> <span class="n">num_particles</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_dask</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">weights</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">from_array</span><span class="p">(</span><span class="n">weights_np</span><span class="p">,</span> <span class="n">chunks</span><span class="o">=</span><span class="p">(</span><span class="n">num_particles</span> <span class="o">//</span> <span class="mi">10</span><span class="p">,))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_H_matrix</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">h</span> <span class="o">=</span> <span class="n">h</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_h_vectorized</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_init_particles</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_particles</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x0</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_particles</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_particles</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_particles</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_propagate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Propagate particles through state transition + process noise.&quot;&quot;&quot;</span>
+        <span class="n">L_Q</span> <span class="o">=</span> <span class="n">linalg</span><span class="o">.</span><span class="n">cholesky</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Q</span> <span class="o">+</span> <span class="mf">1e-10</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_state</span><span class="p">),</span> <span class="n">lower</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">noise</span> <span class="o">=</span> <span class="p">(</span><span class="n">L_Q</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_state</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_particles</span><span class="p">))</span><span class="o">.</span><span class="n">T</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_f_vectorized</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_particles</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_particles</span> <span class="o">@</span> <span class="bp">self</span><span class="o">.</span><span class="n">_F_matrix</span><span class="o">.</span><span class="n">T</span> <span class="o">+</span> <span class="n">noise</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_dask</span><span class="p">:</span>
+            <span class="n">delayed</span> <span class="o">=</span> <span class="p">[</span><span class="n">dask</span><span class="o">.</span><span class="n">delayed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="p">)(</span><span class="bp">self</span><span class="o">.</span><span class="n">_particles</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+                       <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_particles</span><span class="p">)]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_particles</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dask</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="o">*</span><span class="n">delayed</span><span class="p">))</span> <span class="o">+</span> <span class="n">noise</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">weights</span> <span class="o">=</span> <span class="n">weights_np</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_particles</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+                <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_particles</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_particles</span><span class="p">)]</span>
+            <span class="p">)</span> <span class="o">+</span> <span class="n">noise</span>
 
-        <span class="c1"># Current state estimate (initially set to the initial state)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">initial_state</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_dask</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">initial_state</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_compute_predicted_obs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute predicted observations for all particles.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_h_vectorized</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_particles</span> <span class="o">@</span> <span class="bp">self</span><span class="o">.</span><span class="n">_H_matrix</span><span class="o">.</span><span class="n">T</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_dask</span><span class="p">:</span>
+            <span class="n">delayed</span> <span class="o">=</span> <span class="p">[</span><span class="n">dask</span><span class="o">.</span><span class="n">delayed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h</span><span class="p">)(</span><span class="bp">self</span><span class="o">.</span><span class="n">_particles</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+                       <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_particles</span><span class="p">)]</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dask</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="o">*</span><span class="n">delayed</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+                <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">h</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_particles</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_particles</span><span class="p">)]</span>
+            <span class="p">)</span>
 
-        <span class="c1"># For parameter estimation methods, we store a copy of Q and R (could be updated later)</span>
-        <span class="c1"># For demonstration, we initialize them as given.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Q</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">process_noise_cov</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">R</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">observation_noise_cov</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_update_weights</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">predicted_obs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Update particle weights based on measurement likelihood.&quot;&quot;&quot;</span>
+        <span class="n">R_inv</span> <span class="o">=</span> <span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="p">)</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">logdet_R</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">slogdet</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="p">)</span>
+        <span class="n">log_norm</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_obs</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span> <span class="o">+</span> <span class="n">logdet_R</span><span class="p">)</span>
 
-<div class="viewcode-block" id="DaskParticleFilter.predict"><a class="viewcode-back" href="../../../modules.html#tfilterspy.state_estimation.DaskParticleFilter.predict">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">diff</span> <span class="o">=</span> <span class="n">predicted_obs</span> <span class="o">-</span> <span class="n">z</span>
+        <span class="c1"># Vectorized log-likelihood for all particles</span>
+        <span class="n">log_likelihoods</span> <span class="o">=</span> <span class="n">log_norm</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">diff</span> <span class="o">@</span> <span class="n">R_inv</span> <span class="o">*</span> <span class="n">diff</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># Numerical stability: subtract max before exp</span>
+        <span class="n">log_likelihoods</span> <span class="o">-=</span> <span class="n">log_likelihoods</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+        <span class="n">likelihoods</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">log_likelihoods</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_weights</span> <span class="o">*=</span> <span class="n">likelihoods</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_weights</span> <span class="o">+=</span> <span class="mf">1e-300</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_weights</span> <span class="o">/=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_weights</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_systematic_resample</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Systematic resampling — lower variance than multinomial.&quot;&quot;&quot;</span>
+        <span class="n">N</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_particles</span>
+        <span class="n">positions</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">N</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">())</span> <span class="o">/</span> <span class="n">N</span>
+        <span class="n">cumsum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_weights</span><span class="p">)</span>
+        <span class="n">cumsum</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>  <span class="c1"># ensure no floating-point overshoot</span>
+        <span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">searchsorted</span><span class="p">(</span><span class="n">cumsum</span><span class="p">,</span> <span class="n">positions</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_particles</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_particles</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">N</span><span class="p">)</span> <span class="o">/</span> <span class="n">N</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_effective_sample_size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_weights</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ParticleFilter.fit">
+<a class="viewcode-back" href="../../../modules.html#tfilterspy.state_estimation.ParticleFilter.fit">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Step 2: Prediction. Propagate each particle using the state transition model plus </span>
-<span class="sd">        Gaussian process noise.</span>
+<span class="sd">        Run the particle filter on measurements.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        X : ndarray, shape (n_timesteps, n_obs)</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        self</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">noise_np</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">multivariate_normal</span><span class="p">(</span>
-            <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">state_dim</span><span class="p">),</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">process_noise_cov</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_dask</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">process_noise_cov</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">num_particles</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="s2">&quot;compute&quot;</span><span class="p">):</span>
+            <span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">X</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">measurements_</span> <span class="o">=</span> <span class="n">X</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_init_particles</span><span class="p">()</span>
+
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+        <span class="n">ns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_state</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">filtered_states_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="n">ns</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filtered_covs_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="n">ns</span><span class="p">,</span> <span class="n">ns</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">effective_sample_sizes_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_propagate</span><span class="p">()</span>
+
+            <span class="n">predicted_obs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_predicted_obs</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_update_weights</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">predicted_obs</span><span class="p">)</span>
+
+            <span class="c1"># State estimate</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">filtered_states_</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_weights</span> <span class="o">@</span> <span class="bp">self</span><span class="o">.</span><span class="n">_particles</span>
+            <span class="n">diff</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_particles</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">filtered_states_</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">filtered_covs_</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">diff</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_weights</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">])</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">diff</span>
+
+            <span class="c1"># ESS-based resampling</span>
+            <span class="n">ess</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_effective_sample_size</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">effective_sample_sizes_</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">ess</span>
+            <span class="k">if</span> <span class="n">ess</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">resample_threshold</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_particles</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_systematic_resample</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_fitted_</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+
+<div class="viewcode-block" id="ParticleFilter.predict">
+<a class="viewcode-back" href="../../../modules.html#tfilterspy.state_estimation.ParticleFilter.predict">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return filtered state estimates.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_fitted</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">filtered_states_</span></div>
+
+
+<div class="viewcode-block" id="ParticleFilter.filter_step">
+<a class="viewcode-back" href="../../../modules.html#tfilterspy.state_estimation.ParticleFilter.filter_step">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">filter_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Single-step online particle filter update.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        z : ndarray, shape (n_obs,)</span>
+<span class="sd">            Single measurement.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        state : ndarray, shape (n_state,)</span>
+<span class="sd">            Weighted mean state estimate.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_online_init&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_init_particles</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_online_init</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_propagate</span><span class="p">()</span>
+        <span class="n">predicted_obs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_predicted_obs</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_weights</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">predicted_obs</span><span class="p">)</span>
+
+        <span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_weights</span> <span class="o">@</span> <span class="bp">self</span><span class="o">.</span><span class="n">_particles</span>
+
+        <span class="n">ess</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_effective_sample_size</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">ess</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">resample_threshold</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_particles</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_systematic_resample</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">state</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="DaskParticleFilter">
+<a class="viewcode-back" href="../../../modules.html#tfilterspy.state_estimation.DaskParticleFilter">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">DaskParticleFilter</span><span class="p">(</span><span class="n">ParticleFilter</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Backward-compatible Particle Filter wrapper.</span>
+
+<span class="sd">    Accepts the original DaskParticleFilter constructor signature</span>
+<span class="sd">    and delegates to the new ParticleFilter implementation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state_transition</span><span class="p">,</span> <span class="n">observation_model</span><span class="p">,</span> <span class="n">process_noise_cov</span><span class="p">,</span>
+                 <span class="n">observation_noise_cov</span><span class="p">,</span> <span class="n">initial_state</span><span class="p">,</span> <span class="n">num_particles</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+                 <span class="n">use_dask</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">estimation_strategy</span><span class="o">=</span><span class="s2">&quot;residual_analysis&quot;</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">f</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">state_transition</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">),</span>
+            <span class="n">h</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">observation_model</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">),</span>
+            <span class="n">Q</span><span class="o">=</span><span class="n">process_noise_cov</span><span class="p">,</span>
+            <span class="n">R</span><span class="o">=</span><span class="n">observation_noise_cov</span><span class="p">,</span>
+            <span class="n">x0</span><span class="o">=</span><span class="n">initial_state</span><span class="p">,</span>
+            <span class="n">n_particles</span><span class="o">=</span><span class="n">num_particles</span><span class="p">,</span>
+            <span class="n">use_dask</span><span class="o">=</span><span class="n">use_dask</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_dask</span><span class="p">:</span>
-            <span class="n">noise</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">from_array</span><span class="p">(</span><span class="n">noise_np</span><span class="p">,</span> <span class="n">chunks</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="o">.</span><span class="n">chunksize</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">noise</span> <span class="o">=</span> <span class="n">noise_np</span>
-        
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_dask</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">particles</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">state_transition</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="o">+</span> <span class="n">noise</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">particles</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="o">.</span><span class="n">persist</span><span class="p">()</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">particles</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">state_transition</span> <span class="o">@</span> <span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">T</span> <span class="o">+</span> <span class="n">noise</span></div>
-
-<div class="viewcode-block" id="DaskParticleFilter.update"><a class="viewcode-back" href="../../../modules.html#tfilterspy.state_estimation.DaskParticleFilter.update">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">measurement</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Step 3: Measurement Update. Update particle weights based on the likelihood </span>
-<span class="sd">        of the observed measurement.</span>
-<span class="sd">        </span>
-<span class="sd">        Parameters:</span>
-<span class="sd">            measurement (np.ndarray): The observed measurement.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_dask</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">measurement</span><span class="p">,</span> <span class="n">da</span><span class="o">.</span><span class="n">Array</span><span class="p">):</span>
-            <span class="n">measurement</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">from_array</span><span class="p">(</span><span class="n">measurement</span><span class="p">,</span> <span class="n">chunks</span><span class="o">=</span><span class="n">measurement</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-        
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_dask</span><span class="p">:</span>
-            <span class="n">predicted_measurements</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">observation_model</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">predicted_measurements</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">observation_model</span> <span class="o">@</span> <span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
-        
-        <span class="n">diff</span> <span class="o">=</span> <span class="n">predicted_measurements</span> <span class="o">-</span> <span class="n">measurement</span>
-        
-        <span class="n">R_val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">observation_noise_cov</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_dask</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">observation_noise_cov</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_dask</span><span class="p">:</span>
-            <span class="n">likelihood</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">da</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">diff</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">R_val</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">likelihood</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">diff</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">R_val</span><span class="p">)</span>
-        
-        <span class="bp">self</span><span class="o">.</span><span class="n">weights</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">weights</span> <span class="o">*</span> <span class="n">likelihood</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">weights</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">weights</span> <span class="o">+</span> <span class="mf">1e-300</span>  <span class="c1"># Avoid zero weights</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">weights</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">weights</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
-        
-        <span class="bp">self</span><span class="o">.</span><span class="n">resample</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">estimate_state</span><span class="p">()</span></div>
-
-<div class="viewcode-block" id="DaskParticleFilter.resample"><a class="viewcode-back" href="../../../modules.html#tfilterspy.state_estimation.DaskParticleFilter.resample">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">resample</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Step 4: Resampling. Multinomial resampling to refocus on high-probability particles.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">weights_np</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_dask</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">weights</span>
-        <span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_particles</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">num_particles</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">weights_np</span><span class="p">)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_dask</span><span class="p">:</span>
-            <span class="n">particles_np</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
-            <span class="n">particles_resampled</span> <span class="o">=</span> <span class="n">particles_np</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">particles</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">from_array</span><span class="p">(</span><span class="n">particles_resampled</span><span class="p">,</span> <span class="n">chunks</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="o">.</span><span class="n">chunksize</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">weights</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">from_array</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_particles</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_particles</span><span class="p">,</span> <span class="n">chunks</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="o">.</span><span class="n">chunksize</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">particles</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_particles</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_particles</span></div>
-
-<div class="viewcode-block" id="DaskParticleFilter.estimate_state"><a class="viewcode-back" href="../../../modules.html#tfilterspy.state_estimation.DaskParticleFilter.estimate_state">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">estimate_state</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Step 5: State Estimation. Compute the state estimate as the weighted average of particles.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_dask</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="DaskParticleFilter.step"><a class="viewcode-back" href="../../../modules.html#tfilterspy.state_estimation.DaskParticleFilter.step">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">measurement</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Step 6: Iteration. Run one full filter cycle: predict, update, resample, and state estimation.</span>
-<span class="sd">        </span>
-<span class="sd">        Parameters:</span>
-<span class="sd">            measurement (np.ndarray): The observed measurement.</span>
-<span class="sd">        </span>
-<span class="sd">        Returns:</span>
-<span class="sd">            np.ndarray: The estimated state.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">predict</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">measurement</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span></div>
-
-<div class="viewcode-block" id="DaskParticleFilter.run_filter"><a class="viewcode-back" href="../../../modules.html#tfilterspy.state_estimation.DaskParticleFilter.run_filter">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">run_filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">measurements</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        This method is required for parameter estimation routines. It should run the filter </span>
-<span class="sd">        over a sequence of measurements and return both the state estimates and the residuals.</span>
-<span class="sd">        </span>
-<span class="sd">        Parameters:</span>
-<span class="sd">            measurements (da.Array): Array of measurements over time, shape (n_timesteps, n_obs).</span>
-<span class="sd">        </span>
-<span class="sd">        Returns:</span>
-<span class="sd">            state_estimates (da.Array): Filtered state estimates, shape (n_timesteps, n_state).</span>
-<span class="sd">            residuals (da.Array): Residuals (measurement - predicted_measurement), same shape as measurements.</span>
-<span class="sd">        </span>
-<span class="sd">        For this simple example, we run the filter sequentially over the measurements.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">n_timesteps</span> <span class="o">=</span> <span class="n">measurements</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">state_estimates</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">residuals</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_timesteps</span><span class="p">):</span>
-            <span class="n">meas</span> <span class="o">=</span> <span class="n">measurements</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-            <span class="c1"># Predict and update for current measurement</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">meas</span><span class="p">)</span>
-            <span class="n">state_estimates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">)</span>
-            <span class="c1"># Compute predicted measurement from the current state estimate</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_dask</span><span class="p">:</span>
-                <span class="n">pred_meas</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">da</span><span class="o">.</span><span class="n">from_array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">,</span> <span class="n">chunks</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">shape</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">observation_model</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">pred_meas</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">observation_model</span> <span class="o">@</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span>
-            <span class="c1"># Residual is difference between actual measurement and predicted measurement</span>
-            <span class="n">res</span> <span class="o">=</span> <span class="p">(</span><span class="n">meas</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_dask</span> <span class="k">else</span> <span class="n">meas</span><span class="p">)</span> <span class="o">-</span> <span class="n">pred_meas</span>
-            <span class="n">residuals</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
-        <span class="c1"># Convert lists to dask arrays (or numpy arrays)</span>
-        <span class="n">state_estimates</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">from_array</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span><span class="n">state_estimates</span><span class="p">))</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_dask</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span><span class="n">state_estimates</span><span class="p">)</span>
-        <span class="n">residuals</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">from_array</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span><span class="n">residuals</span><span class="p">))</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_dask</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span><span class="n">residuals</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">state_estimates</span><span class="p">,</span> <span class="n">residuals</span></div></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">estimation_strategy</span> <span class="o">=</span> <span class="n">estimation_strategy</span></div>
 
 </pre></div>
 

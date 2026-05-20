@@ -1,114 +1,172 @@
-Real World Usecases 🎢
-=======================
+Examples
+========
 
-Welcome to the Notebook Playground -  where your Jupyter notebooks come to life and show off their filtering magic! ✨  
-This section showcases real-world applications of TFiltersPy in noisy, messy, dynamic environments where **Bayesian filtering** shines.
+TFiltersPy includes Python scripts and Jupyter notebooks demonstrating
+each filter on real-world problems.
 
-🚀 Whether you're smoothing topic probabilities, estimating hidden states, or tracking uncertainty across time — these notebooks will get you started.
+Python Examples
+---------------
 
-📚 For a full list of our example notebooks, head over to our GitHub:
+Run any example directly:
 
-🔗 `Visit the Examples Directory <https://github.com/ubunye-ai-ecosystems/tfilterspy/tree/main/examples/notebooks>`_
+.. code-block:: bash
 
+   python examples/example_gps_tracking.py
 
-Use-Case Templates
-------------------
+.. list-table::
+   :header-rows: 1
+   :widths: 30 15 55
 
-Each example notebook typically follows this structure:
+   * - Example
+     - Filter
+     - Description
+   * - ``example_gps_tracking.py``
+     - KF
+     - Vehicle tracks a figure-8 at 10 Hz GPS. Demonstrates ``fit``, ``predict``,
+       ``smooth``, ``forecast``, ``score``, and ``filter_step``.
+       Achieves 86% noise reduction (filtered), 96% (smoothed).
+   * - ``example_radar_tracking.py``
+     - EKF, UKF
+     - Aircraft in a coordinated turn observed by radar (range + bearing).
+       Compares EKF vs UKF accuracy. EKF smoothing reaches 81% improvement.
+   * - ``example_robot_localization.py``
+     - PF
+     - Robot navigates using range measurements to 3 landmarks.
+       Compares 100, 500, and 2000 particles. Shows ESS monitoring
+       and online ``filter_step`` demo.
 
-1. **Data Loading** - Real or simulated data that represents a time-varying system.
-2. **Preprocessing** - Cleaning, transformation, and feature extraction.
-3. **Filter Setup** - Define system matrices (F, H), noise covariances (Q, R), and initial conditions.
-4. **Fit & Predict** - Apply your filter across the dataset using `.fit()` and `.predict()` or `.run_filter()`.
-5. **Visualization** - Plot raw vs filtered estimates.
-6. **Interpretation** - Gain insights into dynamics, trends, and uncertainty.
-
-
----------------------------------
-Topic Modeling + Kalman Filtering
----------------------------------
-
-This notebook shows how to use TFiltersPy to smooth topic probabilities over time in a stream of disaster-related tweets. 
-Smooth chaotic topic trends in disaster-related tweets to track evolving narratives over time.
-
-
-
-
-.. code-block:: python
-
-    import pandas as pd
-    import numpy as np
-    import dask.array as da
-    from sklearn.feature_extraction.text import CountVectorizer
-    from sklearn.decomposition import LatentDirichletAllocation
-    from  tfilterspy.state_estimation.particle_filters import DaskParticleFilter
-    import matplotlib.pyplot as plt
-
-1. Load Disaster Tweets
+GPS Tracking (KalmanFilter)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: python
 
-    path_to_disaster_tweets= r'/../../tfilterspy/examples/data/train_nlp.csv'
-    data_path = path_to_disaster_tweets  # Update after download
-    df = pd.read_csv(data_path)
-    tweets = df['text'].values  # ~7613 tweets
-    print(f"Number of tweets: {len(tweets)}")
+   import numpy as np
+   from tfilterspy import KalmanFilter
 
-2. Preprocess and Extract Topics
+   dt = 0.1
+   F = np.array([[1, dt, 0,  0],
+                 [0,  1, 0,  0],
+                 [0,  0, 1, dt],
+                 [0,  0, 0,  1]])
+   H = np.array([[1, 0, 0, 0],
+                 [0, 0, 1, 0]])
+   Q = np.diag([0.1, 1.0, 0.1, 1.0])
+   R = np.eye(2) * 25.0
+   x0 = np.array([0, 10, 0, 10], dtype=np.float64)
+   P0 = np.eye(4) * 100.0
 
-.. code-block:: python
+   kf = KalmanFilter(F, H, Q, R, x0, P0)
+   kf.fit(measurements)
+   filtered = kf.predict()
+   smoothed, _ = kf.smooth()
+   forecast_states, forecast_covs = kf.forecast(50)
 
-    vectorizer = CountVectorizer(max_features=5000, stop_words='english')
-    X = vectorizer.fit_transform(tweets)
-    n_topics = 5  # e.g., disaster, weather, casual, news, other
-    lda = LatentDirichletAllocation(n_components=n_topics, random_state=42)
-    topic_dist = lda.fit_transform(X)  # Shape: (7613, 5)
-    X_dask = da.from_array(topic_dist, chunks=(1000, n_topics))
-    print(f"Topic distribution shape: {X_dask.shape}")
+.. code-block:: text
 
-3. Kalman Filter Initiative
+   RESULTS
+   ==================================================
+   MSE raw GPS:    24.465 m^2
+   MSE filtered:   3.495 m^2  (86% reduction)
+   MSE smoothed:   0.990 m^2  (96% reduction)
+   Log-likelihood: -6193.8
 
-.. code-block:: python
-
-    n_features = 14
-    F = np.eye(n_features)  # Static transition (identity for simplicity)
-    H = np.eye(n_features)  # Direct observation
-    Q = np.eye(n_features) * 0.01  # Process noise
-    R = np.eye(n_features) * 0.1   # Observation noise
-    x0 = np.zeros(n_features)      # Initial state
-    P0 = np.eye(n_features)        # Initial covariance
-    kf = DaskKalmanFilter(F, H, Q, R, x0, P0, estimation_strategy="residual_analysis")
-
-4. Fit and Predict
-
-.. code-block:: python
-
-    kf.fit(X_dask)
-    smoothed_topics = kf.predict().compute()
-
-
-5. Plot Raw vs Smoothed Topics (first 1000 tweets)
+Radar Tracking (EKF vs UKF)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: python
 
-    plt.figure(figsize=(12, 8))
-    for i in range(n_topics):
-        plt.subplot(n_topics, 1, i + 1)
-        plt.plot(topic_dist[:1000, i], label=f"Raw Topic {i+1}", alpha=0.5)
-        plt.plot(smoothed_topics[:1000, i], label=f"Smoothed Topic {i+1}", linestyle="--")
-        plt.title(f"Topic {i+1}")
-        plt.xlabel("Tweet Index (Time)")
-        plt.ylabel("Probability")
-        plt.legend()
-    plt.tight_layout()
-    plt.show()
+   from tfilterspy import ExtendedKalmanFilter, UnscentedKalmanFilter
 
+   ekf = ExtendedKalmanFilter(
+       f=f_aircraft, h=h_radar,
+       F_jacobian=F_jac, H_jacobian=H_jac,
+       Q=Q, R=R, x0=x0, P0=P0,
+   )
+   ekf.fit(measurements)
+   ekf_states = ekf.predict()
+   ekf_smoothed, _ = ekf.smooth()
 
-6. Interpret Topics 
+   ukf = UnscentedKalmanFilter(
+       f=f_aircraft, h=h_radar,
+       Q=Q, R=R, x0=x0, P0=P0,
+   )
+   ukf.fit(measurements)
+   ukf_states = ukf.predict()
+
+.. code-block:: text
+
+   POSITION RMSE COMPARISON
+   =======================================================
+   Raw radar:      42.84 m
+   EKF filtered:   33.68 m  (21% improvement)
+   EKF smoothed:    8.01 m  (81% improvement)
+   UKF filtered:   33.66 m  (21% improvement)
+
+Robot Localization (ParticleFilter)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: python
 
-    feature_names = vectorizer.get_feature_names_out()
-    for i, topic in enumerate(lda.components_):
-        top_words = [feature_names[j] for j in topic.argsort()[-5:]]
-        print(f"Topic {i+1}: {', '.join(top_words)}")
+   from tfilterspy import ParticleFilter
+
+   pf = ParticleFilter(
+       f=robot_dynamics, h=range_observation,
+       Q=Q, R=R, x0=x0,
+       n_particles=2000,
+       resample_threshold=0.5,
+   )
+   pf.fit(measurements)
+   states = pf.predict()
+   print(f"Mean ESS: {np.mean(pf.effective_sample_sizes_):.0f}")
+
+.. code-block:: text
+
+   PARTICLE FILTER RESULTS
+   ============================================================
+   Particles    RMSE (m)    Mean ESS     ESS %
+   -----------------------------------------------
+        100       0.777       62.3     62.3%
+        500       0.437      304.2     60.8%
+       2000       0.320     1193.2     59.7%
+
+Jupyter Notebooks
+-----------------
+
+Interactive notebooks with visualizations are in ``examples/notebooks/``.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 40 60
+
+   * - Notebook
+     - Description
+   * - ``Kalman-filters-use-cases.ipynb``
+     - Image denoising (digits), EEG time series filtering,
+       NLP topic smoothing with KalmanFilter
+   * - ``particle-filters-usecases.ipynb``
+     - Same three domains with ParticleFilter. Includes ESS monitoring
+       and comparison to KF
+   * - ``nonlinear-filters-usecases.ipynb``
+     - Pendulum tracking (EKF vs UKF), radar with RTS smoothing,
+       high-dimensional coupled oscillator (EnKF vs UKF)
+   * - ``benchmarks.ipynb``
+     - Speed and accuracy comparison of all 5 filters on the digits dataset.
+       Includes classification accuracy with LogisticRegression
+
+`Browse notebooks on GitHub <https://github.com/ubunye-ai-ecosystems/tfilterspy/tree/main/examples/notebooks>`_
+
+Filter Pipeline Diagram
+------------------------
+
+.. code-block:: text
+
+                                           +-----------+
+   measurements ──> fit() ──> predict() ──>| filtered  |
+                                  |        | states    |
+                                  |        +-----------+
+                                  |
+                              smooth() ──> smoothed states (KF, EKF only)
+                                  |
+                            forecast(n) ──> future prediction (KF only)
+                                  |
+                           filter_step(z) ──> online / streaming mode (all filters)

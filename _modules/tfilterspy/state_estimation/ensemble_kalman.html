@@ -1,0 +1,324 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tfilterspy.state_estimation.ensemble_kalman &mdash; tfilterspy 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=8d563738"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            tfilterspy
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../filter_guide.html">Choosing a Filter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api_reference.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../literature.html">Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Module Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../CONTRIBUTING.html">Contributing to TFiltersPy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../MAINTAINERS.html">Maintainers of TFilterPy</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">tfilterspy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">tfilterspy.state_estimation.ensemble_kalman</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for tfilterspy.state_estimation.ensemble_kalman</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">dask</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy</span><span class="w"> </span><span class="kn">import</span> <span class="n">linalg</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">tfilterspy.base_estimator</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseEstimator</span>
+
+
+<div class="viewcode-block" id="EnsembleKalmanFilter">
+<a class="viewcode-back" href="../../../modules.html#tfilterspy.state_estimation.EnsembleKalmanFilter">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">EnsembleKalmanFilter</span><span class="p">(</span><span class="n">BaseEstimator</span><span class="p">):</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Ensemble Kalman Filter for high-dimensional state-space models.</span>
+
+<span class="sd">    Approximates the Kalman filter using a Monte Carlo ensemble of state</span>
+<span class="sd">    realizations. Scales to systems with millions of state variables where</span>
+<span class="sd">    storing full covariance matrices is infeasible.</span>
+
+<span class="sd">    Uses Dask for parallel ensemble member propagation when ``use_dask=True``.</span>
+
+<span class="sd">    State-space model::</span>
+
+<span class="sd">        x_{k+1} = f(x_k) + w_k,    w_k ~ N(0, Q)</span>
+<span class="sd">        z_k     = h(x_k) + v_k,     v_k ~ N(0, R)</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    f : callable</span>
+<span class="sd">        State transition function ``f(x) -&gt; x_next``.</span>
+<span class="sd">    h : callable</span>
+<span class="sd">        Observation function ``h(x) -&gt; z``.</span>
+<span class="sd">    Q : ndarray, shape (n_state, n_state)</span>
+<span class="sd">        Process noise covariance.</span>
+<span class="sd">    R : ndarray, shape (n_obs, n_obs)</span>
+<span class="sd">        Observation noise covariance.</span>
+<span class="sd">    x0 : ndarray, shape (n_state,)</span>
+<span class="sd">        Initial state estimate.</span>
+<span class="sd">    P0 : ndarray, shape (n_state, n_state)</span>
+<span class="sd">        Initial state covariance.</span>
+<span class="sd">    n_ensemble : int, optional</span>
+<span class="sd">        Number of ensemble members (default 100).</span>
+<span class="sd">    use_dask : bool, optional</span>
+<span class="sd">        Use Dask for parallel ensemble computation (default True).</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">    &gt;&gt;&gt; from tfilterspy import EnsembleKalmanFilter</span>
+<span class="sd">    &gt;&gt;&gt; def f(x): return x</span>
+<span class="sd">    &gt;&gt;&gt; def h(x): return x[:1]</span>
+<span class="sd">    &gt;&gt;&gt; enkf = EnsembleKalmanFilter(f, h,</span>
+<span class="sd">    ...     Q=np.eye(2)*0.1, R=np.eye(1)*0.5,</span>
+<span class="sd">    ...     x0=np.zeros(2), P0=np.eye(2), n_ensemble=50)</span>
+<span class="sd">    &gt;&gt;&gt; enkf.fit(np.random.randn(50, 1))</span>
+<span class="sd">    &gt;&gt;&gt; states = enkf.predict()</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">P0</span><span class="p">,</span> <span class="n">n_ensemble</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">use_dask</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">f</span> <span class="o">=</span> <span class="n">f</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">h</span> <span class="o">=</span> <span class="n">h</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">Q</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">R</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">P0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">P0</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_ensemble</span> <span class="o">=</span> <span class="n">n_ensemble</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">use_dask</span> <span class="o">=</span> <span class="n">use_dask</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_state</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_obs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_fitted_</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_init_ensemble</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">L</span> <span class="o">=</span> <span class="n">linalg</span><span class="o">.</span><span class="n">cholesky</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">P0</span> <span class="o">+</span> <span class="mf">1e-10</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_state</span><span class="p">),</span> <span class="n">lower</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">noise</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_state</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_ensemble</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ensemble_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x0</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">+</span> <span class="n">L</span> <span class="o">@</span> <span class="n">noise</span>  <span class="c1"># (n_state, n_ensemble)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_propagate_ensemble</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ensemble</span><span class="p">):</span>
+        <span class="n">ne</span> <span class="o">=</span> <span class="n">ensemble</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_dask</span><span class="p">:</span>
+            <span class="n">delayed_preds</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">dask</span><span class="o">.</span><span class="n">delayed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="p">)(</span><span class="n">ensemble</span><span class="p">[:,</span> <span class="n">j</span><span class="p">])</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ne</span><span class="p">)</span>
+            <span class="p">]</span>
+            <span class="n">results</span> <span class="o">=</span> <span class="n">dask</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="o">*</span><span class="n">delayed_preds</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="p">(</span><span class="n">ensemble</span><span class="p">[:,</span> <span class="n">j</span><span class="p">])</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ne</span><span class="p">)])</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_observe_ensemble</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ensemble</span><span class="p">):</span>
+        <span class="n">ne</span> <span class="o">=</span> <span class="n">ensemble</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_dask</span><span class="p">:</span>
+            <span class="n">delayed_obs</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">dask</span><span class="o">.</span><span class="n">delayed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h</span><span class="p">)(</span><span class="n">ensemble</span><span class="p">[:,</span> <span class="n">j</span><span class="p">])</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ne</span><span class="p">)</span>
+            <span class="p">]</span>
+            <span class="n">results</span> <span class="o">=</span> <span class="n">dask</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="o">*</span><span class="n">delayed_obs</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">h</span><span class="p">(</span><span class="n">ensemble</span><span class="p">[:,</span> <span class="n">j</span><span class="p">])</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ne</span><span class="p">)])</span>
+
+<div class="viewcode-block" id="EnsembleKalmanFilter.fit">
+<a class="viewcode-back" href="../../../modules.html#tfilterspy.state_estimation.EnsembleKalmanFilter.fit">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Run the EnKF forward pass.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        X : ndarray, shape (n_timesteps, n_obs)</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        self</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="s2">&quot;compute&quot;</span><span class="p">):</span>
+            <span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">X</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">measurements_</span> <span class="o">=</span> <span class="n">X</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_init_ensemble</span><span class="p">()</span>
+
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+        <span class="n">ns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_state</span>
+        <span class="n">ne</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_ensemble</span>
+        <span class="n">no</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_obs</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">filtered_states_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="n">ns</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filtered_covs_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="n">ns</span><span class="p">,</span> <span class="n">ns</span><span class="p">))</span>
+
+        <span class="n">L_Q</span> <span class="o">=</span> <span class="n">linalg</span><span class="o">.</span><span class="n">cholesky</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Q</span> <span class="o">+</span> <span class="mf">1e-10</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">ns</span><span class="p">),</span> <span class="n">lower</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">L_R</span> <span class="o">=</span> <span class="n">linalg</span><span class="o">.</span><span class="n">cholesky</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">R</span> <span class="o">+</span> <span class="mf">1e-10</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">no</span><span class="p">),</span> <span class="n">lower</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">ensemble</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ensemble_</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+            <span class="c1"># --- Predict: propagate + add process noise ---</span>
+            <span class="n">predicted</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_propagate_ensemble</span><span class="p">(</span><span class="n">ensemble</span><span class="p">)</span>
+            <span class="n">process_noise</span> <span class="o">=</span> <span class="n">L_Q</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">ns</span><span class="p">,</span> <span class="n">ne</span><span class="p">)</span>
+            <span class="n">predicted</span> <span class="o">+=</span> <span class="n">process_noise</span>
+
+            <span class="c1"># --- Ensemble statistics ---</span>
+            <span class="n">x_mean</span> <span class="o">=</span> <span class="n">predicted</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">A</span> <span class="o">=</span> <span class="p">(</span><span class="n">predicted</span> <span class="o">-</span> <span class="n">x_mean</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">])</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">ne</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+
+            <span class="c1"># --- Predicted observations ---</span>
+            <span class="n">pred_obs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_observe_ensemble</span><span class="p">(</span><span class="n">predicted</span><span class="p">)</span>
+            <span class="n">z_mean</span> <span class="o">=</span> <span class="n">pred_obs</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">HA</span> <span class="o">=</span> <span class="p">(</span><span class="n">pred_obs</span> <span class="o">-</span> <span class="n">z_mean</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">])</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">ne</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+
+            <span class="c1"># --- Perturbed observations ---</span>
+            <span class="n">obs_noise</span> <span class="o">=</span> <span class="n">L_R</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">no</span><span class="p">,</span> <span class="n">ne</span><span class="p">)</span>
+            <span class="n">perturbed_obs</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">][:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">+</span> <span class="n">obs_noise</span>
+
+            <span class="c1"># --- EnKF update ---</span>
+            <span class="n">S</span> <span class="o">=</span> <span class="n">HA</span> <span class="o">@</span> <span class="n">HA</span><span class="o">.</span><span class="n">T</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">R</span>
+            <span class="n">K</span> <span class="o">=</span> <span class="n">A</span> <span class="o">@</span> <span class="n">HA</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">S</span><span class="p">)</span>
+
+            <span class="n">innovations</span> <span class="o">=</span> <span class="n">perturbed_obs</span> <span class="o">-</span> <span class="n">pred_obs</span>
+            <span class="n">ensemble</span> <span class="o">=</span> <span class="n">predicted</span> <span class="o">+</span> <span class="n">K</span> <span class="o">@</span> <span class="n">innovations</span>
+
+            <span class="c1"># --- Store results ---</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">filtered_states_</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">ensemble</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">diff</span> <span class="o">=</span> <span class="n">ensemble</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">filtered_states_</span><span class="p">[</span><span class="n">i</span><span class="p">][:,</span> <span class="kc">None</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">filtered_covs_</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">diff</span> <span class="o">@</span> <span class="n">diff</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">ne</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">ensemble_</span> <span class="o">=</span> <span class="n">ensemble</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_fitted_</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+
+<div class="viewcode-block" id="EnsembleKalmanFilter.predict">
+<a class="viewcode-back" href="../../../modules.html#tfilterspy.state_estimation.EnsembleKalmanFilter.predict">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return filtered state estimates.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_fitted</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">filtered_states_</span></div>
+
+
+<div class="viewcode-block" id="EnsembleKalmanFilter.filter_step">
+<a class="viewcode-back" href="../../../modules.html#tfilterspy.state_estimation.EnsembleKalmanFilter.filter_step">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">filter_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Single-step online EnKF update.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_online_ensemble&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_init_ensemble</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_online_ensemble</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ensemble_</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+        <span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+        <span class="n">ns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_state</span>
+        <span class="n">ne</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_ensemble</span>
+        <span class="n">no</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_obs</span>
+
+        <span class="n">L_Q</span> <span class="o">=</span> <span class="n">linalg</span><span class="o">.</span><span class="n">cholesky</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Q</span> <span class="o">+</span> <span class="mf">1e-10</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">ns</span><span class="p">),</span> <span class="n">lower</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">L_R</span> <span class="o">=</span> <span class="n">linalg</span><span class="o">.</span><span class="n">cholesky</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">R</span> <span class="o">+</span> <span class="mf">1e-10</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">no</span><span class="p">),</span> <span class="n">lower</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">predicted</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_propagate_ensemble</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_online_ensemble</span><span class="p">)</span>
+        <span class="n">predicted</span> <span class="o">+=</span> <span class="n">L_Q</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">ns</span><span class="p">,</span> <span class="n">ne</span><span class="p">)</span>
+
+        <span class="n">x_mean</span> <span class="o">=</span> <span class="n">predicted</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">A</span> <span class="o">=</span> <span class="p">(</span><span class="n">predicted</span> <span class="o">-</span> <span class="n">x_mean</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">])</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">ne</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">pred_obs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_observe_ensemble</span><span class="p">(</span><span class="n">predicted</span><span class="p">)</span>
+        <span class="n">z_mean</span> <span class="o">=</span> <span class="n">pred_obs</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">HA</span> <span class="o">=</span> <span class="p">(</span><span class="n">pred_obs</span> <span class="o">-</span> <span class="n">z_mean</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">])</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">ne</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">S</span> <span class="o">=</span> <span class="n">HA</span> <span class="o">@</span> <span class="n">HA</span><span class="o">.</span><span class="n">T</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">R</span>
+        <span class="n">K</span> <span class="o">=</span> <span class="n">A</span> <span class="o">@</span> <span class="n">HA</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">S</span><span class="p">)</span>
+
+        <span class="n">perturbed_obs</span> <span class="o">=</span> <span class="n">z</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">+</span> <span class="n">L_R</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">no</span><span class="p">,</span> <span class="n">ne</span><span class="p">)</span>
+        <span class="n">innovations</span> <span class="o">=</span> <span class="n">perturbed_obs</span> <span class="o">-</span> <span class="n">pred_obs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_online_ensemble</span> <span class="o">=</span> <span class="n">predicted</span> <span class="o">+</span> <span class="n">K</span> <span class="o">@</span> <span class="n">innovations</span>
+
+        <span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_online_ensemble</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">state</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Thabang Mashinin-Sekhoto, Lebogang Mashinini-Sekhoto, Palesa Mashinini-Sekhoto.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

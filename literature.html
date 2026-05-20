@@ -1,27 +1,29 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Understanding the Kalman Filter &mdash; tfilterspy 1.0.0 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+  <title>Theory &mdash; tfilterspy 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
-        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
-        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=8d563738"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="API Reference" href="api_cheatsheet.html" />
-    <link rel="prev" title="Real World Usecases 🎢" href="examples.html" /> 
+    <link rel="next" title="Module Reference" href="modules.html" />
+    <link rel="prev" title="API Reference" href="api_reference.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -46,12 +48,20 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="examples.html">Real World Usecases 🎢</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Understanding the Kalman Filter</a></li>
-<li class="toctree-l1"><a class="reference internal" href="#understanding-particle-filters">Understanding  Particle Filters</a></li>
-<li class="toctree-l1"><a class="reference internal" href="#parameter-estimation-methods">Parameter Estimation Methods</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api_cheatsheet.html">API Reference</a></li>
-<li class="toctree-l1"><a class="reference internal" href="modules.html">Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="filter_guide.html">Choosing a Filter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_reference.html">API Reference</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Theory</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#kalman-filter">Kalman Filter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#extended-kalman-filter">Extended Kalman Filter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#unscented-kalman-filter">Unscented Kalman Filter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ensemble-kalman-filter">Ensemble Kalman Filter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#particle-filter">Particle Filter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Module Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="CONTRIBUTING.html">Contributing to TFiltersPy</a></li>
 <li class="toctree-l1"><a class="reference internal" href="MAINTAINERS.html">Maintainers of TFilterPy</a></li>
 </ul>
@@ -70,7 +80,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Understanding the Kalman Filter</li>
+      <li class="breadcrumb-item active">Theory</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/literature.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -80,160 +90,137 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="understanding-the-kalman-filter">
-<h1>Understanding the Kalman Filter<a class="headerlink" href="#understanding-the-kalman-filter" title="Permalink to this heading"></a></h1>
-<p>Think of the Kalman Filter like a smart guesser 🤖.</p>
-<p>At each step, it:
-1. Predicts what will happen next.
-2. Checks what <em>actually</em> happened (the measurement).
-3. Adjusts its guess based on how wrong it was.</p>
-<p>We do this using a bit of matrix magic — here’s how it works:</p>
-<p>Step 1: Predict (What do we <em>think</em> will happen?)</p>
+  <section id="theory">
+<h1>Theory<a class="headerlink" href="#theory" title="Link to this heading"></a></h1>
+<p>This page covers the mathematical foundations of each filter implemented
+in TFiltersPy.</p>
+<section id="kalman-filter">
+<h2>Kalman Filter<a class="headerlink" href="#kalman-filter" title="Link to this heading"></a></h2>
+<p>The Kalman filter is optimal for <strong>linear-Gaussian</strong> state-space models:</p>
 <div class="math notranslate nohighlight">
-\[ \begin{align}\begin{aligned}\hat{x}_{k|k-1} = F \cdot \hat{x}_{k-1|k-1}\\P_{k|k-1} = F \cdot P_{k-1|k-1} \cdot F^\top + Q\end{aligned}\end{align} \]</div>
-<ul class="simple">
-<li><p><span class="math notranslate nohighlight">\(\hat{x}_{k|k-1}\)</span> is our predicted state at time <cite>k</cite>.</p></li>
-<li><p><span class="math notranslate nohighlight">\(F\)</span> is the state transition matrix.</p></li>
-<li><p><span class="math notranslate nohighlight">\(P_{k|k-1}\)</span> is the predicted uncertainty (covariance).</p></li>
-<li><p><span class="math notranslate nohighlight">\(Q\)</span> is the process noise — how much we think the system can change randomly.</p></li>
-</ul>
-<p>Step 2: Update (What did we <em>actually</em> see?)</p>
+\[ \begin{align}\begin{aligned}x_{k+1} = F \, x_k + w_k, \quad w_k \sim \mathcal{N}(0, Q)\\z_k = H \, x_k + v_k, \quad v_k \sim \mathcal{N}(0, R)\end{aligned}\end{align} \]</div>
+<p><strong>Predict step:</strong></p>
 <div class="math notranslate nohighlight">
-\[ \begin{align}\begin{aligned}y_k = z_k - H \cdot \hat{x}_{k|k-1}\\S_k = H \cdot P_{k|k-1} \cdot H^\top + R\\K_k = P_{k|k-1} \cdot H^\top \cdot S_k^{-1}\end{aligned}\end{align} \]</div>
-<ul class="simple">
-<li><p><span class="math notranslate nohighlight">\(y_k\)</span> is the “innovation” — the difference between what we saw (<cite>z_k</cite>) and what we predicted.</p></li>
-<li><p><span class="math notranslate nohighlight">\(H\)</span> maps our state to what we <em>can</em> observe.</p></li>
-<li><p><span class="math notranslate nohighlight">\(S_k\)</span> is the uncertainty in the measurement prediction.</p></li>
-<li><p><span class="math notranslate nohighlight">\(R\)</span> is the observation noise — how noisy our measurements are.</p></li>
-<li><p><span class="math notranslate nohighlight">\(K_k\)</span> is the Kalman Gain — it decides how much to trust the measurement vs the prediction.</p></li>
-</ul>
-<p>Step 3: Correct (Update our guess based on new info)</p>
+\[ \begin{align}\begin{aligned}\hat{x}_{k|k-1} = F \, \hat{x}_{k-1|k-1}\\P_{k|k-1} = F \, P_{k-1|k-1} \, F^\top + Q\end{aligned}\end{align} \]</div>
+<p><strong>Update step</strong> (Joseph form for numerical stability):</p>
 <div class="math notranslate nohighlight">
-\[ \begin{align}\begin{aligned}\hat{x}_{k|k} = \hat{x}_{k|k-1} + K_k \cdot y_k\\P_{k|k} = (I - K_k \cdot H) \cdot P_{k|k-1}\end{aligned}\end{align} \]</div>
-<ul class="simple">
-<li><p>We update our estimate of the state and its uncertainty.</p></li>
-</ul>
-<p>Intuition:</p>
-<ul class="simple">
-<li><p>If the measurement is very noisy (big <span class="math notranslate nohighlight">\(R\)</span>), we trust our prediction more.</p></li>
-<li><p>If the prediction is uncertain (big <span class="math notranslate nohighlight">\(P\)</span>), we trust the measurement more.</p></li>
-</ul>
-<p>This beautiful balance between <strong>what we expect</strong> and <strong>what we observe</strong> is what makes the Kalman Filter such a powerful tool for filtering out noise and estimating the hidden truth. ✨</p>
+\[ \begin{align}\begin{aligned}y_k = z_k - H \, \hat{x}_{k|k-1}\\S_k = H \, P_{k|k-1} \, H^\top + R\\K_k = P_{k|k-1} \, H^\top \, S_k^{-1}\\\hat{x}_{k|k} = \hat{x}_{k|k-1} + K_k \, y_k\\P_{k|k} = (I - K_k H) \, P_{k|k-1} \, (I - K_k H)^\top + K_k \, R \, K_k^\top\end{aligned}\end{align} \]</div>
+<p>The Joseph form update for <span class="math notranslate nohighlight">\(P_{k|k}\)</span> is more numerically stable than the
+standard <span class="math notranslate nohighlight">\((I - K_k H) P_{k|k-1}\)</span> formulation.</p>
+<p><strong>RTS Smoother</strong> (backward pass):</p>
+<div class="math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}C_k = P_{k|k} \, F^\top \, P_{k+1|k}^{-1}\\\hat{x}_{k|T} = \hat{x}_{k|k} + C_k (\hat{x}_{k+1|T} - \hat{x}_{k+1|k})\\P_{k|T} = P_{k|k} + C_k (P_{k+1|T} - P_{k+1|k}) C_k^\top\end{aligned}\end{align} \]</div>
 </section>
-<section id="understanding-particle-filters">
-<h1>Understanding  Particle Filters<a class="headerlink" href="#understanding-particle-filters" title="Permalink to this heading"></a></h1>
-<p>The Particle Filter is like a swarm of guesses (particles) trying to chase the truth. 🐝
-Each particle represents a hypothesis of where the system could be. As time moves on, we adjust how much we trust each guess based on what we observe.</p>
-<p>Step 1: Initialization 🐣</p>
-<p>Start with <cite>N</cite> particles, each one initialized at the same known state (or sampled if you want variation):</p>
+<section id="extended-kalman-filter">
+<h2>Extended Kalman Filter<a class="headerlink" href="#extended-kalman-filter" title="Link to this heading"></a></h2>
+<p>For <strong>nonlinear</strong> systems with Gaussian noise:</p>
 <div class="math notranslate nohighlight">
-\[x_i^{(0)} = x_0, \quad w_i^{(0)} = \frac{1}{N}\]</div>
-<p>Where:
-- <span class="math notranslate nohighlight">\(x_i^{(0)}\)</span> is the initial state of the <em>i</em>-th particle
-- <span class="math notranslate nohighlight">\(w_i^{(0)}\)</span> is its weight (uniform initially)</p>
-<p>Step 2: Prediction 🔮</p>
-<p>Let each particle evolve through the state transition model and some random noise:</p>
+\[x_{k+1} = f(x_k) + w_k, \quad z_k = h(x_k) + v_k\]</div>
+<p>The EKF linearizes around the current estimate using first-order Taylor expansion:</p>
 <div class="math notranslate nohighlight">
-\[x_i^{(k)} = f(x_i^{(k-1)}) + \epsilon_i^{(k)}\]</div>
-<p>Where:
-- <span class="math notranslate nohighlight">\(f(x)\)</span> is the state transition function
-- <span class="math notranslate nohighlight">\(\epsilon_i^{(k)} \sim \mathcal{N}(0, Q)\)</span> is process noise</p>
-<p>Step 3: Measurement Update 🔍</p>
-<p>Compare each particle’s prediction to the actual observation:</p>
-<div class="math notranslate nohighlight">
-\[w_i^{(k)} \propto w_i^{(k-1)} \cdot p(y^{(k)} \mid x_i^{(k)})\]</div>
-<p>Typically, this likelihood is Gaussian:</p>
-<div class="math notranslate nohighlight">
-\[p(y^{(k)} \mid x_i^{(k)}) = \mathcal{N}(y^{(k)} \mid h(x_i^{(k)}), R)\]</div>
-<p>Where:
-- <span class="math notranslate nohighlight">\(h(x)\)</span> is the observation function
-- <span class="math notranslate nohighlight">\(R\)</span> is the observation noise covariance</p>
-<p>Normalize weights so they sum to 1:</p>
-<div class="math notranslate nohighlight">
-\[\sum_{i=1}^{N} w_i^{(k)} = 1\]</div>
-<p>Step 4: Resampling ♻️</p>
-<p>If most particles have near-zero weights, we resample to keep only good particles:</p>
-<p>Draw <cite>N</cite> new particles <strong>with replacement</strong>, favoring high-weight ones.</p>
-<div class="math notranslate nohighlight">
-\[x_i^{(k)} \sim \{ x_j^{(k)} \}_{j=1}^{N}, \quad \text{with probability } w_j^{(k)}\]</div>
-<p>Step 5: Estimate State 🎯</p>
-<p>The best guess of the state is just a weighted average of all particles:</p>
-<div class="math notranslate nohighlight">
-\[\hat{x}^{(k)} = \sum_{i=1}^{N} w_i^{(k)} x_i^{(k)}\]</div>
-<p>Bonus: Residuals</p>
-<p>We can define the residual (aka innovation) at each step:</p>
-<div class="math notranslate nohighlight">
-\[r^{(k)} = y^{(k)} - \hat{y}^{(k)}, \quad \text{where } \hat{y}^{(k)} = h(\hat{x}^{(k)})\]</div>
-<p>Use these for parameter estimation or diagnostics!</p>
-<p>Intuition:</p>
-<ul class="simple">
-<li><p>If your model is spot-on, particles stay tight and track the truth.</p></li>
-<li><p>If your model is wrong or noisy, particles spread out, but the filter still works by focusing on better guesses.</p></li>
-</ul>
-<p>That’s it — just a clever crowd of guesses refining themselves with every new clue! 🧠🎲</p>
+\[F_k = \left.\frac{\partial f}{\partial x}\right|_{x=\hat{x}_{k|k}}, \quad
+H_k = \left.\frac{\partial h}{\partial x}\right|_{x=\hat{x}_{k|k-1}}\]</div>
+<p>Then applies the standard Kalman equations with these linearized matrices.
+Works well when the nonlinearity is mild relative to the uncertainty.</p>
 </section>
-<section id="parameter-estimation-methods">
-<h1>Parameter Estimation Methods<a class="headerlink" href="#parameter-estimation-methods" title="Permalink to this heading"></a></h1>
-<p>When you’re not sure how much noise is in your system (Q and R), these methods help your filter figure it out.</p>
-<p>Let’s break down each method simply:</p>
-<p>Notation:
-- <span class="math notranslate nohighlight">\(Q\)</span>: Process noise covariance (uncertainty in the system’s evolution).
-- <span class="math notranslate nohighlight">\(R\)</span>: Observation noise covariance (uncertainty in what we observe).
-- <span class="math notranslate nohighlight">\(y_t\)</span>: Observation at time t.
-- <span class="math notranslate nohighlight">\(\hat{y}_t\)</span>: Predicted observation at time t from filter.
-- <span class="math notranslate nohighlight">\(r_t = y_t - \hat{y}_t\)</span>: The <em>residual</em> or <em>innovation</em>.</p>
-<ol class="arabic simple">
-<li><p>Residual Analysis 📊</p></li>
+<section id="unscented-kalman-filter">
+<h2>Unscented Kalman Filter<a class="headerlink" href="#unscented-kalman-filter" title="Link to this heading"></a></h2>
+<p>The UKF avoids Jacobians by propagating <strong>sigma points</strong> through the
+nonlinear functions. For a state of dimension <span class="math notranslate nohighlight">\(n\)</span>:</p>
+<p><strong>Sigma point generation</strong> (Merwe scaled):</p>
+<div class="math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}\lambda = \alpha^2 (n + \kappa) - n\\\chi_0 = \hat{x}\\\chi_i = \hat{x} + \sqrt{(n + \lambda) P}_i, \quad i = 1, \ldots, n\\\chi_{n+i} = \hat{x} - \sqrt{(n + \lambda) P}_i, \quad i = 1, \ldots, n\end{aligned}\end{align} \]</div>
+<p><strong>Weights:</strong></p>
+<div class="math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}W_0^{(m)} = \frac{\lambda}{n + \lambda}, \quad
+W_0^{(c)} = \frac{\lambda}{n + \lambda} + (1 - \alpha^2 + \beta)\\W_i^{(m)} = W_i^{(c)} = \frac{1}{2(n + \lambda)}, \quad i = 1, \ldots, 2n\end{aligned}\end{align} \]</div>
+<p>The sigma points are propagated through <span class="math notranslate nohighlight">\(f\)</span> and <span class="math notranslate nohighlight">\(h\)</span>, and the
+resulting mean and covariance are computed as weighted averages. This captures
+second-order statistics without derivatives.</p>
+</section>
+<section id="ensemble-kalman-filter">
+<h2>Ensemble Kalman Filter<a class="headerlink" href="#ensemble-kalman-filter" title="Link to this heading"></a></h2>
+<p>The EnKF approximates the Kalman filter using a <strong>Monte Carlo ensemble</strong>
+of <span class="math notranslate nohighlight">\(M\)</span> state realizations:</p>
+<div class="math notranslate nohighlight">
+\[E_k = [x_k^{(1)}, x_k^{(2)}, \ldots, x_k^{(M)}]\]</div>
+<p><strong>Predict:</strong> Propagate each member through the dynamics:</p>
+<div class="math notranslate nohighlight">
+\[x_{k+1}^{(i)} = f(x_k^{(i)}) + w_k^{(i)}\]</div>
+<p><strong>Update:</strong> Use ensemble statistics instead of full covariance:</p>
+<div class="math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}\bar{x}_k = \frac{1}{M} \sum_{i=1}^{M} x_k^{(i)}\\P_k \approx \frac{1}{M-1} \sum_{i=1}^{M} (x_k^{(i)} - \bar{x}_k)(x_k^{(i)} - \bar{x}_k)^\top\end{aligned}\end{align} \]</div>
+<p>The Kalman gain is computed from these ensemble-derived statistics.
+Each member is updated with a perturbed observation:</p>
+<div class="math notranslate nohighlight">
+\[x_k^{(i)} \leftarrow x_k^{(i)} + K_k(z_k + \epsilon_k^{(i)} - h(x_k^{(i)}))\]</div>
+<p>This scales to systems with millions of state variables since we never
+store or invert the full covariance matrix.</p>
+</section>
+<section id="particle-filter">
+<h2>Particle Filter<a class="headerlink" href="#particle-filter" title="Link to this heading"></a></h2>
+<p>The particle filter represents the posterior using <span class="math notranslate nohighlight">\(N\)</span> weighted samples:</p>
+<div class="math notranslate nohighlight">
+\[p(x_k | z_{1:k}) \approx \sum_{i=1}^{N} w_k^{(i)} \, \delta(x - x_k^{(i)})\]</div>
+<p><strong>Predict:</strong> Draw from the transition model:</p>
+<div class="math notranslate nohighlight">
+\[x_k^{(i)} \sim f(x_{k-1}^{(i)}) + \mathcal{N}(0, Q)\]</div>
+<p><strong>Update weights</strong> using the observation likelihood:</p>
+<div class="math notranslate nohighlight">
+\[w_k^{(i)} \propto w_{k-1}^{(i)} \cdot p(z_k | x_k^{(i)})\]</div>
+<p>Weights are normalized to sum to 1.</p>
+<p><strong>Systematic resampling</strong> is triggered when the Effective Sample Size
+drops below a threshold:</p>
+<div class="math notranslate nohighlight">
+\[\text{ESS} = \frac{1}{\sum_{i=1}^{N} (w_k^{(i)})^2}\]</div>
+<p>Systematic resampling has lower variance than multinomial resampling and
+produces more evenly distributed samples.</p>
+<p><strong>State estimate:</strong></p>
+<div class="math notranslate nohighlight">
+\[\hat{x}_k = \sum_{i=1}^{N} w_k^{(i)} \, x_k^{(i)}\]</div>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><ol class="upperalpha simple" start="18">
+<li><ol class="upperalpha simple" start="5">
+<li><p>Kalman, “A New Approach to Linear Filtering and Prediction Problems,” <em>ASME Journal of Basic Engineering</em>, 1960.</p></li>
 </ol>
-<p>This method says: “Let’s look at the errors and calculate how wild they are.”</p>
-<p>We assume the residuals are due to noise. So we use their <strong>variance</strong> and <strong>covariance</strong> to estimate Q and R:</p>
-<div class="math notranslate nohighlight">
-\[ \begin{align}\begin{aligned}R \approx \mathrm{Var}(r_t) = \frac{1}{T} \sum_{t=1}^{T} r_t r_t^\top\\Q \approx \mathrm{Cov}(r_t) = \frac{1}{T} \sum_{t=1}^{T} (r_t - \bar{r})(r_t - \bar{r})^\top\end{aligned}\end{align} \]</div>
-<p>Where <span class="math notranslate nohighlight">\(\bar{r}\)</span> is the mean of the residuals.</p>
-<ol class="arabic simple" start="2">
-<li><p>Maximum Likelihood Estimation (MLE) 🔍</p></li>
+</li>
 </ol>
-<p>MLE says: “Let’s find the Q and R that <em>most likely</em> made our observations happen.”</p>
-<p>We do it iteratively:
-- Run the filter
-- Get residuals
-- Update Q and R to maximize the likelihood</p>
-<p>Simplified:</p>
-<div class="math notranslate nohighlight">
-\[ \begin{align}\begin{aligned}Q^{(i+1)} = \mathrm{Var}(r_t^{(i)})\\R^{(i+1)} = \mathrm{Var}(r_t^{(i)})\end{aligned}\end{align} \]</div>
-<p>Where <span class="math notranslate nohighlight">\(i\)</span> is the iteration index. We stop after a few rounds or when it converges.</p>
-<ol class="arabic simple" start="3">
-<li><p>Cross-Validation (CV) 🔁</p></li>
+</li>
+<li><ol class="upperalpha simple" start="19">
+<li><ol class="upperalpha simple" start="10">
+<li><p>Julier and J. K. Uhlmann, “Unscented Filtering and Nonlinear Estimation,” <em>Proceedings of the IEEE</em>, 2004.</p></li>
 </ol>
-<p>Let’s split the data into parts (folds), train the filter on some, and validate on the rest.</p>
-<p>For each fold:</p>
-<div class="math notranslate nohighlight">
-\[ \begin{align}\begin{aligned}\text{Train on } X_{\text{train}}, \quad \text{Validate on } X_{\text{val}}\\Q_{\text{fold}} = \mathrm{Cov}(r_t^{\text{train}}), \quad
-R_{\text{fold}} = \mathrm{Var}(r_t^{\text{train}})\end{aligned}\end{align} \]</div>
-<p>Then we compute the <strong>validation score</strong>:</p>
-<div class="math notranslate nohighlight">
-\[\text{Score}_{\text{fold}} = \frac{1}{N} \sum_{t \in \text{val}} \left\| y_t - \hat{y}_t \right\|^2\]</div>
-<p>We pick the Q and R from the fold with the <strong>lowest score</strong>.</p>
-<ol class="arabic simple" start="4">
-<li><p>Adaptive Filtering (Online Updating) 🔄</p></li>
+</li>
 </ol>
-<p>This method says: “Let’s keep updating Q and R as we go using a small learning rate.”</p>
-<p>Every new innovation <span class="math notranslate nohighlight">\(r_t\)</span> gives us new evidence to tweak Q and R:</p>
-<div class="math notranslate nohighlight">
-\[ \begin{align}\begin{aligned}Q_t = (1 - \alpha) Q_{t-1} + \alpha (r_t r_t^\top)\\R_t = (1 - \alpha) R_{t-1} + \alpha \cdot \mathrm{diag}(r_t r_t^\top)\end{aligned}\end{align} \]</div>
-<p>Where:
-- <span class="math notranslate nohighlight">\(\alpha\)</span> is the learning rate (e.g. 0.01)
-- <span class="math notranslate nohighlight">\(r_t\)</span> is the innovation (residual)</p>
-<p>The filter gets smarter over time, adjusting itself like a thermostat reacting to room temperature. 🌡️</p>
-<p>These techniques are all about helping the filter “learn” how noisy the world is — so it can be confident when it needs to be, and skeptical when things look fishy. 🐠</p>
+</li>
+<li><ol class="upperalpha simple" start="7">
+<li><p>Evensen, “Sequential Data Assimilation with a Nonlinear Quasi-Geostrophic Model Using Monte Carlo Methods,” <em>JGR</em>, 1994.</p></li>
+</ol>
+</li>
+<li><ol class="upperalpha simple">
+<li><p>Doucet, N. de Freitas, and N. Gordon, <em>Sequential Monte Carlo Methods in Practice</em>, Springer, 2001.</p></li>
+</ol>
+</li>
+<li><ol class="upperalpha simple" start="8">
+<li><ol class="upperalpha simple" start="5">
+<li><p>Rauch, F. Tung, and C. T. Striebel, “Maximum Likelihood Estimates of Linear Dynamic Systems,” <em>AIAA Journal</em>, 1965.</p></li>
+</ol>
+</li>
+</ol>
+</li>
+</ul>
+</section>
 </section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="examples.html" class="btn btn-neutral float-left" title="Real World Usecases 🎢" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="api_cheatsheet.html" class="btn btn-neutral float-right" title="API Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="api_reference.html" class="btn btn-neutral float-left" title="API Reference" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="modules.html" class="btn btn-neutral float-right" title="Module Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

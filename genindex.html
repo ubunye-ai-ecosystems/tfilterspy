@@ -1,19 +1,21 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Index &mdash; tfilterspy 1.0.0 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
-        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=8d563738"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="#" />
     <link rel="search" title="Search" href="search.html" /> 
@@ -41,12 +43,12 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="examples.html">Real World Usecases 🎢</a></li>
-<li class="toctree-l1"><a class="reference internal" href="literature.html">Understanding the Kalman Filter</a></li>
-<li class="toctree-l1"><a class="reference internal" href="literature.html#understanding-particle-filters">Understanding  Particle Filters</a></li>
-<li class="toctree-l1"><a class="reference internal" href="literature.html#parameter-estimation-methods">Parameter Estimation Methods</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api_cheatsheet.html">API Reference</a></li>
-<li class="toctree-l1"><a class="reference internal" href="modules.html">Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="filter_guide.html">Choosing a Filter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_reference.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="literature.html">Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Module Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="CONTRIBUTING.html">Contributing to TFiltersPy</a></li>
 <li class="toctree-l1"><a class="reference internal" href="MAINTAINERS.html">Maintainers of TFilterPy</a></li>
 </ul>
@@ -83,6 +85,7 @@
  | <a href="#E"><strong>E</strong></a>
  | <a href="#F"><strong>F</strong></a>
  | <a href="#G"><strong>G</strong></a>
+ | <a href="#K"><strong>K</strong></a>
  | <a href="#M"><strong>M</strong></a>
  | <a href="#P"><strong>P</strong></a>
  | <a href="#R"><strong>R</strong></a>
@@ -104,33 +107,111 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="modules.html#tfilterspy.state_estimation.DaskKalmanFilter">DaskKalmanFilter (class in tfilterspy.state_estimation)</a>
+
+      <ul>
+        <li><a href="modules.html#tfilterspy.state_estimation.linear_filters.DaskKalmanFilter">(class in tfilterspy.state_estimation.linear_filters)</a>
 </li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="modules.html#tfilterspy.state_estimation.DaskNonLinearKalmanFilter">DaskNonLinearKalmanFilter (class in tfilterspy.state_estimation)</a>
+      <li><a href="modules.html#tfilterspy.state_estimation.DaskNonLinearKalmanFilter">DaskNonLinearKalmanFilter (in module tfilterspy.state_estimation)</a>
 </li>
       <li><a href="modules.html#tfilterspy.state_estimation.DaskParticleFilter">DaskParticleFilter (class in tfilterspy.state_estimation)</a>
+
+      <ul>
+        <li><a href="modules.html#tfilterspy.state_estimation.particle_filters.DaskParticleFilter">(class in tfilterspy.state_estimation.particle_filters)</a>
 </li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
 <h2 id="E">E</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="modules.html#tfilterspy.state_estimation.DaskKalmanFilter.estimate_parameters">estimate_parameters() (tfilterspy.state_estimation.DaskKalmanFilter method)</a>
+      <li><a href="modules.html#tfilterspy.state_estimation.EnsembleKalmanFilter">EnsembleKalmanFilter (class in tfilterspy.state_estimation)</a>
+
+      <ul>
+        <li><a href="modules.html#tfilterspy.state_estimation.ensemble_kalman.EnsembleKalmanFilter">(class in tfilterspy.state_estimation.ensemble_kalman)</a>
+</li>
+      </ul></li>
+      <li><a href="modules.html#tfilterspy.utils.optimisation_utils.ParameterEstimator.estimate_parameters">estimate_parameters() (tfilterspy.utils.optimisation_utils.ParameterEstimator method)</a>
+</li>
+      <li><a href="modules.html#tfilterspy.utils.optimisation_utils.ParameterEstimator.estimate_with_adaptive_filtering">estimate_with_adaptive_filtering() (tfilterspy.utils.optimisation_utils.ParameterEstimator method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="modules.html#tfilterspy.state_estimation.DaskParticleFilter.estimate_state">estimate_state() (tfilterspy.state_estimation.DaskParticleFilter method)</a>
+      <li><a href="modules.html#tfilterspy.utils.optimisation_utils.ParameterEstimator.estimate_with_cross_validation">estimate_with_cross_validation() (tfilterspy.utils.optimisation_utils.ParameterEstimator method)</a>
 </li>
+      <li><a href="modules.html#tfilterspy.utils.optimisation_utils.ParameterEstimator.estimate_with_mle">estimate_with_mle() (tfilterspy.utils.optimisation_utils.ParameterEstimator method)</a>
+</li>
+      <li><a href="modules.html#tfilterspy.utils.optimisation_utils.ParameterEstimator.estimate_with_residual_analysis">estimate_with_residual_analysis() (tfilterspy.utils.optimisation_utils.ParameterEstimator method)</a>
+</li>
+      <li><a href="modules.html#tfilterspy.state_estimation.ExtendedKalmanFilter">ExtendedKalmanFilter (class in tfilterspy.state_estimation)</a>
+
+      <ul>
+        <li><a href="modules.html#tfilterspy.state_estimation.extended_kalman.ExtendedKalmanFilter">(class in tfilterspy.state_estimation.extended_kalman)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
 <h2 id="F">F</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="modules.html#tfilterspy.state_estimation.DaskKalmanFilter.fit">fit() (tfilterspy.state_estimation.DaskKalmanFilter method)</a>
+      <li><a href="modules.html#tfilterspy.state_estimation.ensemble_kalman.EnsembleKalmanFilter.filter_step">filter_step() (tfilterspy.state_estimation.ensemble_kalman.EnsembleKalmanFilter method)</a>
+
+      <ul>
+        <li><a href="modules.html#tfilterspy.state_estimation.EnsembleKalmanFilter.filter_step">(tfilterspy.state_estimation.EnsembleKalmanFilter method)</a>
 </li>
+        <li><a href="modules.html#tfilterspy.state_estimation.extended_kalman.ExtendedKalmanFilter.filter_step">(tfilterspy.state_estimation.extended_kalman.ExtendedKalmanFilter method)</a>
+</li>
+        <li><a href="modules.html#tfilterspy.state_estimation.ExtendedKalmanFilter.filter_step">(tfilterspy.state_estimation.ExtendedKalmanFilter method)</a>
+</li>
+        <li><a href="modules.html#tfilterspy.state_estimation.KalmanFilter.filter_step">(tfilterspy.state_estimation.KalmanFilter method)</a>
+</li>
+        <li><a href="modules.html#tfilterspy.state_estimation.linear_filters.KalmanFilter.filter_step">(tfilterspy.state_estimation.linear_filters.KalmanFilter method)</a>
+</li>
+        <li><a href="modules.html#tfilterspy.state_estimation.particle_filters.ParticleFilter.filter_step">(tfilterspy.state_estimation.particle_filters.ParticleFilter method)</a>
+</li>
+        <li><a href="modules.html#tfilterspy.state_estimation.ParticleFilter.filter_step">(tfilterspy.state_estimation.ParticleFilter method)</a>
+</li>
+        <li><a href="modules.html#tfilterspy.state_estimation.unscented_kalman.UnscentedKalmanFilter.filter_step">(tfilterspy.state_estimation.unscented_kalman.UnscentedKalmanFilter method)</a>
+</li>
+        <li><a href="modules.html#tfilterspy.state_estimation.UnscentedKalmanFilter.filter_step">(tfilterspy.state_estimation.UnscentedKalmanFilter method)</a>
+</li>
+      </ul></li>
+      <li><a href="modules.html#tfilterspy.state_estimation.ensemble_kalman.EnsembleKalmanFilter.fit">fit() (tfilterspy.state_estimation.ensemble_kalman.EnsembleKalmanFilter method)</a>
+
+      <ul>
+        <li><a href="modules.html#tfilterspy.state_estimation.EnsembleKalmanFilter.fit">(tfilterspy.state_estimation.EnsembleKalmanFilter method)</a>
+</li>
+        <li><a href="modules.html#tfilterspy.state_estimation.extended_kalman.ExtendedKalmanFilter.fit">(tfilterspy.state_estimation.extended_kalman.ExtendedKalmanFilter method)</a>
+</li>
+        <li><a href="modules.html#tfilterspy.state_estimation.ExtendedKalmanFilter.fit">(tfilterspy.state_estimation.ExtendedKalmanFilter method)</a>
+</li>
+        <li><a href="modules.html#tfilterspy.state_estimation.KalmanFilter.fit">(tfilterspy.state_estimation.KalmanFilter method)</a>
+</li>
+        <li><a href="modules.html#tfilterspy.state_estimation.linear_filters.KalmanFilter.fit">(tfilterspy.state_estimation.linear_filters.KalmanFilter method)</a>
+</li>
+        <li><a href="modules.html#tfilterspy.state_estimation.particle_filters.ParticleFilter.fit">(tfilterspy.state_estimation.particle_filters.ParticleFilter method)</a>
+</li>
+        <li><a href="modules.html#tfilterspy.state_estimation.ParticleFilter.fit">(tfilterspy.state_estimation.ParticleFilter method)</a>
+</li>
+        <li><a href="modules.html#tfilterspy.state_estimation.unscented_kalman.UnscentedKalmanFilter.fit">(tfilterspy.state_estimation.unscented_kalman.UnscentedKalmanFilter method)</a>
+</li>
+        <li><a href="modules.html#tfilterspy.state_estimation.UnscentedKalmanFilter.fit">(tfilterspy.state_estimation.UnscentedKalmanFilter method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="modules.html#tfilterspy.base_estimator.BaseEstimator.fit_predict">fit_predict() (tfilterspy.base_estimator.BaseEstimator method)</a>
+</li>
+      <li><a href="modules.html#tfilterspy.state_estimation.KalmanFilter.forecast">forecast() (tfilterspy.state_estimation.KalmanFilter method)</a>
+
+      <ul>
+        <li><a href="modules.html#tfilterspy.state_estimation.linear_filters.KalmanFilter.forecast">(tfilterspy.state_estimation.linear_filters.KalmanFilter method)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -139,6 +220,18 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="modules.html#tfilterspy.base_estimator.BaseEstimator.get_params">get_params() (tfilterspy.base_estimator.BaseEstimator method)</a>
 </li>
+  </ul></td>
+</tr></table>
+
+<h2 id="K">K</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="modules.html#tfilterspy.state_estimation.KalmanFilter">KalmanFilter (class in tfilterspy.state_estimation)</a>
+
+      <ul>
+        <li><a href="modules.html#tfilterspy.state_estimation.linear_filters.KalmanFilter">(class in tfilterspy.state_estimation.linear_filters)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -153,6 +246,18 @@
 </li>
         <li><a href="modules.html#module-tfilterspy.state_estimation">tfilterspy.state_estimation</a>
 </li>
+        <li><a href="modules.html#module-tfilterspy.state_estimation.ensemble_kalman">tfilterspy.state_estimation.ensemble_kalman</a>
+</li>
+        <li><a href="modules.html#module-tfilterspy.state_estimation.extended_kalman">tfilterspy.state_estimation.extended_kalman</a>
+</li>
+        <li><a href="modules.html#module-tfilterspy.state_estimation.linear_filters">tfilterspy.state_estimation.linear_filters</a>
+</li>
+        <li><a href="modules.html#module-tfilterspy.state_estimation.particle_filters">tfilterspy.state_estimation.particle_filters</a>
+</li>
+        <li><a href="modules.html#module-tfilterspy.state_estimation.unscented_kalman">tfilterspy.state_estimation.unscented_kalman</a>
+</li>
+        <li><a href="modules.html#module-tfilterspy.utils.optimisation_utils">tfilterspy.utils.optimisation_utils</a>
+</li>
       </ul></li>
   </ul></td>
 </tr></table>
@@ -160,10 +265,38 @@
 <h2 id="P">P</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="modules.html#tfilterspy.utils.optimisation_utils.ParameterEstimator">ParameterEstimator (class in tfilterspy.utils.optimisation_utils)</a>
+</li>
+      <li><a href="modules.html#tfilterspy.state_estimation.ParticleFilter">ParticleFilter (class in tfilterspy.state_estimation)</a>
+
+      <ul>
+        <li><a href="modules.html#tfilterspy.state_estimation.particle_filters.ParticleFilter">(class in tfilterspy.state_estimation.particle_filters)</a>
+</li>
+      </ul></li>
       <li><a href="modules.html#tfilterspy.state_estimation.DaskKalmanFilter.predict">predict() (tfilterspy.state_estimation.DaskKalmanFilter method)</a>
 
       <ul>
-        <li><a href="modules.html#tfilterspy.state_estimation.DaskParticleFilter.predict">(tfilterspy.state_estimation.DaskParticleFilter method)</a>
+        <li><a href="modules.html#tfilterspy.state_estimation.ensemble_kalman.EnsembleKalmanFilter.predict">(tfilterspy.state_estimation.ensemble_kalman.EnsembleKalmanFilter method)</a>
+</li>
+        <li><a href="modules.html#tfilterspy.state_estimation.EnsembleKalmanFilter.predict">(tfilterspy.state_estimation.EnsembleKalmanFilter method)</a>
+</li>
+        <li><a href="modules.html#tfilterspy.state_estimation.extended_kalman.ExtendedKalmanFilter.predict">(tfilterspy.state_estimation.extended_kalman.ExtendedKalmanFilter method)</a>
+</li>
+        <li><a href="modules.html#tfilterspy.state_estimation.ExtendedKalmanFilter.predict">(tfilterspy.state_estimation.ExtendedKalmanFilter method)</a>
+</li>
+        <li><a href="modules.html#tfilterspy.state_estimation.KalmanFilter.predict">(tfilterspy.state_estimation.KalmanFilter method)</a>
+</li>
+        <li><a href="modules.html#tfilterspy.state_estimation.linear_filters.DaskKalmanFilter.predict">(tfilterspy.state_estimation.linear_filters.DaskKalmanFilter method)</a>
+</li>
+        <li><a href="modules.html#tfilterspy.state_estimation.linear_filters.KalmanFilter.predict">(tfilterspy.state_estimation.linear_filters.KalmanFilter method)</a>
+</li>
+        <li><a href="modules.html#tfilterspy.state_estimation.particle_filters.ParticleFilter.predict">(tfilterspy.state_estimation.particle_filters.ParticleFilter method)</a>
+</li>
+        <li><a href="modules.html#tfilterspy.state_estimation.ParticleFilter.predict">(tfilterspy.state_estimation.ParticleFilter method)</a>
+</li>
+        <li><a href="modules.html#tfilterspy.state_estimation.unscented_kalman.UnscentedKalmanFilter.predict">(tfilterspy.state_estimation.unscented_kalman.UnscentedKalmanFilter method)</a>
+</li>
+        <li><a href="modules.html#tfilterspy.state_estimation.UnscentedKalmanFilter.predict">(tfilterspy.state_estimation.UnscentedKalmanFilter method)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -172,14 +305,10 @@
 <h2 id="R">R</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="modules.html#tfilterspy.state_estimation.DaskParticleFilter.resample">resample() (tfilterspy.state_estimation.DaskParticleFilter method)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="modules.html#tfilterspy.state_estimation.DaskKalmanFilter.run_filter">run_filter() (tfilterspy.state_estimation.DaskKalmanFilter method)</a>
+      <li><a href="modules.html#tfilterspy.state_estimation.KalmanFilter.run_filter">run_filter() (tfilterspy.state_estimation.KalmanFilter method)</a>
 
       <ul>
-        <li><a href="modules.html#tfilterspy.state_estimation.DaskParticleFilter.run_filter">(tfilterspy.state_estimation.DaskParticleFilter method)</a>
+        <li><a href="modules.html#tfilterspy.state_estimation.linear_filters.KalmanFilter.run_filter">(tfilterspy.state_estimation.linear_filters.KalmanFilter method)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -188,12 +317,20 @@
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="modules.html#tfilterspy.base_estimator.BaseEstimator.score">score() (tfilterspy.base_estimator.BaseEstimator method)</a>
+</li>
       <li><a href="modules.html#tfilterspy.base_estimator.BaseEstimator.set_params">set_params() (tfilterspy.base_estimator.BaseEstimator method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="modules.html#tfilterspy.state_estimation.DaskParticleFilter.step">step() (tfilterspy.state_estimation.DaskParticleFilter method)</a>
+      <li><a href="modules.html#tfilterspy.state_estimation.extended_kalman.ExtendedKalmanFilter.smooth">smooth() (tfilterspy.state_estimation.extended_kalman.ExtendedKalmanFilter method)</a>
+
+      <ul>
+        <li><a href="modules.html#tfilterspy.state_estimation.ExtendedKalmanFilter.smooth">(tfilterspy.state_estimation.ExtendedKalmanFilter method)</a>
 </li>
+        <li><a href="modules.html#tfilterspy.state_estimation.KalmanFilter.smooth">(tfilterspy.state_estimation.KalmanFilter method)</a>
+</li>
+        <li><a href="modules.html#tfilterspy.state_estimation.linear_filters.KalmanFilter.smooth">(tfilterspy.state_estimation.linear_filters.KalmanFilter method)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -207,13 +344,55 @@
         <li><a href="modules.html#module-tfilterspy.base_estimator">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     tfilterspy.state_estimation
 
       <ul>
         <li><a href="modules.html#module-tfilterspy.state_estimation">module</a>
+</li>
+      </ul></li>
+      <li>
+    tfilterspy.state_estimation.ensemble_kalman
+
+      <ul>
+        <li><a href="modules.html#module-tfilterspy.state_estimation.ensemble_kalman">module</a>
+</li>
+      </ul></li>
+      <li>
+    tfilterspy.state_estimation.extended_kalman
+
+      <ul>
+        <li><a href="modules.html#module-tfilterspy.state_estimation.extended_kalman">module</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li>
+    tfilterspy.state_estimation.linear_filters
+
+      <ul>
+        <li><a href="modules.html#module-tfilterspy.state_estimation.linear_filters">module</a>
+</li>
+      </ul></li>
+      <li>
+    tfilterspy.state_estimation.particle_filters
+
+      <ul>
+        <li><a href="modules.html#module-tfilterspy.state_estimation.particle_filters">module</a>
+</li>
+      </ul></li>
+      <li>
+    tfilterspy.state_estimation.unscented_kalman
+
+      <ul>
+        <li><a href="modules.html#module-tfilterspy.state_estimation.unscented_kalman">module</a>
+</li>
+      </ul></li>
+      <li>
+    tfilterspy.utils.optimisation_utils
+
+      <ul>
+        <li><a href="modules.html#module-tfilterspy.utils.optimisation_utils">module</a>
 </li>
       </ul></li>
       <li><a href="modules.html#tfilterspy.base_estimator.BaseEstimator.to_dask_array">to_dask_array() (tfilterspy.base_estimator.BaseEstimator static method)</a>
@@ -224,8 +403,12 @@
 <h2 id="U">U</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="modules.html#tfilterspy.state_estimation.DaskParticleFilter.update">update() (tfilterspy.state_estimation.DaskParticleFilter method)</a>
+      <li><a href="modules.html#tfilterspy.state_estimation.UnscentedKalmanFilter">UnscentedKalmanFilter (class in tfilterspy.state_estimation)</a>
+
+      <ul>
+        <li><a href="modules.html#tfilterspy.state_estimation.unscented_kalman.UnscentedKalmanFilter">(class in tfilterspy.state_estimation.unscented_kalman)</a>
 </li>
+      </ul></li>
   </ul></td>
 </tr></table>
 

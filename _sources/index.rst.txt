@@ -1,10 +1,8 @@
-.. tfilters documentation master file, created by
-   sphinx-quickstart on Sun Jan 12 00:32:16 2025.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+.. tfilters documentation master file
+
 .. image:: _static/tfilters-logo.jpeg
    :alt: tfilters logo
-   :width: 500px
+   :width: 400px
    :align: center
 
 .. raw:: html
@@ -14,56 +12,105 @@
 .. image:: https://img.shields.io/pypi/v/tfilterspy.svg
    :target: https://pypi.org/project/tfilterspy/
    :alt: PyPI version
+.. image:: https://img.shields.io/pypi/pyversions/tfilterspy.svg
+   :target: https://pypi.org/project/tfilterspy/
+   :alt: Python versions
 .. image:: https://img.shields.io/pypi/l/tfilterspy.svg
    :target: https://github.com/ubunye-ai-ecosystems/tfilterspy/blob/main/LICENSE
    :alt: License
-.. image:: https://img.shields.io/badge/made%20in-Africa-red.svg
-   :target: https://github.com/ubunye-ai-ecosystems
-   :alt: Made in Africa
 .. image:: https://img.shields.io/github/stars/ubunye-ai-ecosystems/tfilterspy.svg?style=social
    :target: https://github.com/ubunye-ai-ecosystems/tfilterspy
    :alt: GitHub Stars
 
-Welcome to TFilterPy's Documentation!
-=====================================
+TFiltersPy
+==========
 
-.. raw:: html
+**Bayesian state estimation for Python** -- sklearn-compatible, scalable, modular.
 
-   <p style="color: crimson; font-size: 0.9em; margin-top: 0.5em;">
-     Where we say: <strong>Sawubona, Molo, Hallo, Dumela, Ndaa, Xewani</strong>,
-     and a heartfelt <strong>Dinstang</strong> in pure Sipitori style 🇿🇦✨.
-   </p>
+TFiltersPy provides 5 production-ready Bayesian filters with a unified
+``fit`` / ``predict`` / ``score`` API. Built on NumPy/SciPy with optional
+Dask parallelism for large-scale problems.
 
-**TFiltersPy** is your go-to open-source Python library for applying state-of-the-art Bayesian filtering — built with the power of Dask for scale,  
-the elegance of Kalman and Particle Filters for precision, and a sprinkle of local flavor to make it proudly African.
+Part of the `Ubunye AI Ecosystems <https://github.com/ubunye-ai-ecosystems>`_.
 
-✨ This library is part of the **Ubunye Artificial Intelligent Ecosystems (UIAE)** —  
-a collaborative initiative to build powerful, locally rooted, and globally relevant AI tools.  
-Explore more projects at 👉 https://github.com/ubunye-ai-ecosystems
+Filters at a Glance
+--------------------
 
-🚀 Whether you're building AI for space tech, smart grids, autonomous cars, or township telemetry —  
-if it’s noisy, dynamic, and uncertain, we’ve got you covered.
+.. list-table::
+   :header-rows: 1
+   :widths: 25 30 15 15 15
 
-Features
---------
-- **Bayesian Filtering:** Supports both linear (Kalman) and nonlinear/non-Gaussian (Particle) filtering for robust state estimation in dynamic systems.
-- **Distributed Computation:** Built on Dask, enabling parallel and out-of-core filtering for large-scale or streaming data.
-- **Uncertainty Quantification:** Includes tools to quantify estimation confidence through residual analysis, covariance estimation, and adaptive strategies.
-- **Parameter Estimation:** Advanced methods for estimating system parameters using Bayesian techniques, including maximum likelihood and cross-validation.
-- **User-Friendly API:** Clean, modular, and scikit-learn like API — with examples, documentation, and sensible defaults so you can go from idea 💡 to insight 📈 fast.
+   * - Filter
+     - Best For
+     - Linearity
+     - Jacobians?
+     - Scales To
+   * - **KalmanFilter**
+     - GPS tracking, signal denoising
+     - Linear
+     - N/A
+     - 10K+ steps
+   * - **ExtendedKalmanFilter**
+     - Radar, navigation
+     - Nonlinear
+     - Required
+     - 10K+ steps
+   * - **UnscentedKalmanFilter**
+     - Highly nonlinear systems
+     - Nonlinear
+     - Not needed
+     - 10K+ steps
+   * - **EnsembleKalmanFilter**
+     - Weather, ocean models
+     - Nonlinear
+     - Not needed
+     - High-dim states
+   * - **ParticleFilter**
+     - Robot localization, multimodal
+     - Any
+     - Not needed
+     - Non-Gaussian
+
+Quick Example
+-------------
+
+.. code-block:: python
+
+   import numpy as np
+   from tfilterspy import KalmanFilter
+
+   F = np.eye(2)
+   H = np.eye(2)
+   Q = np.eye(2) * 0.1
+   R = np.eye(2) * 0.5
+
+   kf = KalmanFilter(F, H, Q, R, x0=np.zeros(2), P0=np.eye(2))
+   kf.fit(measurements)        # (n_steps, 2)
+   filtered = kf.predict()     # (n_steps, 2)
+   smoothed, _ = kf.smooth()   # RTS smoother
+
+Key Features
+-------------
+
+- **5 Filters:** KF, EKF, UKF, EnKF, Particle Filter -- covering linear to fully nonlinear, Gaussian to arbitrary distributions
+- **sklearn API:** ``fit()`` / ``predict()`` / ``score()`` / ``get_params()`` / ``set_params()``
+- **RTS Smoothing:** Backward pass for KF and EKF to refine estimates
+- **Online Filtering:** ``filter_step(z)`` for real-time streaming data
+- **Forecasting:** ``forecast(n_steps)`` to predict future states
+- **Dask Parallelism:** Ensemble and particle propagation on distributed clusters
+- **Memory Efficient:** ``store_covariances=False`` saves ~80% memory on long series
+- **Numerically Stable:** Joseph form covariance update, log-weight arithmetic
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
    :caption: Contents:
 
    installation
+   quickstart
+   filter_guide
    examples
+   api_reference
    literature
-   api_cheatsheet
    modules
    CONTRIBUTING
    MAINTAINERS
-
-
-
-

@@ -1,25 +1,27 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Real World Usecases 🎢 &mdash; tfilterspy 1.0.0 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+  <title>Examples &mdash; tfilterspy 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
-        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=8d563738"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Understanding the Kalman Filter" href="literature.html" />
-    <link rel="prev" title="Installation" href="installation.html" /> 
+    <link rel="next" title="API Reference" href="api_reference.html" />
+    <link rel="prev" title="Choosing a Filter" href="filter_guide.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -44,18 +46,22 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Real World Usecases 🎢</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#use-case-templates">Use-Case Templates</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#topic-modeling-kalman-filtering">Topic Modeling + Kalman Filtering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="filter_guide.html">Choosing a Filter</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#python-examples">Python Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#gps-tracking-kalmanfilter">GPS Tracking (KalmanFilter)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#radar-tracking-ekf-vs-ukf">Radar Tracking (EKF vs UKF)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#robot-localization-particlefilter">Robot Localization (ParticleFilter)</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#jupyter-notebooks">Jupyter Notebooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#filter-pipeline-diagram">Filter Pipeline Diagram</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="literature.html">Understanding the Kalman Filter</a></li>
-<li class="toctree-l1"><a class="reference internal" href="literature.html#understanding-particle-filters">Understanding  Particle Filters</a></li>
-<li class="toctree-l1"><a class="reference internal" href="literature.html#parameter-estimation-methods">Parameter Estimation Methods</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api_cheatsheet.html">API Reference</a></li>
-<li class="toctree-l1"><a class="reference internal" href="modules.html">Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_reference.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="literature.html">Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Module Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="CONTRIBUTING.html">Contributing to TFiltersPy</a></li>
 <li class="toctree-l1"><a class="reference internal" href="MAINTAINERS.html">Maintainers of TFilterPy</a></li>
 </ul>
@@ -74,7 +80,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Real World Usecases 🎢</li>
+      <li class="breadcrumb-item active">Examples</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/examples.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -84,105 +90,185 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="real-world-usecases">
-<h1>Real World Usecases 🎢<a class="headerlink" href="#real-world-usecases" title="Permalink to this heading"></a></h1>
-<p>Welcome to the Notebook Playground -  where your Jupyter notebooks come to life and show off their filtering magic! ✨
-This section showcases real-world applications of TFiltersPy in noisy, messy, dynamic environments where <strong>Bayesian filtering</strong> shines.</p>
-<p>🚀 Whether you’re smoothing topic probabilities, estimating hidden states, or tracking uncertainty across time — these notebooks will get you started.</p>
-<p>📚 For a full list of our example notebooks, head over to our GitHub:</p>
-<p>🔗 <a class="reference external" href="https://github.com/ubunye-ai-ecosystems/tfilterspy/tree/main/examples/notebooks">Visit the Examples Directory</a></p>
-<section id="use-case-templates">
-<h2>Use-Case Templates<a class="headerlink" href="#use-case-templates" title="Permalink to this heading"></a></h2>
-<p>Each example notebook typically follows this structure:</p>
-<ol class="arabic simple">
-<li><p><strong>Data Loading</strong> - Real or simulated data that represents a time-varying system.</p></li>
-<li><p><strong>Preprocessing</strong> - Cleaning, transformation, and feature extraction.</p></li>
-<li><p><strong>Filter Setup</strong> - Define system matrices (F, H), noise covariances (Q, R), and initial conditions.</p></li>
-<li><p><strong>Fit &amp; Predict</strong> - Apply your filter across the dataset using <cite>.fit()</cite> and <cite>.predict()</cite> or <cite>.run_filter()</cite>.</p></li>
-<li><p><strong>Visualization</strong> - Plot raw vs filtered estimates.</p></li>
-<li><p><strong>Interpretation</strong> - Gain insights into dynamics, trends, and uncertainty.</p></li>
-</ol>
-<section id="topic-modeling-kalman-filtering">
-<h3>Topic Modeling + Kalman Filtering<a class="headerlink" href="#topic-modeling-kalman-filtering" title="Permalink to this heading"></a></h3>
-<p>This notebook shows how to use TFiltersPy to smooth topic probabilities over time in a stream of disaster-related tweets.
-Smooth chaotic topic trends in disaster-related tweets to track evolving narratives over time.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">dask.array</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">da</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.feature_extraction.text</span><span class="w"> </span><span class="kn">import</span> <span class="n">CountVectorizer</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.decomposition</span><span class="w"> </span><span class="kn">import</span> <span class="n">LatentDirichletAllocation</span>
-<span class="kn">from</span><span class="w">  </span><span class="nn">tfilterspy.state_estimation.particle_filters</span><span class="w"> </span><span class="kn">import</span> <span class="n">DaskParticleFilter</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+  <section id="examples">
+<h1>Examples<a class="headerlink" href="#examples" title="Link to this heading"></a></h1>
+<p>TFiltersPy includes Python scripts and Jupyter notebooks demonstrating
+each filter on real-world problems.</p>
+<section id="python-examples">
+<h2>Python Examples<a class="headerlink" href="#python-examples" title="Link to this heading"></a></h2>
+<p>Run any example directly:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>examples/example_gps_tracking.py
 </pre></div>
 </div>
-<ol class="arabic simple">
-<li><p>Load Disaster Tweets</p></li>
-</ol>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">path_to_disaster_tweets</span><span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;/../../tfilterspy/examples/data/train_nlp.csv&#39;</span>
-<span class="n">data_path</span> <span class="o">=</span> <span class="n">path_to_disaster_tweets</span>  <span class="c1"># Update after download</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">data_path</span><span class="p">)</span>
-<span class="n">tweets</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>  <span class="c1"># ~7613 tweets</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Number of tweets: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">tweets</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 15.0%" />
+<col style="width: 55.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Example</p></th>
+<th class="head"><p>Filter</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">example_gps_tracking.py</span></code></p></td>
+<td><p>KF</p></td>
+<td><p>Vehicle tracks a figure-8 at 10 Hz GPS. Demonstrates <code class="docutils literal notranslate"><span class="pre">fit</span></code>, <code class="docutils literal notranslate"><span class="pre">predict</span></code>,
+<code class="docutils literal notranslate"><span class="pre">smooth</span></code>, <code class="docutils literal notranslate"><span class="pre">forecast</span></code>, <code class="docutils literal notranslate"><span class="pre">score</span></code>, and <code class="docutils literal notranslate"><span class="pre">filter_step</span></code>.
+Achieves 86% noise reduction (filtered), 96% (smoothed).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">example_radar_tracking.py</span></code></p></td>
+<td><p>EKF, UKF</p></td>
+<td><p>Aircraft in a coordinated turn observed by radar (range + bearing).
+Compares EKF vs UKF accuracy. EKF smoothing reaches 81% improvement.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">example_robot_localization.py</span></code></p></td>
+<td><p>PF</p></td>
+<td><p>Robot navigates using range measurements to 3 landmarks.
+Compares 100, 500, and 2000 particles. Shows ESS monitoring
+and online <code class="docutils literal notranslate"><span class="pre">filter_step</span></code> demo.</p></td>
+</tr>
+</tbody>
+</table>
+<section id="gps-tracking-kalmanfilter">
+<h3>GPS Tracking (KalmanFilter)<a class="headerlink" href="#gps-tracking-kalmanfilter" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tfilterspy</span><span class="w"> </span><span class="kn">import</span> <span class="n">KalmanFilter</span>
+
+<span class="n">dt</span> <span class="o">=</span> <span class="mf">0.1</span>
+<span class="n">F</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">],</span>
+              <span class="p">[</span><span class="mi">0</span><span class="p">,</span>  <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">],</span>
+              <span class="p">[</span><span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">dt</span><span class="p">],</span>
+              <span class="p">[</span><span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>  <span class="mi">1</span><span class="p">]])</span>
+<span class="n">H</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+              <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])</span>
+<span class="n">Q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">([</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
+<span class="n">R</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="mf">25.0</span>
+<span class="n">x0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+<span class="n">P0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span> <span class="o">*</span> <span class="mf">100.0</span>
+
+<span class="n">kf</span> <span class="o">=</span> <span class="n">KalmanFilter</span><span class="p">(</span><span class="n">F</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">P0</span><span class="p">)</span>
+<span class="n">kf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">measurements</span><span class="p">)</span>
+<span class="n">filtered</span> <span class="o">=</span> <span class="n">kf</span><span class="o">.</span><span class="n">predict</span><span class="p">()</span>
+<span class="n">smoothed</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">kf</span><span class="o">.</span><span class="n">smooth</span><span class="p">()</span>
+<span class="n">forecast_states</span><span class="p">,</span> <span class="n">forecast_covs</span> <span class="o">=</span> <span class="n">kf</span><span class="o">.</span><span class="n">forecast</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span>
 </pre></div>
 </div>
-<ol class="arabic simple" start="2">
-<li><p>Preprocess and Extract Topics</p></li>
-</ol>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">vectorizer</span> <span class="o">=</span> <span class="n">CountVectorizer</span><span class="p">(</span><span class="n">max_features</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span> <span class="n">stop_words</span><span class="o">=</span><span class="s1">&#39;english&#39;</span><span class="p">)</span>
-<span class="n">X</span> <span class="o">=</span> <span class="n">vectorizer</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">tweets</span><span class="p">)</span>
-<span class="n">n_topics</span> <span class="o">=</span> <span class="mi">5</span>  <span class="c1"># e.g., disaster, weather, casual, news, other</span>
-<span class="n">lda</span> <span class="o">=</span> <span class="n">LatentDirichletAllocation</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="n">n_topics</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
-<span class="n">topic_dist</span> <span class="o">=</span> <span class="n">lda</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>  <span class="c1"># Shape: (7613, 5)</span>
-<span class="n">X_dask</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">from_array</span><span class="p">(</span><span class="n">topic_dist</span><span class="p">,</span> <span class="n">chunks</span><span class="o">=</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="n">n_topics</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Topic distribution shape: </span><span class="si">{</span><span class="n">X_dask</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-<ol class="arabic simple" start="3">
-<li><p>Kalman Filter Initiative</p></li>
-</ol>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">n_features</span> <span class="o">=</span> <span class="mi">14</span>
-<span class="n">F</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">n_features</span><span class="p">)</span>  <span class="c1"># Static transition (identity for simplicity)</span>
-<span class="n">H</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">n_features</span><span class="p">)</span>  <span class="c1"># Direct observation</span>
-<span class="n">Q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">n_features</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.01</span>  <span class="c1"># Process noise</span>
-<span class="n">R</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">n_features</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.1</span>   <span class="c1"># Observation noise</span>
-<span class="n">x0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_features</span><span class="p">)</span>      <span class="c1"># Initial state</span>
-<span class="n">P0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">n_features</span><span class="p">)</span>        <span class="c1"># Initial covariance</span>
-<span class="n">kf</span> <span class="o">=</span> <span class="n">DaskKalmanFilter</span><span class="p">(</span><span class="n">F</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">P0</span><span class="p">,</span> <span class="n">estimation_strategy</span><span class="o">=</span><span class="s2">&quot;residual_analysis&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-<ol class="arabic simple" start="4">
-<li><p>Fit and Predict</p></li>
-</ol>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">kf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_dask</span><span class="p">)</span>
-<span class="n">smoothed_topics</span> <span class="o">=</span> <span class="n">kf</span><span class="o">.</span><span class="n">predict</span><span class="p">()</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
-</pre></div>
-</div>
-<ol class="arabic simple" start="5">
-<li><p>Plot Raw vs Smoothed Topics (first 1000 tweets)</p></li>
-</ol>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_topics</span><span class="p">):</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="n">n_topics</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">topic_dist</span><span class="p">[:</span><span class="mi">1000</span><span class="p">,</span> <span class="n">i</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Raw Topic </span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">smoothed_topics</span><span class="p">[:</span><span class="mi">1000</span><span class="p">,</span> <span class="n">i</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Smoothed Topic </span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Topic </span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Tweet Index (Time)&quot;</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Probability&quot;</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div>
-</div>
-<ol class="arabic simple" start="6">
-<li><p>Interpret Topics</p></li>
-</ol>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">feature_names</span> <span class="o">=</span> <span class="n">vectorizer</span><span class="o">.</span><span class="n">get_feature_names_out</span><span class="p">()</span>
-<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">topic</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">lda</span><span class="o">.</span><span class="n">components_</span><span class="p">):</span>
-    <span class="n">top_words</span> <span class="o">=</span> <span class="p">[</span><span class="n">feature_names</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">topic</span><span class="o">.</span><span class="n">argsort</span><span class="p">()[</span><span class="o">-</span><span class="mi">5</span><span class="p">:]]</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Topic </span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">top_words</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>RESULTS
+==================================================
+MSE raw GPS:    24.465 m^2
+MSE filtered:   3.495 m^2  (86% reduction)
+MSE smoothed:   0.990 m^2  (96% reduction)
+Log-likelihood: -6193.8
 </pre></div>
 </div>
 </section>
+<section id="radar-tracking-ekf-vs-ukf">
+<h3>Radar Tracking (EKF vs UKF)<a class="headerlink" href="#radar-tracking-ekf-vs-ukf" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">tfilterspy</span><span class="w"> </span><span class="kn">import</span> <span class="n">ExtendedKalmanFilter</span><span class="p">,</span> <span class="n">UnscentedKalmanFilter</span>
+
+<span class="n">ekf</span> <span class="o">=</span> <span class="n">ExtendedKalmanFilter</span><span class="p">(</span>
+    <span class="n">f</span><span class="o">=</span><span class="n">f_aircraft</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="n">h_radar</span><span class="p">,</span>
+    <span class="n">F_jacobian</span><span class="o">=</span><span class="n">F_jac</span><span class="p">,</span> <span class="n">H_jacobian</span><span class="o">=</span><span class="n">H_jac</span><span class="p">,</span>
+    <span class="n">Q</span><span class="o">=</span><span class="n">Q</span><span class="p">,</span> <span class="n">R</span><span class="o">=</span><span class="n">R</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="n">x0</span><span class="p">,</span> <span class="n">P0</span><span class="o">=</span><span class="n">P0</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">ekf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">measurements</span><span class="p">)</span>
+<span class="n">ekf_states</span> <span class="o">=</span> <span class="n">ekf</span><span class="o">.</span><span class="n">predict</span><span class="p">()</span>
+<span class="n">ekf_smoothed</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">ekf</span><span class="o">.</span><span class="n">smooth</span><span class="p">()</span>
+
+<span class="n">ukf</span> <span class="o">=</span> <span class="n">UnscentedKalmanFilter</span><span class="p">(</span>
+    <span class="n">f</span><span class="o">=</span><span class="n">f_aircraft</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="n">h_radar</span><span class="p">,</span>
+    <span class="n">Q</span><span class="o">=</span><span class="n">Q</span><span class="p">,</span> <span class="n">R</span><span class="o">=</span><span class="n">R</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="n">x0</span><span class="p">,</span> <span class="n">P0</span><span class="o">=</span><span class="n">P0</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">ukf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">measurements</span><span class="p">)</span>
+<span class="n">ukf_states</span> <span class="o">=</span> <span class="n">ukf</span><span class="o">.</span><span class="n">predict</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>POSITION RMSE COMPARISON
+=======================================================
+Raw radar:      42.84 m
+EKF filtered:   33.68 m  (21% improvement)
+EKF smoothed:    8.01 m  (81% improvement)
+UKF filtered:   33.66 m  (21% improvement)
+</pre></div>
+</div>
+</section>
+<section id="robot-localization-particlefilter">
+<h3>Robot Localization (ParticleFilter)<a class="headerlink" href="#robot-localization-particlefilter" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">tfilterspy</span><span class="w"> </span><span class="kn">import</span> <span class="n">ParticleFilter</span>
+
+<span class="n">pf</span> <span class="o">=</span> <span class="n">ParticleFilter</span><span class="p">(</span>
+    <span class="n">f</span><span class="o">=</span><span class="n">robot_dynamics</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="n">range_observation</span><span class="p">,</span>
+    <span class="n">Q</span><span class="o">=</span><span class="n">Q</span><span class="p">,</span> <span class="n">R</span><span class="o">=</span><span class="n">R</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="n">x0</span><span class="p">,</span>
+    <span class="n">n_particles</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span>
+    <span class="n">resample_threshold</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">pf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">measurements</span><span class="p">)</span>
+<span class="n">states</span> <span class="o">=</span> <span class="n">pf</span><span class="o">.</span><span class="n">predict</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Mean ESS: </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">pf</span><span class="o">.</span><span class="n">effective_sample_sizes_</span><span class="p">)</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>PARTICLE FILTER RESULTS
+============================================================
+Particles    RMSE (m)    Mean ESS     ESS %
+-----------------------------------------------
+     100       0.777       62.3     62.3%
+     500       0.437      304.2     60.8%
+    2000       0.320     1193.2     59.7%
+</pre></div>
+</div>
+</section>
+</section>
+<section id="jupyter-notebooks">
+<h2>Jupyter Notebooks<a class="headerlink" href="#jupyter-notebooks" title="Link to this heading"></a></h2>
+<p>Interactive notebooks with visualizations are in <code class="docutils literal notranslate"><span class="pre">examples/notebooks/</span></code>.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 40.0%" />
+<col style="width: 60.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Notebook</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Kalman-filters-use-cases.ipynb</span></code></p></td>
+<td><p>Image denoising (digits), EEG time series filtering,
+NLP topic smoothing with KalmanFilter</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">particle-filters-usecases.ipynb</span></code></p></td>
+<td><p>Same three domains with ParticleFilter. Includes ESS monitoring
+and comparison to KF</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">nonlinear-filters-usecases.ipynb</span></code></p></td>
+<td><p>Pendulum tracking (EKF vs UKF), radar with RTS smoothing,
+high-dimensional coupled oscillator (EnKF vs UKF)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">benchmarks.ipynb</span></code></p></td>
+<td><p>Speed and accuracy comparison of all 5 filters on the digits dataset.
+Includes classification accuracy with LogisticRegression</p></td>
+</tr>
+</tbody>
+</table>
+<p><a class="reference external" href="https://github.com/ubunye-ai-ecosystems/tfilterspy/tree/main/examples/notebooks">Browse notebooks on GitHub</a></p>
+</section>
+<section id="filter-pipeline-diagram">
+<h2>Filter Pipeline Diagram<a class="headerlink" href="#filter-pipeline-diagram" title="Link to this heading"></a></h2>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>                                        +-----------+
+measurements ──&gt; fit() ──&gt; predict() ──&gt;| filtered  |
+                               |        | states    |
+                               |        +-----------+
+                               |
+                           smooth() ──&gt; smoothed states (KF, EKF only)
+                               |
+                         forecast(n) ──&gt; future prediction (KF only)
+                               |
+                        filter_step(z) ──&gt; online / streaming mode (all filters)
+</pre></div>
+</div>
 </section>
 </section>
 
@@ -190,8 +276,8 @@ Smooth chaotic topic trends in disaster-related tweets to track evolving narrati
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="installation.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="literature.html" class="btn btn-neutral float-right" title="Understanding the Kalman Filter" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="filter_guide.html" class="btn btn-neutral float-left" title="Choosing a Filter" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="api_reference.html" class="btn btn-neutral float-right" title="API Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

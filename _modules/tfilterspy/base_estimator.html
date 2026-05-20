@@ -1,19 +1,21 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>tfilterspy.base_estimator &mdash; tfilterspy 1.0.0 documentation</title>
-      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+
   
-        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-        <script src="../../_static/doctools.js"></script>
-        <script src="../../_static/sphinx_highlight.js"></script>
-        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=8d563738"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
@@ -41,12 +43,12 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../examples.html">Real World Usecases 🎢</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../literature.html">Understanding the Kalman Filter</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../literature.html#understanding-particle-filters">Understanding  Particle Filters</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../literature.html#parameter-estimation-methods">Parameter Estimation Methods</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api_cheatsheet.html">API Reference</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../modules.html">Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../filter_guide.html">Choosing a Filter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api_reference.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../literature.html">Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">Module Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../CONTRIBUTING.html">Contributing to TFiltersPy</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../MAINTAINERS.html">Maintainers of TFilterPy</a></li>
 </ul>
@@ -76,57 +78,41 @@
            <div itemprop="articleBody">
              
   <h1>Source code for tfilterspy.base_estimator</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">dask.array</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">da</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">dask.array</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">da</span>
 
 
-<div class="viewcode-block" id="BaseEstimator"><a class="viewcode-back" href="../../modules.html#tfilterspy.base_estimator.BaseEstimator">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">BaseEstimator</span><span class="p">:</span>
+<div class="viewcode-block" id="BaseEstimator">
+<a class="viewcode-back" href="../../modules.html#tfilterspy.base_estimator.BaseEstimator">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">BaseEstimator</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Base class for all estimators in the TFilterPy package.</span>
-<span class="sd">    Provides common functionality such as parameter handling and validation.</span>
+<span class="sd">    Base class for all estimators in TFiltersPy.</span>
+
+<span class="sd">    Provides sklearn-compatible parameter handling, Dask array conversion,</span>
+<span class="sd">    and shared methods for all filter implementations.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Initialize the BaseEstimator.</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            name (str): Optional name for the estimator.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
 
-<div class="viewcode-block" id="BaseEstimator.to_dask_array"><a class="viewcode-back" href="../../modules.html#tfilterspy.base_estimator.BaseEstimator.to_dask_array">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="BaseEstimator.to_dask_array">
+<a class="viewcode-back" href="../../modules.html#tfilterspy.base_estimator.BaseEstimator.to_dask_array">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">to_dask_array</span><span class="p">(</span><span class="n">numpy_array</span><span class="p">,</span> <span class="n">chunk_size</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Convert a NumPy array to a Dask array with specified chunking.</span>
-<span class="sd">        If chunk_size is None, use Dask&#39;s automatic chunking.</span>
-<span class="sd">        </span>
-<span class="sd">        Parameters:</span>
-<span class="sd">            numpy_array (np.ndarray): Input array.</span>
-<span class="sd">            chunk_size (int or tuple, optional): Desired chunk size.</span>
-<span class="sd">            </span>
-<span class="sd">        Returns:</span>
-<span class="sd">            da.Array: Dask array version of numpy_array.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert a NumPy array to a Dask array with specified chunking.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">chunk_size</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">da</span><span class="o">.</span><span class="n">from_array</span><span class="p">(</span><span class="n">numpy_array</span><span class="p">,</span> <span class="n">chunks</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">chunk_size</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="n">chunks</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">chunk_size</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">numpy_array</span><span class="o">.</span><span class="n">ndim</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="c1"># If a single integer is provided, use it for all dimensions.</span>
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">chunk_size</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
-                <span class="n">chunks</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">chunk_size</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">numpy_array</span><span class="o">.</span><span class="n">ndim</span><span class="p">))</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">chunks</span> <span class="o">=</span> <span class="n">chunk_size</span>
-            <span class="k">return</span> <span class="n">da</span><span class="o">.</span><span class="n">from_array</span><span class="p">(</span><span class="n">numpy_array</span><span class="p">,</span> <span class="n">chunks</span><span class="o">=</span><span class="n">chunks</span><span class="p">)</span></div>
-    
-<div class="viewcode-block" id="BaseEstimator.get_params"><a class="viewcode-back" href="../../modules.html#tfilterspy.base_estimator.BaseEstimator.get_params">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">deep</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Get parameters of the estimator.</span>
+            <span class="n">chunks</span> <span class="o">=</span> <span class="n">chunk_size</span>
+        <span class="k">return</span> <span class="n">da</span><span class="o">.</span><span class="n">from_array</span><span class="p">(</span><span class="n">numpy_array</span><span class="p">,</span> <span class="n">chunks</span><span class="o">=</span><span class="n">chunks</span><span class="p">)</span></div>
 
-<span class="sd">        Args:</span>
-<span class="sd">            deep (bool): If True, retrieves parameters of nested objects.</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            dict: A dictionary of parameter names mapped to their values.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="BaseEstimator.get_params">
+<a class="viewcode-back" href="../../modules.html#tfilterspy.base_estimator.BaseEstimator.get_params">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">deep</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get parameters of the estimator (sklearn-compatible).&quot;&quot;&quot;</span>
         <span class="n">params</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">deep</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="s2">&quot;get_params&quot;</span><span class="p">):</span>
@@ -136,44 +122,61 @@
                 <span class="n">params</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
         <span class="k">return</span> <span class="n">params</span></div>
 
-<div class="viewcode-block" id="BaseEstimator.set_params"><a class="viewcode-back" href="../../modules.html#tfilterspy.base_estimator.BaseEstimator.set_params">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">set_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Set parameters of the estimator.</span>
 
-<span class="sd">        Args:</span>
-<span class="sd">            **params: Arbitrary keyword arguments of parameters to set.</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            self: Returns the instance itself.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="BaseEstimator.set_params">
+<a class="viewcode-back" href="../../modules.html#tfilterspy.base_estimator.BaseEstimator.set_params">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set parameters of the estimator (sklearn-compatible).&quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">params</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid parameter: </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span></div>
 
-<div class="viewcode-block" id="BaseEstimator.validate_matrices"><a class="viewcode-back" href="../../modules.html#tfilterspy.base_estimator.BaseEstimator.validate_matrices">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">validate_matrices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">matrices</span><span class="p">):</span>
+
+<div class="viewcode-block" id="BaseEstimator.fit_predict">
+<a class="viewcode-back" href="../../modules.html#tfilterspy.base_estimator.BaseEstimator.fit_predict">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fit_predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Fit the filter and return state estimates.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span><span class="o">.</span><span class="n">predict</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="BaseEstimator.score">
+<a class="viewcode-back" href="../../modules.html#tfilterspy.base_estimator.BaseEstimator.score">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X_true</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Validate that matrices have consistent shapes.</span>
+<span class="sd">        Negative MSE between filtered states and ground truth.</span>
 
-<span class="sd">        Args:</span>
-<span class="sd">            matrices (dict): A dictionary of matrix names and their values.</span>
-
-<span class="sd">        Raises:</span>
-<span class="sd">            ValueError: If the matrices are inconsistent.</span>
+<span class="sd">        Returns a negative value so that higher is better (sklearn convention).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_fitted</span><span class="p">()</span>
+        <span class="n">X_true</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">X_true</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">X_true</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">X_true</span> <span class="o">=</span> <span class="n">X_true</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">states</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filtered_states_</span>
+        <span class="k">if</span> <span class="n">X_true</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">states</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+            <span class="n">X_true</span> <span class="o">=</span> <span class="n">X_true</span><span class="p">[:,</span> <span class="p">:</span><span class="n">states</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+        <span class="k">return</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">states</span> <span class="o">-</span> <span class="n">X_true</span><span class="p">[:</span><span class="nb">len</span><span class="p">(</span><span class="n">states</span><span class="p">)])</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BaseEstimator.validate_matrices">
+<a class="viewcode-back" href="../../modules.html#tfilterspy.base_estimator.BaseEstimator.validate_matrices">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">validate_matrices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">matrices</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Validate that matrices are NumPy or Dask arrays.&quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">matrix</span> <span class="ow">in</span> <span class="n">matrices</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">matrix</span><span class="p">,</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">da</span><span class="o">.</span><span class="n">Array</span><span class="p">)):</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> must be a NumPy or Dask array.&quot;</span><span class="p">)</span></div>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        String representation of the estimator.</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            str: A string representation of the estimator.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">get_params</span><span class="p">(</span><span class="n">deep</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="si">}</span><span class="s2">)&quot;</span></div>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_check_fitted</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;is_fitted_&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> not fitted. Call fit() first.&quot;</span>
+            <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">()&quot;</span></div>
+
 </pre></div>
 
            </div>

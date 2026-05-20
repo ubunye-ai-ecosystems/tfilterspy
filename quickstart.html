@@ -1,0 +1,284 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quick Start &mdash; tfilterspy 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=8d563738"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Choosing a Filter" href="filter_guide.html" />
+    <link rel="prev" title="Installation" href="installation.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            tfilterspy
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Quick Start</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#kalman-filter-gps-tracking">Kalman Filter – GPS Tracking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#extended-kalman-filter-radar-tracking">Extended Kalman Filter – Radar Tracking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#unscented-kalman-filter-no-jacobians">Unscented Kalman Filter – No Jacobians</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ensemble-kalman-filter-high-dimensional">Ensemble Kalman Filter – High-Dimensional</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#particle-filter-robot-localization">Particle Filter – Robot Localization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#online-filtering">Online Filtering</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="filter_guide.html">Choosing a Filter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_reference.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="literature.html">Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Module Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CONTRIBUTING.html">Contributing to TFiltersPy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="MAINTAINERS.html">Maintainers of TFilterPy</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">tfilterspy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Quick Start</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/quickstart.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="quick-start">
+<h1>Quick Start<a class="headerlink" href="#quick-start" title="Link to this heading"></a></h1>
+<p>All filters in TFiltersPy follow the same three-step workflow:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>1. Create    --&gt;   filter = KalmanFilter(F, H, Q, R, x0, P0)
+2. Fit       --&gt;   filter.fit(measurements)
+3. Predict   --&gt;   states = filter.predict()
+</pre></div>
+</div>
+<section id="kalman-filter-gps-tracking">
+<h2>Kalman Filter – GPS Tracking<a class="headerlink" href="#kalman-filter-gps-tracking" title="Link to this heading"></a></h2>
+<p>A vehicle drives a figure-8 pattern. GPS gives noisy 2D position at 10 Hz.
+We use a constant-velocity model to estimate the true trajectory.</p>
+<p><strong>State vector:</strong> <code class="docutils literal notranslate"><span class="pre">[x,</span> <span class="pre">vx,</span> <span class="pre">y,</span> <span class="pre">vy]</span></code> (position + velocity in 2D)</p>
+<p><strong>Observation:</strong> <code class="docutils literal notranslate"><span class="pre">[x_gps,</span> <span class="pre">y_gps]</span></code> (noisy GPS position)</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tfilterspy</span><span class="w"> </span><span class="kn">import</span> <span class="n">KalmanFilter</span>
+
+<span class="n">dt</span> <span class="o">=</span> <span class="mf">0.1</span>  <span class="c1"># 10 Hz GPS</span>
+
+<span class="c1"># Constant-velocity model</span>
+<span class="n">F</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">],</span>
+              <span class="p">[</span><span class="mi">0</span><span class="p">,</span>  <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">],</span>
+              <span class="p">[</span><span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">dt</span><span class="p">],</span>
+              <span class="p">[</span><span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>  <span class="mi">1</span><span class="p">]])</span>
+
+<span class="n">H</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>   <span class="c1"># GPS observes position only</span>
+              <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])</span>
+
+<span class="n">Q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">([</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>   <span class="c1"># process noise</span>
+<span class="n">R</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="mf">25.0</span>                  <span class="c1"># GPS noise (5m std)^2</span>
+<span class="n">x0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">P0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span> <span class="o">*</span> <span class="mf">100.0</span>
+
+<span class="n">kf</span> <span class="o">=</span> <span class="n">KalmanFilter</span><span class="p">(</span><span class="n">F</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">P0</span><span class="p">)</span>
+<span class="n">kf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">gps_measurements</span><span class="p">)</span>           <span class="c1"># shape (n_steps, 2)</span>
+<span class="n">filtered</span> <span class="o">=</span> <span class="n">kf</span><span class="o">.</span><span class="n">predict</span><span class="p">()</span>            <span class="c1"># shape (n_steps, 4)</span>
+
+<span class="c1"># RTS smoothing -- backward pass for even better estimates</span>
+<span class="n">smoothed</span><span class="p">,</span> <span class="n">smoothed_covs</span> <span class="o">=</span> <span class="n">kf</span><span class="o">.</span><span class="n">smooth</span><span class="p">()</span>
+
+<span class="c1"># Forecast 50 steps into the future</span>
+<span class="n">forecast_states</span><span class="p">,</span> <span class="n">forecast_covs</span> <span class="o">=</span> <span class="n">kf</span><span class="o">.</span><span class="n">forecast</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span>
+
+<span class="c1"># Evaluate against ground truth</span>
+<span class="n">score</span> <span class="o">=</span> <span class="n">kf</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">true_states</span><span class="p">)</span>      <span class="c1"># negative MSE (higher = better)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Log-likelihood: </span><span class="si">{</span><span class="n">kf</span><span class="o">.</span><span class="n">log_likelihood_</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Result:</strong> 86% noise reduction (filtered), 96% (smoothed).</p>
+</section>
+<section id="extended-kalman-filter-radar-tracking">
+<h2>Extended Kalman Filter – Radar Tracking<a class="headerlink" href="#extended-kalman-filter-radar-tracking" title="Link to this heading"></a></h2>
+<p>An aircraft in a coordinated turn. A ground-based radar measures range and
+bearing – a nonlinear observation model. The EKF linearizes using Jacobians.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">tfilterspy</span><span class="w"> </span><span class="kn">import</span> <span class="n">ExtendedKalmanFilter</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">f_aircraft</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Constant-velocity transition.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">dt</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">dt</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="mi">3</span><span class="p">]])</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">h_radar</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Radar: [range, bearing] from origin.&quot;&quot;&quot;</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">r</span><span class="p">,</span> <span class="n">theta</span><span class="p">])</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">F_jac</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+                     <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">dt</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]])</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">H_jac</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="n">px</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">py</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">x</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">px</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">py</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="mf">1e-10</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">px</span><span class="o">/</span><span class="n">r</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">py</span><span class="o">/</span><span class="n">r</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+                     <span class="p">[</span><span class="o">-</span><span class="n">py</span><span class="o">/</span><span class="n">r</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">px</span><span class="o">/</span><span class="n">r</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])</span>
+
+<span class="n">ekf</span> <span class="o">=</span> <span class="n">ExtendedKalmanFilter</span><span class="p">(</span>
+    <span class="n">f</span><span class="o">=</span><span class="n">f_aircraft</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="n">h_radar</span><span class="p">,</span>
+    <span class="n">F_jacobian</span><span class="o">=</span><span class="n">F_jac</span><span class="p">,</span> <span class="n">H_jacobian</span><span class="o">=</span><span class="n">H_jac</span><span class="p">,</span>
+    <span class="n">Q</span><span class="o">=</span><span class="n">Q</span><span class="p">,</span> <span class="n">R</span><span class="o">=</span><span class="n">R</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="n">x0</span><span class="p">,</span> <span class="n">P0</span><span class="o">=</span><span class="n">P0</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">ekf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">radar_measurements</span><span class="p">)</span>
+<span class="n">states</span> <span class="o">=</span> <span class="n">ekf</span><span class="o">.</span><span class="n">predict</span><span class="p">()</span>
+<span class="n">smoothed</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">ekf</span><span class="o">.</span><span class="n">smooth</span><span class="p">()</span>   <span class="c1"># RTS smoother works for EKF too</span>
+</pre></div>
+</div>
+</section>
+<section id="unscented-kalman-filter-no-jacobians">
+<h2>Unscented Kalman Filter – No Jacobians<a class="headerlink" href="#unscented-kalman-filter-no-jacobians" title="Link to this heading"></a></h2>
+<p>Same radar problem, but the UKF uses sigma points instead of Jacobians.
+Often more accurate for highly nonlinear systems and easier to implement
+since you only need the transition and observation functions.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">tfilterspy</span><span class="w"> </span><span class="kn">import</span> <span class="n">UnscentedKalmanFilter</span>
+
+<span class="n">ukf</span> <span class="o">=</span> <span class="n">UnscentedKalmanFilter</span><span class="p">(</span>
+    <span class="n">f</span><span class="o">=</span><span class="n">f_aircraft</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="n">h_radar</span><span class="p">,</span>
+    <span class="n">Q</span><span class="o">=</span><span class="n">Q</span><span class="p">,</span> <span class="n">R</span><span class="o">=</span><span class="n">R</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="n">x0</span><span class="p">,</span> <span class="n">P0</span><span class="o">=</span><span class="n">P0</span><span class="p">,</span>
+    <span class="n">alpha</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">kappa</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">ukf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">radar_measurements</span><span class="p">)</span>
+<span class="n">states</span> <span class="o">=</span> <span class="n">ukf</span><span class="o">.</span><span class="n">predict</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="ensemble-kalman-filter-high-dimensional">
+<h2>Ensemble Kalman Filter – High-Dimensional<a class="headerlink" href="#ensemble-kalman-filter-high-dimensional" title="Link to this heading"></a></h2>
+<p>For systems with thousands of state variables (weather, ocean models) where
+storing full covariance matrices is infeasible. Uses a Monte Carlo ensemble
+with optional Dask parallelism.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">tfilterspy</span><span class="w"> </span><span class="kn">import</span> <span class="n">EnsembleKalmanFilter</span>
+
+<span class="n">enkf</span> <span class="o">=</span> <span class="n">EnsembleKalmanFilter</span><span class="p">(</span>
+    <span class="n">f</span><span class="o">=</span><span class="n">dynamics_fn</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="n">observation_fn</span><span class="p">,</span>
+    <span class="n">Q</span><span class="o">=</span><span class="n">Q</span><span class="p">,</span> <span class="n">R</span><span class="o">=</span><span class="n">R</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="n">x0</span><span class="p">,</span>
+    <span class="n">n_ensemble</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+    <span class="n">use_dask</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>   <span class="c1"># parallel propagation</span>
+<span class="p">)</span>
+<span class="n">enkf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">measurements</span><span class="p">)</span>
+<span class="n">states</span> <span class="o">=</span> <span class="n">enkf</span><span class="o">.</span><span class="n">predict</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="particle-filter-robot-localization">
+<h2>Particle Filter – Robot Localization<a class="headerlink" href="#particle-filter-robot-localization" title="Link to this heading"></a></h2>
+<p>A robot navigates using range measurements to known landmarks.
+Handles nonlinear observations and multimodal distributions.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">tfilterspy</span><span class="w"> </span><span class="kn">import</span> <span class="n">ParticleFilter</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">robot_dynamics</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="n">heading</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">heading</span><span class="p">),</span>
+                     <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">heading</span><span class="p">),</span>
+                     <span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.05</span><span class="p">])</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">range_to_landmarks</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="n">pos</span> <span class="o">=</span> <span class="n">x</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">landmarks</span> <span class="o">-</span> <span class="n">pos</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+
+<span class="n">pf</span> <span class="o">=</span> <span class="n">ParticleFilter</span><span class="p">(</span>
+    <span class="n">f</span><span class="o">=</span><span class="n">robot_dynamics</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="n">range_to_landmarks</span><span class="p">,</span>
+    <span class="n">Q</span><span class="o">=</span><span class="n">Q</span><span class="p">,</span> <span class="n">R</span><span class="o">=</span><span class="n">R</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="n">x0</span><span class="p">,</span>
+    <span class="n">n_particles</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span>
+    <span class="n">resample_threshold</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">pf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">range_measurements</span><span class="p">)</span>
+<span class="n">states</span> <span class="o">=</span> <span class="n">pf</span><span class="o">.</span><span class="n">predict</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Mean ESS: </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">pf</span><span class="o">.</span><span class="n">effective_sample_sizes_</span><span class="p">)</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="online-filtering">
+<h2>Online Filtering<a class="headerlink" href="#online-filtering" title="Link to this heading"></a></h2>
+<p>All filters support step-by-step updates for real-time / streaming applications:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">kf</span> <span class="o">=</span> <span class="n">KalmanFilter</span><span class="p">(</span><span class="n">F</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">P0</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">measurement</span> <span class="ow">in</span> <span class="n">sensor_stream</span><span class="p">:</span>
+    <span class="n">x_est</span><span class="p">,</span> <span class="n">P_est</span> <span class="o">=</span> <span class="n">kf</span><span class="o">.</span><span class="n">filter_step</span><span class="p">(</span><span class="n">measurement</span><span class="p">)</span>
+    <span class="c1"># use x_est immediately for control, display, etc.</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="installation.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="filter_guide.html" class="btn btn-neutral float-right" title="Choosing a Filter" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Thabang Mashinin-Sekhoto, Lebogang Mashinini-Sekhoto, Palesa Mashinini-Sekhoto.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

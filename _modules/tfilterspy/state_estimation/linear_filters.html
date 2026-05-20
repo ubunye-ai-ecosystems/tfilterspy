@@ -1,19 +1,21 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>tfilterspy.state_estimation.linear_filters &mdash; tfilterspy 1.0.0 documentation</title>
-      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="../../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+
   
-        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/doctools.js"></script>
-        <script src="../../../_static/sphinx_highlight.js"></script>
-        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=8d563738"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -41,12 +43,12 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../examples.html">Real World Usecases 🎢</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../literature.html">Understanding the Kalman Filter</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../literature.html#understanding-particle-filters">Understanding  Particle Filters</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../literature.html#parameter-estimation-methods">Parameter Estimation Methods</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../api_cheatsheet.html">API Reference</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../filter_guide.html">Choosing a Filter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api_reference.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../literature.html">Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Module Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../CONTRIBUTING.html">Contributing to TFiltersPy</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../MAINTAINERS.html">Maintainers of TFilterPy</a></li>
 </ul>
@@ -78,269 +80,348 @@
   <h1>Source code for tfilterspy.state_estimation.linear_filters</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">dask.array</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">da</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">dask</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy</span><span class="w"> </span><span class="kn">import</span> <span class="n">linalg</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Union</span>
-
-<span class="kn">from</span><span class="w"> </span><span class="nn">tfilterspy.utils.optimisation_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">ParameterEstimator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tfilterspy.base_estimator</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseEstimator</span>
 
 
-<div class="viewcode-block" id="DaskKalmanFilter"><a class="viewcode-back" href="../../../modules.html#tfilterspy.state_estimation.DaskKalmanFilter">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">DaskKalmanFilter</span><span class="p">(</span><span class="n">ParameterEstimator</span><span class="p">):</span>
+<div class="viewcode-block" id="KalmanFilter">
+<a class="viewcode-back" href="../../../modules.html#tfilterspy.state_estimation.KalmanFilter">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">KalmanFilter</span><span class="p">(</span><span class="n">BaseEstimator</span><span class="p">):</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Dask-based implementation of a Kalman Filter that supports distributed computing for</span>
-<span class="sd">    large datasets. This class extends the ParameterEstimator to estimate the process</span>
-<span class="sd">    noise covariance (Q) and observation noise covariance (R) while applying Kalman Filtering</span>
-<span class="sd">    on incoming measurements.</span>
+<span class="sd">    Kalman Filter for linear Gaussian state-space models.</span>
 
-<span class="sd">    The Kalman Filter is a recursive algorithm that estimates the state of a linear dynamic</span>
-<span class="sd">    system from noisy measurements. This implementation leverages Dask to scale computations</span>
-<span class="sd">    across distributed systems.</span>
+<span class="sd">    Efficient numpy core with optional Dask support for batch processing.</span>
+<span class="sd">    Implements the full sklearn-compatible API: fit / predict / score.</span>
+
+<span class="sd">    State-space model::</span>
+
+<span class="sd">        x_{k+1} = F @ x_k + w_k,    w_k ~ N(0, Q)</span>
+<span class="sd">        z_k     = H @ x_k + v_k,     v_k ~ N(0, R)</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    state_transition_matrix : np.ndarray or da.Array, shape (n_features, n_features)</span>
-<span class="sd">        The state transition matrix (F) representing how the system evolves between states.</span>
+<span class="sd">    F : ndarray, shape (n_state, n_state)</span>
+<span class="sd">        State transition matrix.</span>
+<span class="sd">    H : ndarray, shape (n_obs, n_state)</span>
+<span class="sd">        Observation matrix mapping state to measurement space.</span>
+<span class="sd">    Q : ndarray, shape (n_state, n_state)</span>
+<span class="sd">        Process noise covariance.</span>
+<span class="sd">    R : ndarray, shape (n_obs, n_obs)</span>
+<span class="sd">        Observation noise covariance.</span>
+<span class="sd">    x0 : ndarray, shape (n_state,)</span>
+<span class="sd">        Initial state estimate.</span>
+<span class="sd">    P0 : ndarray, shape (n_state, n_state)</span>
+<span class="sd">        Initial state covariance.</span>
+<span class="sd">    store_covariances : bool, optional</span>
+<span class="sd">        If True (default), stores full covariance history. Set to False</span>
+<span class="sd">        to save memory on very long time series (disables smooth()).</span>
 
-<span class="sd">    observation_matrix : np.ndarray or da.Array, shape (n_observations, n_features)</span>
-<span class="sd">        The observation matrix (H) that maps the true state space into the observed space.</span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">    &gt;&gt;&gt; from tfilterspy import KalmanFilter</span>
+<span class="sd">    &gt;&gt;&gt; F = np.eye(2); H = np.eye(2)</span>
+<span class="sd">    &gt;&gt;&gt; Q = np.eye(2) * 0.1; R = np.eye(2) * 0.5</span>
+<span class="sd">    &gt;&gt;&gt; kf = KalmanFilter(F, H, Q, R, np.zeros(2), np.eye(2))</span>
+<span class="sd">    &gt;&gt;&gt; kf.fit(np.random.randn(100, 2))</span>
+<span class="sd">    &gt;&gt;&gt; states = kf.predict()</span>
+<span class="sd">    &gt;&gt;&gt; smoothed, _ = kf.smooth()</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
-<span class="sd">    process_noise_cov : np.ndarray or da.Array, shape (n_features, n_features)</span>
-<span class="sd">        Covariance matrix (Q) representing the process noise.</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">F</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">P0</span><span class="p">,</span> <span class="n">store_covariances</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="n">F</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">P0</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="p">[</span><span class="n">F</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">P0</span><span class="p">])</span>
 
-<span class="sd">    observation_noise_cov : np.ndarray or da.Array, shape (n_observations, n_observations)</span>
-<span class="sd">        Covariance matrix (R) representing the observation noise.</span>
+        <span class="n">n_state</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">F</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="p">(</span><span class="n">n_state</span><span class="p">,</span> <span class="n">n_state</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;State transition matrix (F) must be square.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">H</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">n_state</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Observation matrix (H) columns must match state dimension.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">Q</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="p">(</span><span class="n">n_state</span><span class="p">,</span> <span class="n">n_state</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Process noise covariance (Q) dimensions must match F.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">R</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">R</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">or</span> <span class="n">R</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">H</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Observation noise covariance (R) must be square with dimension matching H rows.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">x0</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="p">(</span><span class="n">n_state</span><span class="p">,):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Initial state (x0) must have length n_state.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">P0</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="p">(</span><span class="n">n_state</span><span class="p">,</span> <span class="n">n_state</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Initial covariance (P0) dimensions must match F.&quot;</span><span class="p">)</span>
 
-<span class="sd">    initial_state : np.ndarray or da.Array, shape (n_features,)</span>
-<span class="sd">        Initial state vector (x0) of the system.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">F</span> <span class="o">=</span> <span class="n">F</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">H</span> <span class="o">=</span> <span class="n">H</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Q</span> <span class="o">=</span> <span class="n">Q</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">R</span> <span class="o">=</span> <span class="n">R</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x0</span> <span class="o">=</span> <span class="n">x0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">P0</span> <span class="o">=</span> <span class="n">P0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_state</span> <span class="o">=</span> <span class="n">n_state</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_obs</span> <span class="o">=</span> <span class="n">H</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">store_covariances</span> <span class="o">=</span> <span class="n">store_covariances</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_fitted_</span> <span class="o">=</span> <span class="kc">False</span>
 
-<span class="sd">    initial_covariance : np.ndarray or da.Array, shape (n_features, n_features)</span>
-<span class="sd">        Initial state covariance matrix (P0), representing initial uncertainty in the state.</span>
+<div class="viewcode-block" id="KalmanFilter.fit">
+<a class="viewcode-back" href="../../../modules.html#tfilterspy.state_estimation.KalmanFilter.fit">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Run the Kalman filter forward pass on measurements.</span>
 
-<span class="sd">    estimation_strategy : str, optional, default=&quot;residual_analysis&quot;</span>
-<span class="sd">        The strategy for estimating Q and R. Can be one of:</span>
-<span class="sd">        - &quot;residual_analysis&quot;</span>
-<span class="sd">        - &quot;mle&quot;</span>
-<span class="sd">        - &quot;cross_validation&quot;</span>
-<span class="sd">        - &quot;adaptive_filtering&quot;</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        X : ndarray or dask.array, shape (n_timesteps, n_obs)</span>
+<span class="sd">            Measurement sequence. 1-D arrays are reshaped to (n, 1).</span>
 
-<span class="sd">    Raises</span>
-<span class="sd">    ------</span>
-<span class="sd">    ValueError</span>
-<span class="sd">        If matrix dimensions do not conform to Kalman Filter requirements.</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        self</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">da</span><span class="o">.</span><span class="n">Array</span><span class="p">):</span>
+            <span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">X</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_obs</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Expected </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">n_obs</span><span class="si">}</span><span class="s2"> observation dimensions, got </span><span class="si">{</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">.&quot;</span>
+            <span class="p">)</span>
 
-<span class="sd">    References</span>
-<span class="sd">    ----------</span>
-<span class="sd">    Welch, G., &amp; Bishop, G. (1995). An Introduction to the Kalman Filter.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">measurements_</span> <span class="o">=</span> <span class="n">X</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_forward_pass</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_forward_pass</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">measurements_</span><span class="p">)</span>
+        <span class="n">ns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_state</span>
+        <span class="n">no</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_obs</span>
+        <span class="n">F</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">R</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">F</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Q</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">R</span>
+        <span class="n">I_ns</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">ns</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">filtered_states_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="n">ns</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">predicted_states_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="n">ns</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">innovations_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="n">no</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_likelihood_</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">store_covariances</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">filtered_covs_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="n">ns</span><span class="p">,</span> <span class="n">ns</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">predicted_covs_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="n">ns</span><span class="p">,</span> <span class="n">ns</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">innovation_covs_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="n">no</span><span class="p">,</span> <span class="n">no</span><span class="p">))</span>
+
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x0</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">P</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">P0</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+            <span class="c1"># --- Predict ---</span>
+            <span class="n">x_pred</span> <span class="o">=</span> <span class="n">F</span> <span class="o">@</span> <span class="n">x</span>
+            <span class="n">P_pred</span> <span class="o">=</span> <span class="n">F</span> <span class="o">@</span> <span class="n">P</span> <span class="o">@</span> <span class="n">F</span><span class="o">.</span><span class="n">T</span> <span class="o">+</span> <span class="n">Q</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">predicted_states_</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">x_pred</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">store_covariances</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">predicted_covs_</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">P_pred</span>
+
+            <span class="c1"># --- Innovation ---</span>
+            <span class="n">z</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">measurements_</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">z</span> <span class="o">-</span> <span class="n">H</span> <span class="o">@</span> <span class="n">x_pred</span>
+            <span class="n">S</span> <span class="o">=</span> <span class="n">H</span> <span class="o">@</span> <span class="n">P_pred</span> <span class="o">@</span> <span class="n">H</span><span class="o">.</span><span class="n">T</span> <span class="o">+</span> <span class="n">R</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">innovations_</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">store_covariances</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">innovation_covs_</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">S</span>
+
+            <span class="c1"># --- Update (Joseph form for numerical stability) ---</span>
+            <span class="n">S_inv</span> <span class="o">=</span> <span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">no</span><span class="p">),</span> <span class="n">assume_a</span><span class="o">=</span><span class="s2">&quot;pos&quot;</span><span class="p">)</span>
+            <span class="n">K</span> <span class="o">=</span> <span class="n">P_pred</span> <span class="o">@</span> <span class="n">H</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">S_inv</span>
+
+            <span class="n">x</span> <span class="o">=</span> <span class="n">x_pred</span> <span class="o">+</span> <span class="n">K</span> <span class="o">@</span> <span class="n">y</span>
+            <span class="n">IKH</span> <span class="o">=</span> <span class="n">I_ns</span> <span class="o">-</span> <span class="n">K</span> <span class="o">@</span> <span class="n">H</span>
+            <span class="n">P</span> <span class="o">=</span> <span class="n">IKH</span> <span class="o">@</span> <span class="n">P_pred</span> <span class="o">@</span> <span class="n">IKH</span><span class="o">.</span><span class="n">T</span> <span class="o">+</span> <span class="n">K</span> <span class="o">@</span> <span class="n">R</span> <span class="o">@</span> <span class="n">K</span><span class="o">.</span><span class="n">T</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">filtered_states_</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">store_covariances</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">filtered_covs_</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">P</span>
+
+            <span class="c1"># --- Log-likelihood ---</span>
+            <span class="n">sign</span><span class="p">,</span> <span class="n">logdet</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">slogdet</span><span class="p">(</span><span class="n">S</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">sign</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">log_likelihood_</span> <span class="o">+=</span> <span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span>
+                    <span class="n">logdet</span> <span class="o">+</span> <span class="n">y</span> <span class="o">@</span> <span class="n">S_inv</span> <span class="o">@</span> <span class="n">y</span> <span class="o">+</span> <span class="n">no</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+                <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_fitted_</span> <span class="o">=</span> <span class="kc">True</span>
+
+<div class="viewcode-block" id="KalmanFilter.predict">
+<a class="viewcode-back" href="../../../modules.html#tfilterspy.state_estimation.KalmanFilter.predict">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return filtered state estimates.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        filtered_states : ndarray, shape (n_timesteps, n_state)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_fitted</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">filtered_states_</span></div>
+
+
+<div class="viewcode-block" id="KalmanFilter.smooth">
+<a class="viewcode-back" href="../../../modules.html#tfilterspy.state_estimation.KalmanFilter.smooth">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">smooth</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Rauch-Tung-Striebel (RTS) backward smoothing pass.</span>
+
+<span class="sd">        Requires ``store_covariances=True`` (the default).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        smoothed_states : ndarray, shape (n_timesteps, n_state)</span>
+<span class="sd">        smoothed_covs : ndarray, shape (n_timesteps, n_state, n_state)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_fitted</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">store_covariances</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;smooth() requires store_covariances=True.&quot;</span><span class="p">)</span>
+
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filtered_states_</span><span class="p">)</span>
+        <span class="n">ns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_state</span>
+
+        <span class="n">smoothed_states</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="n">ns</span><span class="p">))</span>
+        <span class="n">smoothed_covs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="n">ns</span><span class="p">,</span> <span class="n">ns</span><span class="p">))</span>
+        <span class="n">smoothed_states</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filtered_states_</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">smoothed_covs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filtered_covs_</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+            <span class="n">P_pred_inv</span> <span class="o">=</span> <span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">predicted_covs_</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+            <span class="n">C</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filtered_covs_</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">@</span> <span class="bp">self</span><span class="o">.</span><span class="n">F</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">P_pred_inv</span>
+            <span class="n">smoothed_states</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">filtered_states_</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="o">+</span> <span class="n">C</span> <span class="o">@</span> <span class="p">(</span><span class="n">smoothed_states</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">predicted_states_</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+            <span class="p">)</span>
+            <span class="n">smoothed_covs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">filtered_covs_</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="o">+</span> <span class="n">C</span> <span class="o">@</span> <span class="p">(</span><span class="n">smoothed_covs</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">predicted_covs_</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span> <span class="o">@</span> <span class="n">C</span><span class="o">.</span><span class="n">T</span>
+            <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">smoothed_states</span><span class="p">,</span> <span class="n">smoothed_covs</span></div>
+
+
+<div class="viewcode-block" id="KalmanFilter.filter_step">
+<a class="viewcode-back" href="../../../modules.html#tfilterspy.state_estimation.KalmanFilter.filter_step">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">filter_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Single-step online filtering.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        z : ndarray, shape (n_obs,)</span>
+<span class="sd">            Single measurement vector.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        x : ndarray, shape (n_state,)</span>
+<span class="sd">            Updated state estimate.</span>
+<span class="sd">        P : ndarray, shape (n_state, n_state)</span>
+<span class="sd">            Updated covariance.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_online_x&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_online_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x0</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_online_P</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">P0</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+        <span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+        <span class="n">F</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">R</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">F</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Q</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">R</span>
+
+        <span class="n">x_pred</span> <span class="o">=</span> <span class="n">F</span> <span class="o">@</span> <span class="bp">self</span><span class="o">.</span><span class="n">_online_x</span>
+        <span class="n">P_pred</span> <span class="o">=</span> <span class="n">F</span> <span class="o">@</span> <span class="bp">self</span><span class="o">.</span><span class="n">_online_P</span> <span class="o">@</span> <span class="n">F</span><span class="o">.</span><span class="n">T</span> <span class="o">+</span> <span class="n">Q</span>
+
+        <span class="n">y</span> <span class="o">=</span> <span class="n">z</span> <span class="o">-</span> <span class="n">H</span> <span class="o">@</span> <span class="n">x_pred</span>
+        <span class="n">S</span> <span class="o">=</span> <span class="n">H</span> <span class="o">@</span> <span class="n">P_pred</span> <span class="o">@</span> <span class="n">H</span><span class="o">.</span><span class="n">T</span> <span class="o">+</span> <span class="n">R</span>
+        <span class="n">K</span> <span class="o">=</span> <span class="n">P_pred</span> <span class="o">@</span> <span class="n">H</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">S</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_online_x</span> <span class="o">=</span> <span class="n">x_pred</span> <span class="o">+</span> <span class="n">K</span> <span class="o">@</span> <span class="n">y</span>
+        <span class="n">IKH</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_state</span><span class="p">)</span> <span class="o">-</span> <span class="n">K</span> <span class="o">@</span> <span class="n">H</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_online_P</span> <span class="o">=</span> <span class="n">IKH</span> <span class="o">@</span> <span class="n">P_pred</span> <span class="o">@</span> <span class="n">IKH</span><span class="o">.</span><span class="n">T</span> <span class="o">+</span> <span class="n">K</span> <span class="o">@</span> <span class="n">R</span> <span class="o">@</span> <span class="n">K</span><span class="o">.</span><span class="n">T</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_online_x</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">_online_P</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="KalmanFilter.forecast">
+<a class="viewcode-back" href="../../../modules.html#tfilterspy.state_estimation.KalmanFilter.forecast">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">forecast</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_steps</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Forecast future states beyond the observed data.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        n_steps : int</span>
+<span class="sd">            Number of steps to forecast.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        forecasted_states : ndarray, shape (n_steps, n_state)</span>
+<span class="sd">        forecasted_covs : ndarray, shape (n_steps, n_state, n_state)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_fitted</span><span class="p">()</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filtered_states_</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">P</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filtered_covs_</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">store_covariances</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">P0</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+        <span class="n">forecasted_states</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">n_steps</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_state</span><span class="p">))</span>
+        <span class="n">forecasted_covs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">n_steps</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_state</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_state</span><span class="p">))</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_steps</span><span class="p">):</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">F</span> <span class="o">@</span> <span class="n">x</span>
+            <span class="n">P</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">F</span> <span class="o">@</span> <span class="n">P</span> <span class="o">@</span> <span class="bp">self</span><span class="o">.</span><span class="n">F</span><span class="o">.</span><span class="n">T</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">Q</span>
+            <span class="n">forecasted_states</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span>
+            <span class="n">forecasted_covs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">P</span>
+
+        <span class="k">return</span> <span class="n">forecasted_states</span><span class="p">,</span> <span class="n">forecasted_covs</span></div>
+
+
+<div class="viewcode-block" id="KalmanFilter.run_filter">
+<a class="viewcode-back" href="../../../modules.html#tfilterspy.state_estimation.KalmanFilter.run_filter">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">run_filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">measurements</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Legacy method. Use fit() + predict() instead.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">measurements</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">filtered_states_</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">innovations_</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="DaskKalmanFilter">
+<a class="viewcode-back" href="../../../modules.html#tfilterspy.state_estimation.DaskKalmanFilter">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">DaskKalmanFilter</span><span class="p">(</span><span class="n">KalmanFilter</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Backward-compatible Kalman Filter wrapper.</span>
+
+<span class="sd">    Accepts the same constructor signature as the original DaskKalmanFilter</span>
+<span class="sd">    and delegates to the new efficient KalmanFilter implementation.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">state_transition_matrix</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">da</span><span class="o">.</span><span class="n">Array</span><span class="p">],</span>
-        <span class="n">observation_matrix</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">da</span><span class="o">.</span><span class="n">Array</span><span class="p">],</span>
-        <span class="n">process_noise_cov</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">da</span><span class="o">.</span><span class="n">Array</span><span class="p">],</span>
-        <span class="n">observation_noise_cov</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">da</span><span class="o">.</span><span class="n">Array</span><span class="p">],</span>
-        <span class="n">initial_state</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">da</span><span class="o">.</span><span class="n">Array</span><span class="p">],</span>
-        <span class="n">initial_covariance</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">da</span><span class="o">.</span><span class="n">Array</span><span class="p">],</span>
-        <span class="n">chunk_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">64</span><span class="p">,</span>
-        <span class="n">estimation_strategy</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;residual_analysis&quot;</span><span class="p">,</span>
+        <span class="n">state_transition_matrix</span><span class="p">,</span>
+        <span class="n">observation_matrix</span><span class="p">,</span>
+        <span class="n">process_noise_cov</span><span class="p">,</span>
+        <span class="n">observation_noise_cov</span><span class="p">,</span>
+        <span class="n">initial_state</span><span class="p">,</span>
+        <span class="n">initial_covariance</span><span class="p">,</span>
+        <span class="n">chunk_size</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span>
+        <span class="n">estimation_strategy</span><span class="o">=</span><span class="s2">&quot;residual_analysis&quot;</span><span class="p">,</span>
     <span class="p">):</span>
-
-        <span class="c1"># Initialize the parent class (ParameterEstimator)</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">estimation_strategy</span><span class="p">)</span>
-
-        <span class="c1"># Input validation and conversion to Dask arrays</span>
-        <span class="k">if</span> <span class="n">state_transition_matrix</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">state_transition_matrix</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;State transition matrix (F) must be square.&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">observation_matrix</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">state_transition_matrix</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;Observation matrix (H) dimensions must be compatible with F.&quot;</span>
-            <span class="p">)</span>
-        <span class="k">if</span> <span class="n">process_noise_cov</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">state_transition_matrix</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Process noise covariance (Q) dimensions must match F.&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">observation_noise_cov</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">observation_noise_cov</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Observation noise covariance (R) must be square.&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">initial_state</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">state_transition_matrix</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Initial state (x0) dimensions must match F.&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">initial_covariance</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">state_transition_matrix</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Initial covariance (P0) dimensions must match F.&quot;</span><span class="p">)</span>
-
-        <span class="c1"># Convert to Dask arrays if necessary</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">F</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">to_dask_array</span><span class="p">(</span><span class="n">state_transition_matrix</span><span class="p">,</span> <span class="n">chunk_size</span><span class="p">)</span>
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">state_transition_matrix</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span>
-            <span class="k">else</span> <span class="n">state_transition_matrix</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">F</span><span class="o">=</span><span class="n">state_transition_matrix</span><span class="p">,</span>
+            <span class="n">H</span><span class="o">=</span><span class="n">observation_matrix</span><span class="p">,</span>
+            <span class="n">Q</span><span class="o">=</span><span class="n">process_noise_cov</span><span class="p">,</span>
+            <span class="n">R</span><span class="o">=</span><span class="n">observation_noise_cov</span><span class="p">,</span>
+            <span class="n">x0</span><span class="o">=</span><span class="n">initial_state</span><span class="p">,</span>
+            <span class="n">P0</span><span class="o">=</span><span class="n">initial_covariance</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">H</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">to_dask_array</span><span class="p">(</span><span class="n">observation_matrix</span><span class="p">,</span> <span class="n">chunk_size</span><span class="p">)</span>
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">observation_matrix</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span>
-            <span class="k">else</span> <span class="n">observation_matrix</span>
-        <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Q</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">to_dask_array</span><span class="p">(</span><span class="n">process_noise_cov</span><span class="p">,</span> <span class="n">chunk_size</span><span class="p">)</span>
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">process_noise_cov</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span>
-            <span class="k">else</span> <span class="n">process_noise_cov</span>
-        <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">R</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">to_dask_array</span><span class="p">(</span><span class="n">observation_noise_cov</span><span class="p">,</span> <span class="n">chunk_size</span><span class="p">)</span>
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">observation_noise_cov</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span>
-            <span class="k">else</span> <span class="n">observation_noise_cov</span>
-        <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">to_dask_array</span><span class="p">(</span><span class="n">initial_state</span><span class="p">,</span> <span class="n">chunk_size</span><span class="p">)</span>
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">initial_state</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span>
-            <span class="k">else</span> <span class="n">initial_state</span>
-        <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">P</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">to_dask_array</span><span class="p">(</span><span class="n">initial_covariance</span><span class="p">,</span> <span class="n">chunk_size</span><span class="p">)</span>
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">initial_covariance</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span>
-            <span class="k">else</span> <span class="n">initial_covariance</span>
-        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">chunk_size</span> <span class="o">=</span> <span class="n">chunk_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">estimation_strategy</span> <span class="o">=</span> <span class="n">estimation_strategy</span>
 
-<div class="viewcode-block" id="DaskKalmanFilter.fit"><a class="viewcode-back" href="../../../modules.html#tfilterspy.state_estimation.DaskKalmanFilter.fit">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">da</span><span class="o">.</span><span class="n">Array</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s2">&quot;DaskKalmanFilter&quot;</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Prepare the Kalman Filter by storing the measurements as a Dask array.</span>
+<div class="viewcode-block" id="DaskKalmanFilter.predict">
+<a class="viewcode-back" href="../../../modules.html#tfilterspy.state_estimation.DaskKalmanFilter.predict">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return filtered states as a Dask array for backward compatibility.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_fitted</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">da</span><span class="o">.</span><span class="n">from_array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filtered_states_</span><span class="p">,</span> <span class="n">chunks</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">)</span></div>
+</div>
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        X : np.ndarray or da.Array, shape (n_timesteps, n_observations)</span>
-<span class="sd">            Array of measurements over time.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        self : DaskKalmanFilter</span>
-<span class="sd">            The fitted Kalman Filter instance.</span>
-
-<span class="sd">        Raises</span>
-<span class="sd">        ------</span>
-<span class="sd">        ValueError</span>
-<span class="sd">            If the input measurements are not 2-dimensional.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">X</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Measurements must be a 2D array. Received array with shape </span><span class="si">{</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">.&quot;</span>
-            <span class="p">)</span>
-
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">da</span><span class="o">.</span><span class="n">Array</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">X</span> <span class="o">=</span> <span class="n">X</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">X</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">from_array</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">chunks</span><span class="o">=</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">//</span> <span class="mi">4</span><span class="p">,</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
-        <span class="k">return</span> <span class="bp">self</span></div>
-
-<div class="viewcode-block" id="DaskKalmanFilter.predict"><a class="viewcode-back" href="../../../modules.html#tfilterspy.state_estimation.DaskKalmanFilter.predict">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">da</span><span class="o">.</span><span class="n">Array</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Perform state estimation over all time steps using the Kalman Filter algorithm.</span>
-
-<span class="sd">        This method constructs a Dask computation graph to process the entire measurement</span>
-<span class="sd">        sequence in parallel using delayed execution.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        state_estimates : da.Array, shape (n_timesteps, n_features)</span>
-<span class="sd">            The estimated state at each time step.</span>
-
-<span class="sd">        Notes</span>
-<span class="sd">        -----</span>
-<span class="sd">        - The Kalman Filter operates in two steps: prediction and update.</span>
-<span class="sd">        - Predictions are made using the state transition matrix F.</span>
-<span class="sd">        - Updates are performed using the observation matrix H and Kalman Gain K.</span>
-<span class="sd">        - This method leverages Dask to parallelize the filter process over multiple time steps.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="nd">@dask</span><span class="o">.</span><span class="n">delayed</span>
-        <span class="k">def</span><span class="w"> </span><span class="nf">kalman_step</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">F</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">measurements</span><span class="p">):</span>
-            <span class="n">x</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">F</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
-            <span class="n">P</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">da</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">F</span><span class="p">,</span> <span class="n">P</span><span class="p">),</span> <span class="n">F</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="o">+</span> <span class="n">Q</span>
-
-            <span class="n">y</span> <span class="o">=</span> <span class="n">measurements</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">da</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
-            <span class="n">S</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">da</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">P</span><span class="p">),</span> <span class="n">H</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="o">+</span> <span class="n">R</span>
-            <span class="n">K</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">da</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="n">H</span><span class="o">.</span><span class="n">T</span><span class="p">),</span> <span class="n">da</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">S</span><span class="p">))</span>
-            <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">da</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">K</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
-            <span class="n">I</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">P</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">chunks</span><span class="o">=</span><span class="n">P</span><span class="o">.</span><span class="n">chunks</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
-            <span class="n">P</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">I</span> <span class="o">-</span> <span class="n">da</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">K</span><span class="p">,</span> <span class="n">H</span><span class="p">),</span> <span class="n">P</span><span class="p">)</span>
-            <span class="k">return</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">P</span><span class="p">)</span>
-
-        <span class="n">n_timesteps</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">state_estimates</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">x</span><span class="p">,</span> <span class="n">P</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">P</span>
-
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_timesteps</span><span class="p">):</span>
-            <span class="n">delayed_result</span> <span class="o">=</span> <span class="n">kalman_step</span><span class="p">(</span>
-                <span class="n">i</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">F</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Q</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">X</span>
-            <span class="p">)</span>
-            <span class="n">x</span><span class="p">,</span> <span class="n">P</span> <span class="o">=</span> <span class="n">dask</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="n">delayed_result</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="n">state_estimates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-
-        <span class="n">state_estimates</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">state_estimates</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">state_estimates</span></div>
-
-<div class="viewcode-block" id="DaskKalmanFilter.run_filter"><a class="viewcode-back" href="../../../modules.html#tfilterspy.state_estimation.DaskKalmanFilter.run_filter">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">run_filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">measurements</span><span class="p">:</span> <span class="n">da</span><span class="o">.</span><span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Apply the Kalman Filter on measurements to compute state estimates and residuals.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        measurements : da.Array, shape (n_timesteps, n_observations)</span>
-<span class="sd">            Observed measurements over time.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        state_estimates : da.Array, shape (n_timesteps, n_features)</span>
-<span class="sd">            Estimated states over the measurement timeline.</span>
-<span class="sd">        residuals : da.Array, shape (n_timesteps, n_observations)</span>
-<span class="sd">            Difference between observed and predicted measurements (innovations).</span>
-
-<span class="sd">        Notes</span>
-<span class="sd">        -----</span>
-<span class="sd">        - This function is used by parameter estimation strategies to compute residuals.</span>
-<span class="sd">        - Residuals are used for adaptive filtering and cross-validation strategies.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">n_timesteps</span> <span class="o">=</span> <span class="n">measurements</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">state_estimates</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">residuals</span> <span class="o">=</span> <span class="p">[]</span>
-
-        <span class="n">x</span><span class="p">,</span> <span class="n">P</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">P</span>
-
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_timesteps</span><span class="p">):</span>
-            <span class="n">x</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">F</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
-            <span class="n">P</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">da</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">F</span><span class="p">,</span> <span class="n">P</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">F</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">Q</span>
-
-            <span class="n">y</span> <span class="o">=</span> <span class="n">measurements</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">da</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
-            <span class="n">S</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">da</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="p">,</span> <span class="n">P</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">R</span>
-            <span class="n">K</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">da</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">T</span><span class="p">),</span> <span class="n">da</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">S</span><span class="p">))</span>
-            <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">da</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">K</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
-            <span class="n">I</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">P</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">chunks</span><span class="o">=</span><span class="n">P</span><span class="o">.</span><span class="n">chunks</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
-            <span class="n">P</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">I</span> <span class="o">-</span> <span class="n">da</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">K</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="p">),</span> <span class="n">P</span><span class="p">)</span>
-
-            <span class="n">state_estimates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-            <span class="n">residuals</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
-
-        <span class="n">state_estimates</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">state_estimates</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-        <span class="n">residuals</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">residuals</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">state_estimates</span><span class="p">,</span> <span class="n">residuals</span></div>
-
-<div class="viewcode-block" id="DaskKalmanFilter.estimate_parameters"><a class="viewcode-back" href="../../../modules.html#tfilterspy.state_estimation.DaskKalmanFilter.estimate_parameters">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">estimate_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">measurements</span><span class="p">:</span> <span class="n">da</span><span class="o">.</span><span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Estimate process (Q) and observation (R) noise covariances using the specified strategy.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        measurements : da.Array, shape (n_timesteps, n_observations)</span>
-<span class="sd">            Observed measurements over time.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        Q : da.Array, shape (n_features, n_features)</span>
-<span class="sd">            Estimated process noise covariance matrix.</span>
-<span class="sd">        R : da.Array, shape (n_features, n_features)</span>
-<span class="sd">            Estimated observation noise covariance matrix.</span>
-
-<span class="sd">        Notes</span>
-<span class="sd">        -----</span>
-<span class="sd">        - This method calls the appropriate estimation strategy from the parent class.</span>
-<span class="sd">        - The available strategies include residual analysis, MLE, cross-validation,</span>
-<span class="sd">          and adaptive filtering.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">estimate_parameters</span><span class="p">(</span><span class="n">measurements</span><span class="p">)</span></div></div>
 </pre></div>
 
            </div>

@@ -1,20 +1,24 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Welcome to TFilterPy’s Documentation! &mdash; tfilterspy 1.0.0 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+  <title>TFiltersPy &mdash; tfilterspy 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
-        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=8d563738"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -43,12 +47,12 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="examples.html">Real World Usecases 🎢</a></li>
-<li class="toctree-l1"><a class="reference internal" href="literature.html">Understanding the Kalman Filter</a></li>
-<li class="toctree-l1"><a class="reference internal" href="literature.html#understanding-particle-filters">Understanding  Particle Filters</a></li>
-<li class="toctree-l1"><a class="reference internal" href="literature.html#parameter-estimation-methods">Parameter Estimation Methods</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api_cheatsheet.html">API Reference</a></li>
-<li class="toctree-l1"><a class="reference internal" href="modules.html">Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="filter_guide.html">Choosing a Filter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_reference.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="literature.html">Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Module Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="CONTRIBUTING.html">Contributing to TFiltersPy</a></li>
 <li class="toctree-l1"><a class="reference internal" href="MAINTAINERS.html">Maintainers of TFilterPy</a></li>
 </ul>
@@ -67,7 +71,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Welcome to TFilterPy’s Documentation!</li>
+      <li class="breadcrumb-item active">TFiltersPy</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -77,42 +81,160 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <a class="reference internal image-reference" href="_images/tfilters-logo.jpeg"><img alt="tfilters logo" class="align-center" src="_images/tfilters-logo.jpeg" style="width: 500px;" /></a>
-<br><a class="reference external image-reference" href="https://pypi.org/project/tfilterspy/"><img alt="PyPI version" src="https://img.shields.io/pypi/v/tfilterspy.svg" /></a>
-<a class="reference external image-reference" href="https://github.com/ubunye-ai-ecosystems/tfilterspy/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/pypi/l/tfilterspy.svg" /></a>
-<a class="reference external image-reference" href="https://github.com/ubunye-ai-ecosystems"><img alt="Made in Africa" src="https://img.shields.io/badge/made%20in-Africa-red.svg" /></a>
-<a class="reference external image-reference" href="https://github.com/ubunye-ai-ecosystems/tfilterspy"><img alt="GitHub Stars" src="https://img.shields.io/github/stars/ubunye-ai-ecosystems/tfilterspy.svg?style=social" /></a>
-<section id="welcome-to-tfilterpy-s-documentation">
-<h1>Welcome to TFilterPy’s Documentation!<a class="headerlink" href="#welcome-to-tfilterpy-s-documentation" title="Permalink to this heading"></a></h1>
-<p style="color: crimson; font-size: 0.9em; margin-top: 0.5em;">
-  Where we say: <strong>Sawubona, Molo, Hallo, Dumela, Ndaa, Xewani</strong>,
-  and a heartfelt <strong>Dinstang</strong> in pure Sipitori style 🇿🇦✨.
-</p><p><strong>TFiltersPy</strong> is your go-to open-source Python library for applying state-of-the-art Bayesian filtering — built with the power of Dask for scale,
-the elegance of Kalman and Particle Filters for precision, and a sprinkle of local flavor to make it proudly African.</p>
-<p>✨ This library is part of the <strong>Ubunye Artificial Intelligent Ecosystems (UIAE)</strong> —
-a collaborative initiative to build powerful, locally rooted, and globally relevant AI tools.
-Explore more projects at 👉 <a class="reference external" href="https://github.com/ubunye-ai-ecosystems">https://github.com/ubunye-ai-ecosystems</a></p>
-<p>🚀 Whether you’re building AI for space tech, smart grids, autonomous cars, or township telemetry —
-if it’s noisy, dynamic, and uncertain, we’ve got you covered.</p>
-<section id="features">
-<h2>Features<a class="headerlink" href="#features" title="Permalink to this heading"></a></h2>
+  <a class="reference internal image-reference" href="_images/tfilters-logo.jpeg"><img alt="tfilters logo" class="align-center" src="_images/tfilters-logo.jpeg" style="width: 400px;" />
+</a>
+<br><a class="reference external image-reference" href="https://pypi.org/project/tfilterspy/"><img alt="PyPI version" src="https://img.shields.io/pypi/v/tfilterspy.svg" />
+</a>
+<a class="reference external image-reference" href="https://pypi.org/project/tfilterspy/"><img alt="Python versions" src="https://img.shields.io/pypi/pyversions/tfilterspy.svg" />
+</a>
+<a class="reference external image-reference" href="https://github.com/ubunye-ai-ecosystems/tfilterspy/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/pypi/l/tfilterspy.svg" />
+</a>
+<a class="reference external image-reference" href="https://github.com/ubunye-ai-ecosystems/tfilterspy"><img alt="GitHub Stars" src="https://img.shields.io/github/stars/ubunye-ai-ecosystems/tfilterspy.svg?style=social" />
+</a>
+<section id="tfilterspy">
+<h1>TFiltersPy<a class="headerlink" href="#tfilterspy" title="Link to this heading"></a></h1>
+<p><strong>Bayesian state estimation for Python</strong> – sklearn-compatible, scalable, modular.</p>
+<p>TFiltersPy provides 5 production-ready Bayesian filters with a unified
+<code class="docutils literal notranslate"><span class="pre">fit</span></code> / <code class="docutils literal notranslate"><span class="pre">predict</span></code> / <code class="docutils literal notranslate"><span class="pre">score</span></code> API. Built on NumPy/SciPy with optional
+Dask parallelism for large-scale problems.</p>
+<p>Part of the <a class="reference external" href="https://github.com/ubunye-ai-ecosystems">Ubunye AI Ecosystems</a>.</p>
+<section id="filters-at-a-glance">
+<h2>Filters at a Glance<a class="headerlink" href="#filters-at-a-glance" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 25.0%" />
+<col style="width: 30.0%" />
+<col style="width: 15.0%" />
+<col style="width: 15.0%" />
+<col style="width: 15.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Filter</p></th>
+<th class="head"><p>Best For</p></th>
+<th class="head"><p>Linearity</p></th>
+<th class="head"><p>Jacobians?</p></th>
+<th class="head"><p>Scales To</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>KalmanFilter</strong></p></td>
+<td><p>GPS tracking, signal denoising</p></td>
+<td><p>Linear</p></td>
+<td><p>N/A</p></td>
+<td><p>10K+ steps</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>ExtendedKalmanFilter</strong></p></td>
+<td><p>Radar, navigation</p></td>
+<td><p>Nonlinear</p></td>
+<td><p>Required</p></td>
+<td><p>10K+ steps</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>UnscentedKalmanFilter</strong></p></td>
+<td><p>Highly nonlinear systems</p></td>
+<td><p>Nonlinear</p></td>
+<td><p>Not needed</p></td>
+<td><p>10K+ steps</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>EnsembleKalmanFilter</strong></p></td>
+<td><p>Weather, ocean models</p></td>
+<td><p>Nonlinear</p></td>
+<td><p>Not needed</p></td>
+<td><p>High-dim states</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>ParticleFilter</strong></p></td>
+<td><p>Robot localization, multimodal</p></td>
+<td><p>Any</p></td>
+<td><p>Not needed</p></td>
+<td><p>Non-Gaussian</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="quick-example">
+<h2>Quick Example<a class="headerlink" href="#quick-example" title="Link to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tfilterspy</span><span class="w"> </span><span class="kn">import</span> <span class="n">KalmanFilter</span>
+
+<span class="n">F</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">H</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">Q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.1</span>
+<span class="n">R</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.5</span>
+
+<span class="n">kf</span> <span class="o">=</span> <span class="n">KalmanFilter</span><span class="p">(</span><span class="n">F</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">P0</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+<span class="n">kf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">measurements</span><span class="p">)</span>        <span class="c1"># (n_steps, 2)</span>
+<span class="n">filtered</span> <span class="o">=</span> <span class="n">kf</span><span class="o">.</span><span class="n">predict</span><span class="p">()</span>     <span class="c1"># (n_steps, 2)</span>
+<span class="n">smoothed</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">kf</span><span class="o">.</span><span class="n">smooth</span><span class="p">()</span>   <span class="c1"># RTS smoother</span>
+</pre></div>
+</div>
+</section>
+<section id="key-features">
+<h2>Key Features<a class="headerlink" href="#key-features" title="Link to this heading"></a></h2>
 <ul class="simple">
-<li><p><strong>Bayesian Filtering:</strong> Supports both linear (Kalman) and nonlinear/non-Gaussian (Particle) filtering for robust state estimation in dynamic systems.</p></li>
-<li><p><strong>Distributed Computation:</strong> Built on Dask, enabling parallel and out-of-core filtering for large-scale or streaming data.</p></li>
-<li><p><strong>Uncertainty Quantification:</strong> Includes tools to quantify estimation confidence through residual analysis, covariance estimation, and adaptive strategies.</p></li>
-<li><p><strong>Parameter Estimation:</strong> Advanced methods for estimating system parameters using Bayesian techniques, including maximum likelihood and cross-validation.</p></li>
-<li><p><strong>User-Friendly API:</strong> Clean, modular, and scikit-learn like API — with examples, documentation, and sensible defaults so you can go from idea 💡 to insight 📈 fast.</p></li>
+<li><p><strong>5 Filters:</strong> KF, EKF, UKF, EnKF, Particle Filter – covering linear to fully nonlinear, Gaussian to arbitrary distributions</p></li>
+<li><p><strong>sklearn API:</strong> <code class="docutils literal notranslate"><span class="pre">fit()</span></code> / <code class="docutils literal notranslate"><span class="pre">predict()</span></code> / <code class="docutils literal notranslate"><span class="pre">score()</span></code> / <code class="docutils literal notranslate"><span class="pre">get_params()</span></code> / <code class="docutils literal notranslate"><span class="pre">set_params()</span></code></p></li>
+<li><p><strong>RTS Smoothing:</strong> Backward pass for KF and EKF to refine estimates</p></li>
+<li><p><strong>Online Filtering:</strong> <code class="docutils literal notranslate"><span class="pre">filter_step(z)</span></code> for real-time streaming data</p></li>
+<li><p><strong>Forecasting:</strong> <code class="docutils literal notranslate"><span class="pre">forecast(n_steps)</span></code> to predict future states</p></li>
+<li><p><strong>Dask Parallelism:</strong> Ensemble and particle propagation on distributed clusters</p></li>
+<li><p><strong>Memory Efficient:</strong> <code class="docutils literal notranslate"><span class="pre">store_covariances=False</span></code> saves ~80% memory on long series</p></li>
+<li><p><strong>Numerically Stable:</strong> Joseph form covariance update, log-weight arithmetic</p></li>
 </ul>
 <div class="toctree-wrapper compound">
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="examples.html">Real World Usecases 🎢</a></li>
-<li class="toctree-l1"><a class="reference internal" href="literature.html">Understanding the Kalman Filter</a></li>
-<li class="toctree-l1"><a class="reference internal" href="literature.html#understanding-particle-filters">Understanding  Particle Filters</a></li>
-<li class="toctree-l1"><a class="reference internal" href="literature.html#parameter-estimation-methods">Parameter Estimation Methods</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api_cheatsheet.html">API Reference</a></li>
-<li class="toctree-l1"><a class="reference internal" href="modules.html">Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#from-pypi">From PyPI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#from-source">From Source</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#requirements">Requirements</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick Start</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#kalman-filter-gps-tracking">Kalman Filter – GPS Tracking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#extended-kalman-filter-radar-tracking">Extended Kalman Filter – Radar Tracking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#unscented-kalman-filter-no-jacobians">Unscented Kalman Filter – No Jacobians</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#ensemble-kalman-filter-high-dimensional">Ensemble Kalman Filter – High-Dimensional</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#particle-filter-robot-localization">Particle Filter – Robot Localization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#online-filtering">Online Filtering</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="filter_guide.html">Choosing a Filter</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="filter_guide.html#decision-flowchart">Decision Flowchart</a></li>
+<li class="toctree-l2"><a class="reference internal" href="filter_guide.html#filter-comparison">Filter Comparison</a></li>
+<li class="toctree-l2"><a class="reference internal" href="filter_guide.html#when-to-use-each-filter">When to Use Each Filter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="filter_guide.html#memory-efficiency">Memory Efficiency</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#python-examples">Python Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#jupyter-notebooks">Jupyter Notebooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#filter-pipeline-diagram">Filter Pipeline Diagram</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api_reference.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api_reference.html#shared-api-all-filters">Shared API (All Filters)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_reference.html#kalmanfilter">KalmanFilter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_reference.html#extendedkalmanfilter">ExtendedKalmanFilter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_reference.html#unscentedkalmanfilter">UnscentedKalmanFilter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_reference.html#ensemblekalmanfilter">EnsembleKalmanFilter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_reference.html#particlefilter">ParticleFilter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_reference.html#backward-compatibility">Backward Compatibility</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="literature.html">Theory</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="literature.html#kalman-filter">Kalman Filter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="literature.html#extended-kalman-filter">Extended Kalman Filter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="literature.html#unscented-kalman-filter">Unscented Kalman Filter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="literature.html#ensemble-kalman-filter">Ensemble Kalman Filter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="literature.html#particle-filter">Particle Filter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="literature.html#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Module Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#module-tfilterspy.base_estimator">Base Estimator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#module-tfilterspy.state_estimation">State Estimation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#module-tfilterspy.utils.optimisation_utils">Utilities</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="CONTRIBUTING.html">Contributing to TFiltersPy</a></li>
 <li class="toctree-l1"><a class="reference internal" href="MAINTAINERS.html">Maintainers of TFilterPy</a></li>
 </ul>

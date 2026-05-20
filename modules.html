@@ -1,25 +1,27 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Modules &mdash; tfilterspy 1.0.0 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+  <title>Module Reference &mdash; tfilterspy 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
-        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=8d563738"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Contributing to TFiltersPy" href="CONTRIBUTING.html" />
-    <link rel="prev" title="API Reference" href="api_cheatsheet.html" /> 
+    <link rel="prev" title="Theory" href="literature.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -44,34 +46,98 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="examples.html">Real World Usecases 🎢</a></li>
-<li class="toctree-l1"><a class="reference internal" href="literature.html">Understanding the Kalman Filter</a></li>
-<li class="toctree-l1"><a class="reference internal" href="literature.html#understanding-particle-filters">Understanding  Particle Filters</a></li>
-<li class="toctree-l1"><a class="reference internal" href="literature.html#parameter-estimation-methods">Parameter Estimation Methods</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api_cheatsheet.html">API Reference</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Modules</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#tfilterspy.base_estimator.BaseEstimator"><code class="docutils literal notranslate"><span class="pre">BaseEstimator</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#tfilterspy.base_estimator.BaseEstimator.get_params"><code class="docutils literal notranslate"><span class="pre">BaseEstimator.get_params()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#tfilterspy.base_estimator.BaseEstimator.set_params"><code class="docutils literal notranslate"><span class="pre">BaseEstimator.set_params()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#tfilterspy.base_estimator.BaseEstimator.to_dask_array"><code class="docutils literal notranslate"><span class="pre">BaseEstimator.to_dask_array()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#tfilterspy.base_estimator.BaseEstimator.validate_matrices"><code class="docutils literal notranslate"><span class="pre">BaseEstimator.validate_matrices()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="filter_guide.html">Choosing a Filter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_reference.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="literature.html">Theory</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Module Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-tfilterspy.base_estimator">Base Estimator</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#tfilterspy.base_estimator.BaseEstimator"><code class="docutils literal notranslate"><span class="pre">BaseEstimator</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#tfilterspy.base_estimator.BaseEstimator.fit_predict"><code class="docutils literal notranslate"><span class="pre">BaseEstimator.fit_predict()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tfilterspy.base_estimator.BaseEstimator.get_params"><code class="docutils literal notranslate"><span class="pre">BaseEstimator.get_params()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tfilterspy.base_estimator.BaseEstimator.score"><code class="docutils literal notranslate"><span class="pre">BaseEstimator.score()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tfilterspy.base_estimator.BaseEstimator.set_params"><code class="docutils literal notranslate"><span class="pre">BaseEstimator.set_params()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tfilterspy.base_estimator.BaseEstimator.to_dask_array"><code class="docutils literal notranslate"><span class="pre">BaseEstimator.to_dask_array()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tfilterspy.base_estimator.BaseEstimator.validate_matrices"><code class="docutils literal notranslate"><span class="pre">BaseEstimator.validate_matrices()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#tfilterspy.state_estimation.DaskKalmanFilter"><code class="docutils literal notranslate"><span class="pre">DaskKalmanFilter</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#tfilterspy.state_estimation.DaskKalmanFilter.estimate_parameters"><code class="docutils literal notranslate"><span class="pre">DaskKalmanFilter.estimate_parameters()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#tfilterspy.state_estimation.DaskKalmanFilter.fit"><code class="docutils literal notranslate"><span class="pre">DaskKalmanFilter.fit()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#tfilterspy.state_estimation.DaskKalmanFilter.predict"><code class="docutils literal notranslate"><span class="pre">DaskKalmanFilter.predict()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#tfilterspy.state_estimation.DaskKalmanFilter.run_filter"><code class="docutils literal notranslate"><span class="pre">DaskKalmanFilter.run_filter()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#tfilterspy.state_estimation.DaskNonLinearKalmanFilter"><code class="docutils literal notranslate"><span class="pre">DaskNonLinearKalmanFilter</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#tfilterspy.state_estimation.DaskParticleFilter"><code class="docutils literal notranslate"><span class="pre">DaskParticleFilter</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#tfilterspy.state_estimation.DaskParticleFilter.estimate_state"><code class="docutils literal notranslate"><span class="pre">DaskParticleFilter.estimate_state()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#tfilterspy.state_estimation.DaskParticleFilter.predict"><code class="docutils literal notranslate"><span class="pre">DaskParticleFilter.predict()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#tfilterspy.state_estimation.DaskParticleFilter.resample"><code class="docutils literal notranslate"><span class="pre">DaskParticleFilter.resample()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#tfilterspy.state_estimation.DaskParticleFilter.run_filter"><code class="docutils literal notranslate"><span class="pre">DaskParticleFilter.run_filter()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#tfilterspy.state_estimation.DaskParticleFilter.step"><code class="docutils literal notranslate"><span class="pre">DaskParticleFilter.step()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#tfilterspy.state_estimation.DaskParticleFilter.update"><code class="docutils literal notranslate"><span class="pre">DaskParticleFilter.update()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-tfilterspy.state_estimation">State Estimation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#tfilterspy.state_estimation.DaskKalmanFilter"><code class="docutils literal notranslate"><span class="pre">DaskKalmanFilter</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#tfilterspy.state_estimation.DaskKalmanFilter.predict"><code class="docutils literal notranslate"><span class="pre">DaskKalmanFilter.predict()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#tfilterspy.state_estimation.DaskNonLinearKalmanFilter"><code class="docutils literal notranslate"><span class="pre">DaskNonLinearKalmanFilter</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tfilterspy.state_estimation.DaskParticleFilter"><code class="docutils literal notranslate"><span class="pre">DaskParticleFilter</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tfilterspy.state_estimation.EnsembleKalmanFilter"><code class="docutils literal notranslate"><span class="pre">EnsembleKalmanFilter</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#tfilterspy.state_estimation.EnsembleKalmanFilter.filter_step"><code class="docutils literal notranslate"><span class="pre">EnsembleKalmanFilter.filter_step()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tfilterspy.state_estimation.EnsembleKalmanFilter.fit"><code class="docutils literal notranslate"><span class="pre">EnsembleKalmanFilter.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tfilterspy.state_estimation.EnsembleKalmanFilter.predict"><code class="docutils literal notranslate"><span class="pre">EnsembleKalmanFilter.predict()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#tfilterspy.state_estimation.ExtendedKalmanFilter"><code class="docutils literal notranslate"><span class="pre">ExtendedKalmanFilter</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#tfilterspy.state_estimation.ExtendedKalmanFilter.filter_step"><code class="docutils literal notranslate"><span class="pre">ExtendedKalmanFilter.filter_step()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tfilterspy.state_estimation.ExtendedKalmanFilter.fit"><code class="docutils literal notranslate"><span class="pre">ExtendedKalmanFilter.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tfilterspy.state_estimation.ExtendedKalmanFilter.predict"><code class="docutils literal notranslate"><span class="pre">ExtendedKalmanFilter.predict()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tfilterspy.state_estimation.ExtendedKalmanFilter.smooth"><code class="docutils literal notranslate"><span class="pre">ExtendedKalmanFilter.smooth()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#tfilterspy.state_estimation.KalmanFilter"><code class="docutils literal notranslate"><span class="pre">KalmanFilter</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#tfilterspy.state_estimation.KalmanFilter.filter_step"><code class="docutils literal notranslate"><span class="pre">KalmanFilter.filter_step()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tfilterspy.state_estimation.KalmanFilter.fit"><code class="docutils literal notranslate"><span class="pre">KalmanFilter.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tfilterspy.state_estimation.KalmanFilter.forecast"><code class="docutils literal notranslate"><span class="pre">KalmanFilter.forecast()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tfilterspy.state_estimation.KalmanFilter.predict"><code class="docutils literal notranslate"><span class="pre">KalmanFilter.predict()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tfilterspy.state_estimation.KalmanFilter.run_filter"><code class="docutils literal notranslate"><span class="pre">KalmanFilter.run_filter()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tfilterspy.state_estimation.KalmanFilter.smooth"><code class="docutils literal notranslate"><span class="pre">KalmanFilter.smooth()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#tfilterspy.state_estimation.ParticleFilter"><code class="docutils literal notranslate"><span class="pre">ParticleFilter</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#tfilterspy.state_estimation.ParticleFilter.filter_step"><code class="docutils literal notranslate"><span class="pre">ParticleFilter.filter_step()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tfilterspy.state_estimation.ParticleFilter.fit"><code class="docutils literal notranslate"><span class="pre">ParticleFilter.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tfilterspy.state_estimation.ParticleFilter.predict"><code class="docutils literal notranslate"><span class="pre">ParticleFilter.predict()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#tfilterspy.state_estimation.UnscentedKalmanFilter"><code class="docutils literal notranslate"><span class="pre">UnscentedKalmanFilter</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#tfilterspy.state_estimation.UnscentedKalmanFilter.filter_step"><code class="docutils literal notranslate"><span class="pre">UnscentedKalmanFilter.filter_step()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tfilterspy.state_estimation.UnscentedKalmanFilter.fit"><code class="docutils literal notranslate"><span class="pre">UnscentedKalmanFilter.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tfilterspy.state_estimation.UnscentedKalmanFilter.predict"><code class="docutils literal notranslate"><span class="pre">UnscentedKalmanFilter.predict()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-tfilterspy.state_estimation.linear_filters">Kalman Filter</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#tfilterspy.state_estimation.linear_filters.DaskKalmanFilter"><code class="docutils literal notranslate"><span class="pre">DaskKalmanFilter</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tfilterspy.state_estimation.linear_filters.KalmanFilter"><code class="docutils literal notranslate"><span class="pre">KalmanFilter</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-tfilterspy.state_estimation.extended_kalman">Extended Kalman Filter</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#tfilterspy.state_estimation.extended_kalman.ExtendedKalmanFilter"><code class="docutils literal notranslate"><span class="pre">ExtendedKalmanFilter</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-tfilterspy.state_estimation.unscented_kalman">Unscented Kalman Filter</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#tfilterspy.state_estimation.unscented_kalman.UnscentedKalmanFilter"><code class="docutils literal notranslate"><span class="pre">UnscentedKalmanFilter</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-tfilterspy.state_estimation.ensemble_kalman">Ensemble Kalman Filter</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#tfilterspy.state_estimation.ensemble_kalman.EnsembleKalmanFilter"><code class="docutils literal notranslate"><span class="pre">EnsembleKalmanFilter</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-tfilterspy.state_estimation.particle_filters">Particle Filter</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#tfilterspy.state_estimation.particle_filters.DaskParticleFilter"><code class="docutils literal notranslate"><span class="pre">DaskParticleFilter</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tfilterspy.state_estimation.particle_filters.ParticleFilter"><code class="docutils literal notranslate"><span class="pre">ParticleFilter</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-tfilterspy.utils.optimisation_utils">Utilities</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#tfilterspy.utils.optimisation_utils.ParameterEstimator"><code class="docutils literal notranslate"><span class="pre">ParameterEstimator</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#tfilterspy.utils.optimisation_utils.ParameterEstimator.estimate_parameters"><code class="docutils literal notranslate"><span class="pre">ParameterEstimator.estimate_parameters()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tfilterspy.utils.optimisation_utils.ParameterEstimator.estimate_with_adaptive_filtering"><code class="docutils literal notranslate"><span class="pre">ParameterEstimator.estimate_with_adaptive_filtering()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tfilterspy.utils.optimisation_utils.ParameterEstimator.estimate_with_cross_validation"><code class="docutils literal notranslate"><span class="pre">ParameterEstimator.estimate_with_cross_validation()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tfilterspy.utils.optimisation_utils.ParameterEstimator.estimate_with_mle"><code class="docutils literal notranslate"><span class="pre">ParameterEstimator.estimate_with_mle()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tfilterspy.utils.optimisation_utils.ParameterEstimator.estimate_with_residual_analysis"><code class="docutils literal notranslate"><span class="pre">ParameterEstimator.estimate_with_residual_analysis()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -94,7 +160,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Modules</li>
+      <li class="breadcrumb-item active">Module Reference</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/modules.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -104,288 +170,656 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="module-tfilterspy.base_estimator">
-<span id="modules"></span><h1>Modules<a class="headerlink" href="#module-tfilterspy.base_estimator" title="Permalink to this heading"></a></h1>
+  <section id="module-reference">
+<h1>Module Reference<a class="headerlink" href="#module-reference" title="Link to this heading"></a></h1>
+<p>Auto-generated documentation from source code docstrings.</p>
+<section id="module-tfilterspy.base_estimator">
+<span id="base-estimator"></span><h2>Base Estimator<a class="headerlink" href="#module-tfilterspy.base_estimator" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="tfilterspy.base_estimator.BaseEstimator">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tfilterspy.base_estimator.</span></span><span class="sig-name descname"><span class="pre">BaseEstimator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/base_estimator.html#BaseEstimator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.base_estimator.BaseEstimator" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tfilterspy.base_estimator.</span></span><span class="sig-name descname"><span class="pre">BaseEstimator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/base_estimator.html#BaseEstimator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.base_estimator.BaseEstimator" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Base class for all estimators in the TFilterPy package.
-Provides common functionality such as parameter handling and validation.</p>
+<p>Base class for all estimators in TFiltersPy.</p>
+<p>Provides sklearn-compatible parameter handling, Dask array conversion,
+and shared methods for all filter implementations.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="tfilterspy.base_estimator.BaseEstimator.fit_predict">
+<span class="sig-name descname"><span class="pre">fit_predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/base_estimator.html#BaseEstimator.fit_predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.base_estimator.BaseEstimator.fit_predict" title="Link to this definition"></a></dt>
+<dd><p>Fit the filter and return state estimates.</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="tfilterspy.base_estimator.BaseEstimator.get_params">
-<span class="sig-name descname"><span class="pre">get_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/base_estimator.html#BaseEstimator.get_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.base_estimator.BaseEstimator.get_params" title="Permalink to this definition"></a></dt>
-<dd><p>Get parameters of the estimator.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>deep</strong> (<em>bool</em>) – If True, retrieves parameters of nested objects.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A dictionary of parameter names mapped to their values.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>dict</p>
-</dd>
-</dl>
+<span class="sig-name descname"><span class="pre">get_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/base_estimator.html#BaseEstimator.get_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.base_estimator.BaseEstimator.get_params" title="Link to this definition"></a></dt>
+<dd><p>Get parameters of the estimator (sklearn-compatible).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tfilterspy.base_estimator.BaseEstimator.score">
+<span class="sig-name descname"><span class="pre">score</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_true</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/base_estimator.html#BaseEstimator.score"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.base_estimator.BaseEstimator.score" title="Link to this definition"></a></dt>
+<dd><p>Negative MSE between filtered states and ground truth.</p>
+<p>Returns a negative value so that higher is better (sklearn convention).</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="tfilterspy.base_estimator.BaseEstimator.set_params">
-<span class="sig-name descname"><span class="pre">set_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/base_estimator.html#BaseEstimator.set_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.base_estimator.BaseEstimator.set_params" title="Permalink to this definition"></a></dt>
-<dd><p>Set parameters of the estimator.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>**params</strong> – Arbitrary keyword arguments of parameters to set.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Returns the instance itself.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>self</p>
-</dd>
-</dl>
+<span class="sig-name descname"><span class="pre">set_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/base_estimator.html#BaseEstimator.set_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.base_estimator.BaseEstimator.set_params" title="Link to this definition"></a></dt>
+<dd><p>Set parameters of the estimator (sklearn-compatible).</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="tfilterspy.base_estimator.BaseEstimator.to_dask_array">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">to_dask_array</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">numpy_array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chunk_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/base_estimator.html#BaseEstimator.to_dask_array"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.base_estimator.BaseEstimator.to_dask_array" title="Permalink to this definition"></a></dt>
-<dd><p>Convert a NumPy array to a Dask array with specified chunking.
-If chunk_size is None, use Dask’s automatic chunking.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>numpy_array</strong> (<em>np.ndarray</em>) – Input array.</p></li>
-<li><p><strong>chunk_size</strong> (<em>int</em><em> or </em><em>tuple</em><em>, </em><em>optional</em>) – Desired chunk size.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Dask array version of numpy_array.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>da.Array</p>
-</dd>
-</dl>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">to_dask_array</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">numpy_array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chunk_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/base_estimator.html#BaseEstimator.to_dask_array"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.base_estimator.BaseEstimator.to_dask_array" title="Link to this definition"></a></dt>
+<dd><p>Convert a NumPy array to a Dask array with specified chunking.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="tfilterspy.base_estimator.BaseEstimator.validate_matrices">
-<span class="sig-name descname"><span class="pre">validate_matrices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matrices</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/base_estimator.html#BaseEstimator.validate_matrices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.base_estimator.BaseEstimator.validate_matrices" title="Permalink to this definition"></a></dt>
-<dd><p>Validate that matrices have consistent shapes.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>matrices</strong> (<em>dict</em>) – A dictionary of matrix names and their values.</p>
-</dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>ValueError</strong> – If the matrices are inconsistent.</p>
-</dd>
-</dl>
+<span class="sig-name descname"><span class="pre">validate_matrices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matrices</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/base_estimator.html#BaseEstimator.validate_matrices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.base_estimator.BaseEstimator.validate_matrices" title="Link to this definition"></a></dt>
+<dd><p>Validate that matrices are NumPy or Dask arrays.</p>
 </dd></dl>
 
 </dd></dl>
 
-<span class="target" id="module-tfilterspy.state_estimation"></span><p>State Estimation submodule containing implementations for Kalman Filters,
-Nonlinear Filters, and Particle Filters.</p>
+</section>
+<section id="module-tfilterspy.state_estimation">
+<span id="state-estimation"></span><h2>State Estimation<a class="headerlink" href="#module-tfilterspy.state_estimation" title="Link to this heading"></a></h2>
+<p>State Estimation submodule containing implementations for:
+- KalmanFilter (linear Gaussian systems)
+- ExtendedKalmanFilter (nonlinear, Jacobian-based)
+- UnscentedKalmanFilter (nonlinear, sigma points)
+- EnsembleKalmanFilter (high-dimensional, Dask-parallel)
+- ParticleFilter (nonlinear, non-Gaussian)</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="tfilterspy.state_estimation.DaskKalmanFilter">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tfilterspy.state_estimation.</span></span><span class="sig-name descname"><span class="pre">DaskKalmanFilter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state_transition_matrix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">observation_matrix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">process_noise_cov</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">observation_noise_cov</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_covariance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chunk_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">64</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">estimation_strategy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'residual_analysis'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/state_estimation/linear_filters.html#DaskKalmanFilter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.state_estimation.DaskKalmanFilter" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ParameterEstimator</span></code></p>
-<p>Dask-based implementation of a Kalman Filter that supports distributed computing for
-large datasets. This class extends the ParameterEstimator to estimate the process
-noise covariance (Q) and observation noise covariance (R) while applying Kalman Filtering
-on incoming measurements.</p>
-<p>The Kalman Filter is a recursive algorithm that estimates the state of a linear dynamic
-system from noisy measurements. This implementation leverages Dask to scale computations
-across distributed systems.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>state_transition_matrix</strong> (<em>np.ndarray</em><em> or </em><em>da.Array</em><em>, </em><em>shape</em><em> (</em><em>n_features</em><em>, </em><em>n_features</em><em>)</em>) – The state transition matrix (F) representing how the system evolves between states.</p></li>
-<li><p><strong>observation_matrix</strong> (<em>np.ndarray</em><em> or </em><em>da.Array</em><em>, </em><em>shape</em><em> (</em><em>n_observations</em><em>, </em><em>n_features</em><em>)</em>) – The observation matrix (H) that maps the true state space into the observed space.</p></li>
-<li><p><strong>process_noise_cov</strong> (<em>np.ndarray</em><em> or </em><em>da.Array</em><em>, </em><em>shape</em><em> (</em><em>n_features</em><em>, </em><em>n_features</em><em>)</em>) – Covariance matrix (Q) representing the process noise.</p></li>
-<li><p><strong>observation_noise_cov</strong> (<em>np.ndarray</em><em> or </em><em>da.Array</em><em>, </em><em>shape</em><em> (</em><em>n_observations</em><em>, </em><em>n_observations</em><em>)</em>) – Covariance matrix (R) representing the observation noise.</p></li>
-<li><p><strong>initial_state</strong> (<em>np.ndarray</em><em> or </em><em>da.Array</em><em>, </em><em>shape</em><em> (</em><em>n_features</em><em>,</em><em>)</em>) – Initial state vector (x0) of the system.</p></li>
-<li><p><strong>initial_covariance</strong> (<em>np.ndarray</em><em> or </em><em>da.Array</em><em>, </em><em>shape</em><em> (</em><em>n_features</em><em>, </em><em>n_features</em><em>)</em>) – Initial state covariance matrix (P0), representing initial uncertainty in the state.</p></li>
-<li><p><strong>estimation_strategy</strong> (<em>str</em><em>, </em><em>optional</em><em>, </em><em>default=&quot;residual_analysis&quot;</em>) – The strategy for estimating Q and R. Can be one of:
-- “residual_analysis”
-- “mle”
-- “cross_validation”
-- “adaptive_filtering”</p></li>
-</ul>
-</dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>ValueError</strong> – If matrix dimensions do not conform to Kalman Filter requirements.</p>
-</dd>
-</dl>
-<p class="rubric">References</p>
-<p>Welch, G., &amp; Bishop, G. (1995). An Introduction to the Kalman Filter.</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="tfilterspy.state_estimation.DaskKalmanFilter.estimate_parameters">
-<span class="sig-name descname"><span class="pre">estimate_parameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">measurements</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Array</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="reference internal" href="_modules/tfilterspy/state_estimation/linear_filters.html#DaskKalmanFilter.estimate_parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.state_estimation.DaskKalmanFilter.estimate_parameters" title="Permalink to this definition"></a></dt>
-<dd><p>Estimate process (Q) and observation (R) noise covariances using the specified strategy.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>measurements</strong> (<em>da.Array</em><em>, </em><em>shape</em><em> (</em><em>n_timesteps</em><em>, </em><em>n_observations</em><em>)</em>) – Observed measurements over time.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><strong>Q</strong> (<em>da.Array, shape (n_features, n_features)</em>) – Estimated process noise covariance matrix.</p></li>
-<li><p><strong>R</strong> (<em>da.Array, shape (n_features, n_features)</em>) – Estimated observation noise covariance matrix.</p></li>
-</ul>
-</p>
-</dd>
-</dl>
-<p class="rubric">Notes</p>
-<ul class="simple">
-<li><p>This method calls the appropriate estimation strategy from the parent class.</p></li>
-<li><p>The available strategies include residual analysis, MLE, cross-validation,
-and adaptive filtering.</p></li>
-</ul>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="tfilterspy.state_estimation.DaskKalmanFilter.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Array</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#tfilterspy.state_estimation.DaskKalmanFilter" title="tfilterspy.state_estimation.linear_filters.DaskKalmanFilter"><span class="pre">DaskKalmanFilter</span></a></span></span><a class="reference internal" href="_modules/tfilterspy/state_estimation/linear_filters.html#DaskKalmanFilter.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.state_estimation.DaskKalmanFilter.fit" title="Permalink to this definition"></a></dt>
-<dd><p>Prepare the Kalman Filter by storing the measurements as a Dask array.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>X</strong> (<em>np.ndarray</em><em> or </em><em>da.Array</em><em>, </em><em>shape</em><em> (</em><em>n_timesteps</em><em>, </em><em>n_observations</em><em>)</em>) – Array of measurements over time.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>self</strong> – The fitted Kalman Filter instance.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="#tfilterspy.state_estimation.DaskKalmanFilter" title="tfilterspy.state_estimation.DaskKalmanFilter">DaskKalmanFilter</a></p>
-</dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>ValueError</strong> – If the input measurements are not 2-dimensional.</p>
-</dd>
-</dl>
-</dd></dl>
-
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tfilterspy.state_estimation.</span></span><span class="sig-name descname"><span class="pre">DaskKalmanFilter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state_transition_matrix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">observation_matrix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">process_noise_cov</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">observation_noise_cov</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_covariance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chunk_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">64</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">estimation_strategy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'residual_analysis'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/state_estimation/linear_filters.html#DaskKalmanFilter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.state_estimation.DaskKalmanFilter" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#tfilterspy.state_estimation.linear_filters.KalmanFilter" title="tfilterspy.state_estimation.linear_filters.KalmanFilter"><code class="xref py py-class docutils literal notranslate"><span class="pre">KalmanFilter</span></code></a></p>
+<p>Backward-compatible Kalman Filter wrapper.</p>
+<p>Accepts the same constructor signature as the original DaskKalmanFilter
+and delegates to the new efficient KalmanFilter implementation.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="tfilterspy.state_estimation.DaskKalmanFilter.predict">
-<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Array</span></span></span><a class="reference internal" href="_modules/tfilterspy/state_estimation/linear_filters.html#DaskKalmanFilter.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.state_estimation.DaskKalmanFilter.predict" title="Permalink to this definition"></a></dt>
-<dd><p>Perform state estimation over all time steps using the Kalman Filter algorithm.</p>
-<p>This method constructs a Dask computation graph to process the entire measurement
-sequence in parallel using delayed execution.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>state_estimates</strong> – The estimated state at each time step.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>da.Array, shape (n_timesteps, n_features)</p>
-</dd>
-</dl>
-<p class="rubric">Notes</p>
-<ul class="simple">
-<li><p>The Kalman Filter operates in two steps: prediction and update.</p></li>
-<li><p>Predictions are made using the state transition matrix F.</p></li>
-<li><p>Updates are performed using the observation matrix H and Kalman Gain K.</p></li>
-<li><p>This method leverages Dask to parallelize the filter process over multiple time steps.</p></li>
-</ul>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="tfilterspy.state_estimation.DaskKalmanFilter.run_filter">
-<span class="sig-name descname"><span class="pre">run_filter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">measurements</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Array</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="reference internal" href="_modules/tfilterspy/state_estimation/linear_filters.html#DaskKalmanFilter.run_filter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.state_estimation.DaskKalmanFilter.run_filter" title="Permalink to this definition"></a></dt>
-<dd><p>Apply the Kalman Filter on measurements to compute state estimates and residuals.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>measurements</strong> (<em>da.Array</em><em>, </em><em>shape</em><em> (</em><em>n_timesteps</em><em>, </em><em>n_observations</em><em>)</em>) – Observed measurements over time.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><strong>state_estimates</strong> (<em>da.Array, shape (n_timesteps, n_features)</em>) – Estimated states over the measurement timeline.</p></li>
-<li><p><strong>residuals</strong> (<em>da.Array, shape (n_timesteps, n_observations)</em>) – Difference between observed and predicted measurements (innovations).</p></li>
-</ul>
-</p>
-</dd>
-</dl>
-<p class="rubric">Notes</p>
-<ul class="simple">
-<li><p>This function is used by parameter estimation strategies to compute residuals.</p></li>
-<li><p>Residuals are used for adaptive filtering and cross-validation strategies.</p></li>
-</ul>
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/state_estimation/linear_filters.html#DaskKalmanFilter.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.state_estimation.DaskKalmanFilter.predict" title="Link to this definition"></a></dt>
+<dd><p>Return filtered states as a Dask array for backward compatibility.</p>
 </dd></dl>
 
 </dd></dl>
 
-<dl class="py class">
+<dl class="py attribute">
 <dt class="sig sig-object py" id="tfilterspy.state_estimation.DaskNonLinearKalmanFilter">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tfilterspy.state_estimation.</span></span><span class="sig-name descname"><span class="pre">DaskNonLinearKalmanFilter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimation_strategy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'residual_analysis'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/state_estimation/nonlinear_filters.html#DaskNonLinearKalmanFilter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.state_estimation.DaskNonLinearKalmanFilter" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ParameterEstimator</span></code></p>
+<span class="sig-prename descclassname"><span class="pre">tfilterspy.state_estimation.</span></span><span class="sig-name descname"><span class="pre">DaskNonLinearKalmanFilter</span></span><a class="headerlink" href="#tfilterspy.state_estimation.DaskNonLinearKalmanFilter" title="Link to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="#tfilterspy.state_estimation.extended_kalman.ExtendedKalmanFilter" title="tfilterspy.state_estimation.extended_kalman.ExtendedKalmanFilter"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExtendedKalmanFilter</span></code></a></p>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="tfilterspy.state_estimation.DaskParticleFilter">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tfilterspy.state_estimation.</span></span><span class="sig-name descname"><span class="pre">DaskParticleFilter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state_transition</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">observation_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">process_noise_cov</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">observation_noise_cov</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_particles</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_dask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">estimation_strategy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'residual_analysis'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/state_estimation/particle_filters.html#DaskParticleFilter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.state_estimation.DaskParticleFilter" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ParameterEstimator</span></code></p>
-<p>A multivariate, scalable particle filter using Dask. Inherits parameter estimation
-methods from ParameterEstimator.</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="tfilterspy.state_estimation.DaskParticleFilter.estimate_state">
-<span class="sig-name descname"><span class="pre">estimate_state</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/state_estimation/particle_filters.html#DaskParticleFilter.estimate_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.state_estimation.DaskParticleFilter.estimate_state" title="Permalink to this definition"></a></dt>
-<dd><p>Step 5: State Estimation. Compute the state estimate as the weighted average of particles.</p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tfilterspy.state_estimation.</span></span><span class="sig-name descname"><span class="pre">DaskParticleFilter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state_transition</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">observation_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">process_noise_cov</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">observation_noise_cov</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_particles</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_dask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">estimation_strategy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'residual_analysis'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/state_estimation/particle_filters.html#DaskParticleFilter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.state_estimation.DaskParticleFilter" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#tfilterspy.state_estimation.particle_filters.ParticleFilter" title="tfilterspy.state_estimation.particle_filters.ParticleFilter"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParticleFilter</span></code></a></p>
+<p>Backward-compatible Particle Filter wrapper.</p>
+<p>Accepts the original DaskParticleFilter constructor signature
+and delegates to the new ParticleFilter implementation.</p>
 </dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="tfilterspy.state_estimation.DaskParticleFilter.predict">
-<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/state_estimation/particle_filters.html#DaskParticleFilter.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.state_estimation.DaskParticleFilter.predict" title="Permalink to this definition"></a></dt>
-<dd><p>Step 2: Prediction. Propagate each particle using the state transition model plus
-Gaussian process noise.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="tfilterspy.state_estimation.DaskParticleFilter.resample">
-<span class="sig-name descname"><span class="pre">resample</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/state_estimation/particle_filters.html#DaskParticleFilter.resample"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.state_estimation.DaskParticleFilter.resample" title="Permalink to this definition"></a></dt>
-<dd><p>Step 4: Resampling. Multinomial resampling to refocus on high-probability particles.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="tfilterspy.state_estimation.DaskParticleFilter.run_filter">
-<span class="sig-name descname"><span class="pre">run_filter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">measurements</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/state_estimation/particle_filters.html#DaskParticleFilter.run_filter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.state_estimation.DaskParticleFilter.run_filter" title="Permalink to this definition"></a></dt>
-<dd><p>This method is required for parameter estimation routines. It should run the filter
-over a sequence of measurements and return both the state estimates and the residuals.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="tfilterspy.state_estimation.EnsembleKalmanFilter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tfilterspy.state_estimation.</span></span><span class="sig-name descname"><span class="pre">EnsembleKalmanFilter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">R</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">P0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_ensemble</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_dask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/state_estimation/ensemble_kalman.html#EnsembleKalmanFilter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.state_estimation.EnsembleKalmanFilter" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#tfilterspy.base_estimator.BaseEstimator" title="tfilterspy.base_estimator.BaseEstimator"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseEstimator</span></code></a></p>
+<p>Ensemble Kalman Filter for high-dimensional state-space models.</p>
+<p>Approximates the Kalman filter using a Monte Carlo ensemble of state
+realizations. Scales to systems with millions of state variables where
+storing full covariance matrices is infeasible.</p>
+<p>Uses Dask for parallel ensemble member propagation when <code class="docutils literal notranslate"><span class="pre">use_dask=True</span></code>.</p>
+<p>State-space model:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">x_</span><span class="p">{</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">}</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">x_k</span><span class="p">)</span> <span class="o">+</span> <span class="n">w_k</span><span class="p">,</span>    <span class="n">w_k</span> <span class="o">~</span> <span class="n">N</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">Q</span><span class="p">)</span>
+<span class="n">z_k</span>     <span class="o">=</span> <span class="n">h</span><span class="p">(</span><span class="n">x_k</span><span class="p">)</span> <span class="o">+</span> <span class="n">v_k</span><span class="p">,</span>     <span class="n">v_k</span> <span class="o">~</span> <span class="n">N</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">R</span><span class="p">)</span>
+</pre></div>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>measurements</strong> (<em>da.Array</em>) – Array of measurements over time, shape (n_timesteps, n_obs).</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Filtered state estimates, shape (n_timesteps, n_state).
-residuals (da.Array): Residuals (measurement - predicted_measurement), same shape as measurements.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>state_estimates (da.Array)</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>f</strong> (<em>callable</em>) – State transition function <code class="docutils literal notranslate"><span class="pre">f(x)</span> <span class="pre">-&gt;</span> <span class="pre">x_next</span></code>.</p></li>
+<li><p><strong>h</strong> (<em>callable</em>) – Observation function <code class="docutils literal notranslate"><span class="pre">h(x)</span> <span class="pre">-&gt;</span> <span class="pre">z</span></code>.</p></li>
+<li><p><strong>Q</strong> (<em>ndarray</em><em>, </em><em>shape</em><em> (</em><em>n_state</em><em>, </em><em>n_state</em><em>)</em>) – Process noise covariance.</p></li>
+<li><p><strong>R</strong> (<em>ndarray</em><em>, </em><em>shape</em><em> (</em><em>n_obs</em><em>, </em><em>n_obs</em><em>)</em>) – Observation noise covariance.</p></li>
+<li><p><strong>x0</strong> (<em>ndarray</em><em>, </em><em>shape</em><em> (</em><em>n_state</em><em>,</em><em>)</em>) – Initial state estimate.</p></li>
+<li><p><strong>P0</strong> (<em>ndarray</em><em>, </em><em>shape</em><em> (</em><em>n_state</em><em>, </em><em>n_state</em><em>)</em>) – Initial state covariance.</p></li>
+<li><p><strong>n_ensemble</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of ensemble members (default 100).</p></li>
+<li><p><strong>use_dask</strong> (<em>bool</em><em>, </em><em>optional</em>) – Use Dask for parallel ensemble computation (default True).</p></li>
+</ul>
 </dd>
 </dl>
-<p>For this simple example, we run the filter sequentially over the measurements.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">tfilterspy</span><span class="w"> </span><span class="kn">import</span> <span class="n">EnsembleKalmanFilter</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">):</span> <span class="k">return</span> <span class="n">x</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span><span class="w"> </span><span class="nf">h</span><span class="p">(</span><span class="n">x</span><span class="p">):</span> <span class="k">return</span> <span class="n">x</span><span class="p">[:</span><span class="mi">1</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">enkf</span> <span class="o">=</span> <span class="n">EnsembleKalmanFilter</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">Q</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">R</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="mf">0.5</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">x0</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">P0</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">n_ensemble</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">enkf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">states</span> <span class="o">=</span> <span class="n">enkf</span><span class="o">.</span><span class="n">predict</span><span class="p">()</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="tfilterspy.state_estimation.EnsembleKalmanFilter.filter_step">
+<span class="sig-name descname"><span class="pre">filter_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/state_estimation/ensemble_kalman.html#EnsembleKalmanFilter.filter_step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.state_estimation.EnsembleKalmanFilter.filter_step" title="Link to this definition"></a></dt>
+<dd><p>Single-step online EnKF update.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="tfilterspy.state_estimation.DaskParticleFilter.step">
-<span class="sig-name descname"><span class="pre">step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">measurement</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/state_estimation/particle_filters.html#DaskParticleFilter.step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.state_estimation.DaskParticleFilter.step" title="Permalink to this definition"></a></dt>
-<dd><p>Step 6: Iteration. Run one full filter cycle: predict, update, resample, and state estimation.</p>
+<dt class="sig sig-object py" id="tfilterspy.state_estimation.EnsembleKalmanFilter.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/state_estimation/ensemble_kalman.html#EnsembleKalmanFilter.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.state_estimation.EnsembleKalmanFilter.fit" title="Link to this definition"></a></dt>
+<dd><p>Run the EnKF forward pass.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>measurement</strong> (<em>np.ndarray</em>) – The observed measurement.</p>
+<dd class="field-odd"><p><strong>X</strong> (<em>ndarray</em><em>, </em><em>shape</em><em> (</em><em>n_timesteps</em><em>, </em><em>n_obs</em><em>)</em>)</p>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The estimated state.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>np.ndarray</p>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>self</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="tfilterspy.state_estimation.DaskParticleFilter.update">
-<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">measurement</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/state_estimation/particle_filters.html#DaskParticleFilter.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.state_estimation.DaskParticleFilter.update" title="Permalink to this definition"></a></dt>
-<dd><p>Step 3: Measurement Update. Update particle weights based on the likelihood
-of the observed measurement.</p>
+<dt class="sig sig-object py" id="tfilterspy.state_estimation.EnsembleKalmanFilter.predict">
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/state_estimation/ensemble_kalman.html#EnsembleKalmanFilter.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.state_estimation.EnsembleKalmanFilter.predict" title="Link to this definition"></a></dt>
+<dd><p>Return filtered state estimates.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="tfilterspy.state_estimation.ExtendedKalmanFilter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tfilterspy.state_estimation.</span></span><span class="sig-name descname"><span class="pre">ExtendedKalmanFilter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">F_jacobian</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">H_jacobian</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">R</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">P0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/state_estimation/extended_kalman.html#ExtendedKalmanFilter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.state_estimation.ExtendedKalmanFilter" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#tfilterspy.base_estimator.BaseEstimator" title="tfilterspy.base_estimator.BaseEstimator"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseEstimator</span></code></a></p>
+<p>Extended Kalman Filter for nonlinear state-space models.</p>
+<p>Linearizes the dynamics using first-order Taylor expansion (Jacobians)
+around the current state estimate at each time step.</p>
+<p>State-space model:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">x_</span><span class="p">{</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">}</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">x_k</span><span class="p">)</span> <span class="o">+</span> <span class="n">w_k</span><span class="p">,</span>    <span class="n">w_k</span> <span class="o">~</span> <span class="n">N</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">Q</span><span class="p">)</span>
+<span class="n">z_k</span>     <span class="o">=</span> <span class="n">h</span><span class="p">(</span><span class="n">x_k</span><span class="p">)</span> <span class="o">+</span> <span class="n">v_k</span><span class="p">,</span>     <span class="n">v_k</span> <span class="o">~</span> <span class="n">N</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">R</span><span class="p">)</span>
+</pre></div>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>measurement</strong> (<em>np.ndarray</em>) – The observed measurement.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>f</strong> (<em>callable</em>) – State transition function <code class="docutils literal notranslate"><span class="pre">f(x)</span> <span class="pre">-&gt;</span> <span class="pre">x_next</span></code>.</p></li>
+<li><p><strong>h</strong> (<em>callable</em>) – Observation function <code class="docutils literal notranslate"><span class="pre">h(x)</span> <span class="pre">-&gt;</span> <span class="pre">z</span></code>.</p></li>
+<li><p><strong>F_jacobian</strong> (<em>callable</em>) – Jacobian of f: <code class="docutils literal notranslate"><span class="pre">F_jacobian(x)</span> <span class="pre">-&gt;</span> <span class="pre">ndarray</span> <span class="pre">(n_state,</span> <span class="pre">n_state)</span></code>.</p></li>
+<li><p><strong>H_jacobian</strong> (<em>callable</em>) – Jacobian of h: <code class="docutils literal notranslate"><span class="pre">H_jacobian(x)</span> <span class="pre">-&gt;</span> <span class="pre">ndarray</span> <span class="pre">(n_obs,</span> <span class="pre">n_state)</span></code>.</p></li>
+<li><p><strong>Q</strong> (<em>ndarray</em><em>, </em><em>shape</em><em> (</em><em>n_state</em><em>, </em><em>n_state</em><em>)</em>) – Process noise covariance.</p></li>
+<li><p><strong>R</strong> (<em>ndarray</em><em>, </em><em>shape</em><em> (</em><em>n_obs</em><em>, </em><em>n_obs</em><em>)</em>) – Observation noise covariance.</p></li>
+<li><p><strong>x0</strong> (<em>ndarray</em><em>, </em><em>shape</em><em> (</em><em>n_state</em><em>,</em><em>)</em>) – Initial state estimate.</p></li>
+<li><p><strong>P0</strong> (<em>ndarray</em><em>, </em><em>shape</em><em> (</em><em>n_state</em><em>, </em><em>n_state</em><em>)</em>) – Initial state covariance.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">tfilterspy</span><span class="w"> </span><span class="kn">import</span> <span class="n">ExtendedKalmanFilter</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">):</span> <span class="k">return</span> <span class="n">x</span>  <span class="c1"># identity dynamics</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span><span class="w"> </span><span class="nf">h</span><span class="p">(</span><span class="n">x</span><span class="p">):</span> <span class="k">return</span> <span class="n">x</span><span class="p">[:</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># observe first state only</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span><span class="w"> </span><span class="nf">Fj</span><span class="p">(</span><span class="n">x</span><span class="p">):</span> <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span><span class="w"> </span><span class="nf">Hj</span><span class="p">(</span><span class="n">x</span><span class="p">):</span> <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ekf</span> <span class="o">=</span> <span class="n">ExtendedKalmanFilter</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">Fj</span><span class="p">,</span> <span class="n">Hj</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">Q</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">R</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="mf">0.5</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">x0</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">P0</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ekf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">states</span> <span class="o">=</span> <span class="n">ekf</span><span class="o">.</span><span class="n">predict</span><span class="p">()</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="tfilterspy.state_estimation.ExtendedKalmanFilter.filter_step">
+<span class="sig-name descname"><span class="pre">filter_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/state_estimation/extended_kalman.html#ExtendedKalmanFilter.filter_step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.state_estimation.ExtendedKalmanFilter.filter_step" title="Link to this definition"></a></dt>
+<dd><p>Single-step online EKF update.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tfilterspy.state_estimation.ExtendedKalmanFilter.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/state_estimation/extended_kalman.html#ExtendedKalmanFilter.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.state_estimation.ExtendedKalmanFilter.fit" title="Link to this definition"></a></dt>
+<dd><p>Run the EKF forward pass on measurements.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>X</strong> (<em>ndarray</em><em>, </em><em>shape</em><em> (</em><em>n_timesteps</em><em>, </em><em>n_obs</em><em>)</em>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>self</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tfilterspy.state_estimation.ExtendedKalmanFilter.predict">
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/state_estimation/extended_kalman.html#ExtendedKalmanFilter.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.state_estimation.ExtendedKalmanFilter.predict" title="Link to this definition"></a></dt>
+<dd><p>Return filtered state estimates.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tfilterspy.state_estimation.ExtendedKalmanFilter.smooth">
+<span class="sig-name descname"><span class="pre">smooth</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/state_estimation/extended_kalman.html#ExtendedKalmanFilter.smooth"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.state_estimation.ExtendedKalmanFilter.smooth" title="Link to this definition"></a></dt>
+<dd><p>RTS smoother for EKF (re-linearizes at filtered states).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><ul class="simple">
+<li><p><strong>smoothed_states</strong> (<em>ndarray, shape (n_timesteps, n_state)</em>)</p></li>
+<li><p><strong>smoothed_covs</strong> (<em>ndarray, shape (n_timesteps, n_state, n_state)</em>)</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="tfilterspy.state_estimation.KalmanFilter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tfilterspy.state_estimation.</span></span><span class="sig-name descname"><span class="pre">KalmanFilter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">F</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">H</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">R</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">P0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">store_covariances</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/state_estimation/linear_filters.html#KalmanFilter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.state_estimation.KalmanFilter" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#tfilterspy.base_estimator.BaseEstimator" title="tfilterspy.base_estimator.BaseEstimator"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseEstimator</span></code></a></p>
+<p>Kalman Filter for linear Gaussian state-space models.</p>
+<p>Efficient numpy core with optional Dask support for batch processing.
+Implements the full sklearn-compatible API: fit / predict / score.</p>
+<p>State-space model:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">x_</span><span class="p">{</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">}</span> <span class="o">=</span> <span class="n">F</span> <span class="o">@</span> <span class="n">x_k</span> <span class="o">+</span> <span class="n">w_k</span><span class="p">,</span>    <span class="n">w_k</span> <span class="o">~</span> <span class="n">N</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">Q</span><span class="p">)</span>
+<span class="n">z_k</span>     <span class="o">=</span> <span class="n">H</span> <span class="o">@</span> <span class="n">x_k</span> <span class="o">+</span> <span class="n">v_k</span><span class="p">,</span>     <span class="n">v_k</span> <span class="o">~</span> <span class="n">N</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">R</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>F</strong> (<em>ndarray</em><em>, </em><em>shape</em><em> (</em><em>n_state</em><em>, </em><em>n_state</em><em>)</em>) – State transition matrix.</p></li>
+<li><p><strong>H</strong> (<em>ndarray</em><em>, </em><em>shape</em><em> (</em><em>n_obs</em><em>, </em><em>n_state</em><em>)</em>) – Observation matrix mapping state to measurement space.</p></li>
+<li><p><strong>Q</strong> (<em>ndarray</em><em>, </em><em>shape</em><em> (</em><em>n_state</em><em>, </em><em>n_state</em><em>)</em>) – Process noise covariance.</p></li>
+<li><p><strong>R</strong> (<em>ndarray</em><em>, </em><em>shape</em><em> (</em><em>n_obs</em><em>, </em><em>n_obs</em><em>)</em>) – Observation noise covariance.</p></li>
+<li><p><strong>x0</strong> (<em>ndarray</em><em>, </em><em>shape</em><em> (</em><em>n_state</em><em>,</em><em>)</em>) – Initial state estimate.</p></li>
+<li><p><strong>P0</strong> (<em>ndarray</em><em>, </em><em>shape</em><em> (</em><em>n_state</em><em>, </em><em>n_state</em><em>)</em>) – Initial state covariance.</p></li>
+<li><p><strong>store_covariances</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True (default), stores full covariance history. Set to False
+to save memory on very long time series (disables smooth()).</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">tfilterspy</span><span class="w"> </span><span class="kn">import</span> <span class="n">KalmanFilter</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">F</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span> <span class="n">H</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.1</span><span class="p">;</span> <span class="n">R</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">kf</span> <span class="o">=</span> <span class="n">KalmanFilter</span><span class="p">(</span><span class="n">F</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">kf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">states</span> <span class="o">=</span> <span class="n">kf</span><span class="o">.</span><span class="n">predict</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">smoothed</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">kf</span><span class="o">.</span><span class="n">smooth</span><span class="p">()</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="tfilterspy.state_estimation.KalmanFilter.filter_step">
+<span class="sig-name descname"><span class="pre">filter_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/state_estimation/linear_filters.html#KalmanFilter.filter_step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.state_estimation.KalmanFilter.filter_step" title="Link to this definition"></a></dt>
+<dd><p>Single-step online filtering.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>z</strong> (<em>ndarray</em><em>, </em><em>shape</em><em> (</em><em>n_obs</em><em>,</em><em>)</em>) – Single measurement vector.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>x</strong> (<em>ndarray, shape (n_state,)</em>) – Updated state estimate.</p></li>
+<li><p><strong>P</strong> (<em>ndarray, shape (n_state, n_state)</em>) – Updated covariance.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tfilterspy.state_estimation.KalmanFilter.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/state_estimation/linear_filters.html#KalmanFilter.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.state_estimation.KalmanFilter.fit" title="Link to this definition"></a></dt>
+<dd><p>Run the Kalman filter forward pass on measurements.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>X</strong> (<em>ndarray</em><em> or </em><em>dask.array</em><em>, </em><em>shape</em><em> (</em><em>n_timesteps</em><em>, </em><em>n_obs</em><em>)</em>) – Measurement sequence. 1-D arrays are reshaped to (n, 1).</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>self</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tfilterspy.state_estimation.KalmanFilter.forecast">
+<span class="sig-name descname"><span class="pre">forecast</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_steps</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/state_estimation/linear_filters.html#KalmanFilter.forecast"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.state_estimation.KalmanFilter.forecast" title="Link to this definition"></a></dt>
+<dd><p>Forecast future states beyond the observed data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>n_steps</strong> (<em>int</em>) – Number of steps to forecast.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>forecasted_states</strong> (<em>ndarray, shape (n_steps, n_state)</em>)</p></li>
+<li><p><strong>forecasted_covs</strong> (<em>ndarray, shape (n_steps, n_state, n_state)</em>)</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tfilterspy.state_estimation.KalmanFilter.predict">
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/state_estimation/linear_filters.html#KalmanFilter.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.state_estimation.KalmanFilter.predict" title="Link to this definition"></a></dt>
+<dd><p>Return filtered state estimates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filtered_states</strong></p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>ndarray, shape (n_timesteps, n_state)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tfilterspy.state_estimation.KalmanFilter.run_filter">
+<span class="sig-name descname"><span class="pre">run_filter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">measurements</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/state_estimation/linear_filters.html#KalmanFilter.run_filter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.state_estimation.KalmanFilter.run_filter" title="Link to this definition"></a></dt>
+<dd><p>Legacy method. Use fit() + predict() instead.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tfilterspy.state_estimation.KalmanFilter.smooth">
+<span class="sig-name descname"><span class="pre">smooth</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/state_estimation/linear_filters.html#KalmanFilter.smooth"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.state_estimation.KalmanFilter.smooth" title="Link to this definition"></a></dt>
+<dd><p>Rauch-Tung-Striebel (RTS) backward smoothing pass.</p>
+<p>Requires <code class="docutils literal notranslate"><span class="pre">store_covariances=True</span></code> (the default).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><ul class="simple">
+<li><p><strong>smoothed_states</strong> (<em>ndarray, shape (n_timesteps, n_state)</em>)</p></li>
+<li><p><strong>smoothed_covs</strong> (<em>ndarray, shape (n_timesteps, n_state, n_state)</em>)</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="tfilterspy.state_estimation.ParticleFilter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tfilterspy.state_estimation.</span></span><span class="sig-name descname"><span class="pre">ParticleFilter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">R</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_particles</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resample_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_dask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/state_estimation/particle_filters.html#ParticleFilter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.state_estimation.ParticleFilter" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#tfilterspy.base_estimator.BaseEstimator" title="tfilterspy.base_estimator.BaseEstimator"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseEstimator</span></code></a></p>
+<p>Sequential Importance Resampling (SIR) Particle Filter.</p>
+<p>Represents the posterior distribution using a set of weighted particles.
+Handles nonlinear, non-Gaussian state-space models where Kalman-based
+approaches fail.</p>
+<p>Supports both callable and matrix-based transition/observation models.
+When matrices are provided, particle propagation is vectorized for speed.</p>
+<p>State-space model:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">x_</span><span class="p">{</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">}</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">x_k</span><span class="p">)</span> <span class="o">+</span> <span class="n">w_k</span><span class="p">,</span>    <span class="n">w_k</span> <span class="o">~</span> <span class="n">N</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">Q</span><span class="p">)</span>
+<span class="n">z_k</span>     <span class="o">=</span> <span class="n">h</span><span class="p">(</span><span class="n">x_k</span><span class="p">)</span> <span class="o">+</span> <span class="n">v_k</span><span class="p">,</span>     <span class="n">v_k</span> <span class="o">~</span> <span class="n">N</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">R</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>f</strong> (<em>callable</em><em> or </em><em>ndarray</em>) – State transition. If callable: <code class="docutils literal notranslate"><span class="pre">f(x)</span> <span class="pre">-&gt;</span> <span class="pre">x_next</span></code>.
+If ndarray (n_state, n_state): linear transition matrix.</p></li>
+<li><p><strong>h</strong> (<em>callable</em><em> or </em><em>ndarray</em>) – Observation model. If callable: <code class="docutils literal notranslate"><span class="pre">h(x)</span> <span class="pre">-&gt;</span> <span class="pre">z</span></code>.
+If ndarray (n_obs, n_state): linear observation matrix.</p></li>
+<li><p><strong>Q</strong> (<em>ndarray</em><em>, </em><em>shape</em><em> (</em><em>n_state</em><em>, </em><em>n_state</em><em>)</em>) – Process noise covariance.</p></li>
+<li><p><strong>R</strong> (<em>ndarray</em><em>, </em><em>shape</em><em> (</em><em>n_obs</em><em>, </em><em>n_obs</em><em>)</em>) – Observation noise covariance.</p></li>
+<li><p><strong>x0</strong> (<em>ndarray</em><em>, </em><em>shape</em><em> (</em><em>n_state</em><em>,</em><em>)</em>) – Initial state estimate.</p></li>
+<li><p><strong>n_particles</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of particles (default 1000).</p></li>
+<li><p><strong>resample_threshold</strong> (<em>float</em><em>, </em><em>optional</em>) – ESS ratio below which resampling triggers (default 0.5).</p></li>
+<li><p><strong>use_dask</strong> (<em>bool</em><em>, </em><em>optional</em>) – Parallelize particle propagation with Dask (default False).</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">tfilterspy</span><span class="w"> </span><span class="kn">import</span> <span class="n">ParticleFilter</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">F</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">H</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pf</span> <span class="o">=</span> <span class="n">ParticleFilter</span><span class="p">(</span><span class="n">F</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">Q</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">R</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="mf">0.5</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">x0</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">n_particles</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">states</span> <span class="o">=</span> <span class="n">pf</span><span class="o">.</span><span class="n">predict</span><span class="p">()</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="tfilterspy.state_estimation.ParticleFilter.filter_step">
+<span class="sig-name descname"><span class="pre">filter_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/state_estimation/particle_filters.html#ParticleFilter.filter_step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.state_estimation.ParticleFilter.filter_step" title="Link to this definition"></a></dt>
+<dd><p>Single-step online particle filter update.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>z</strong> (<em>ndarray</em><em>, </em><em>shape</em><em> (</em><em>n_obs</em><em>,</em><em>)</em>) – Single measurement.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>state</strong> – Weighted mean state estimate.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ndarray, shape (n_state,)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tfilterspy.state_estimation.ParticleFilter.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/state_estimation/particle_filters.html#ParticleFilter.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.state_estimation.ParticleFilter.fit" title="Link to this definition"></a></dt>
+<dd><p>Run the particle filter on measurements.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>X</strong> (<em>ndarray</em><em>, </em><em>shape</em><em> (</em><em>n_timesteps</em><em>, </em><em>n_obs</em><em>)</em>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>self</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tfilterspy.state_estimation.ParticleFilter.predict">
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/state_estimation/particle_filters.html#ParticleFilter.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.state_estimation.ParticleFilter.predict" title="Link to this definition"></a></dt>
+<dd><p>Return filtered state estimates.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="tfilterspy.state_estimation.UnscentedKalmanFilter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tfilterspy.state_estimation.</span></span><span class="sig-name descname"><span class="pre">UnscentedKalmanFilter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">R</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">P0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kappa</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/state_estimation/unscented_kalman.html#UnscentedKalmanFilter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.state_estimation.UnscentedKalmanFilter" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#tfilterspy.base_estimator.BaseEstimator" title="tfilterspy.base_estimator.BaseEstimator"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseEstimator</span></code></a></p>
+<p>Unscented Kalman Filter for nonlinear state-space models.</p>
+<p>Uses the unscented transform with sigma points to propagate mean and
+covariance through nonlinear functions — no Jacobians required.</p>
+<p>State-space model:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">x_</span><span class="p">{</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">}</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">x_k</span><span class="p">)</span> <span class="o">+</span> <span class="n">w_k</span><span class="p">,</span>    <span class="n">w_k</span> <span class="o">~</span> <span class="n">N</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">Q</span><span class="p">)</span>
+<span class="n">z_k</span>     <span class="o">=</span> <span class="n">h</span><span class="p">(</span><span class="n">x_k</span><span class="p">)</span> <span class="o">+</span> <span class="n">v_k</span><span class="p">,</span>     <span class="n">v_k</span> <span class="o">~</span> <span class="n">N</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">R</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>f</strong> (<em>callable</em>) – State transition function <code class="docutils literal notranslate"><span class="pre">f(x)</span> <span class="pre">-&gt;</span> <span class="pre">x_next</span></code>.</p></li>
+<li><p><strong>h</strong> (<em>callable</em>) – Observation function <code class="docutils literal notranslate"><span class="pre">h(x)</span> <span class="pre">-&gt;</span> <span class="pre">z</span></code>.</p></li>
+<li><p><strong>Q</strong> (<em>ndarray</em><em>, </em><em>shape</em><em> (</em><em>n_state</em><em>, </em><em>n_state</em><em>)</em>) – Process noise covariance.</p></li>
+<li><p><strong>R</strong> (<em>ndarray</em><em>, </em><em>shape</em><em> (</em><em>n_obs</em><em>, </em><em>n_obs</em><em>)</em>) – Observation noise covariance.</p></li>
+<li><p><strong>x0</strong> (<em>ndarray</em><em>, </em><em>shape</em><em> (</em><em>n_state</em><em>,</em><em>)</em>) – Initial state estimate.</p></li>
+<li><p><strong>P0</strong> (<em>ndarray</em><em>, </em><em>shape</em><em> (</em><em>n_state</em><em>, </em><em>n_state</em><em>)</em>) – Initial state covariance.</p></li>
+<li><p><strong>alpha</strong> (<em>float</em><em>, </em><em>optional</em>) – Spread of sigma points around the mean (default 1e-3).</p></li>
+<li><p><strong>beta</strong> (<em>float</em><em>, </em><em>optional</em>) – Prior distribution parameter; 2 is optimal for Gaussian (default 2.0).</p></li>
+<li><p><strong>kappa</strong> (<em>float</em><em>, </em><em>optional</em>) – Secondary scaling parameter (default 0).</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">tfilterspy</span><span class="w"> </span><span class="kn">import</span> <span class="n">UnscentedKalmanFilter</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">):</span> <span class="k">return</span> <span class="n">x</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span><span class="w"> </span><span class="nf">h</span><span class="p">(</span><span class="n">x</span><span class="p">):</span> <span class="k">return</span> <span class="n">x</span><span class="p">[:</span><span class="mi">1</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ukf</span> <span class="o">=</span> <span class="n">UnscentedKalmanFilter</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">Q</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">R</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="mf">0.5</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">x0</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">P0</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ukf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">states</span> <span class="o">=</span> <span class="n">ukf</span><span class="o">.</span><span class="n">predict</span><span class="p">()</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="tfilterspy.state_estimation.UnscentedKalmanFilter.filter_step">
+<span class="sig-name descname"><span class="pre">filter_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/state_estimation/unscented_kalman.html#UnscentedKalmanFilter.filter_step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.state_estimation.UnscentedKalmanFilter.filter_step" title="Link to this definition"></a></dt>
+<dd><p>Single-step online UKF update.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tfilterspy.state_estimation.UnscentedKalmanFilter.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/state_estimation/unscented_kalman.html#UnscentedKalmanFilter.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.state_estimation.UnscentedKalmanFilter.fit" title="Link to this definition"></a></dt>
+<dd><p>Run the UKF forward pass.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>X</strong> (<em>ndarray</em><em>, </em><em>shape</em><em> (</em><em>n_timesteps</em><em>, </em><em>n_obs</em><em>)</em>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>self</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tfilterspy.state_estimation.UnscentedKalmanFilter.predict">
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/state_estimation/unscented_kalman.html#UnscentedKalmanFilter.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.state_estimation.UnscentedKalmanFilter.predict" title="Link to this definition"></a></dt>
+<dd><p>Return filtered state estimates.</p>
+</dd></dl>
+
+</dd></dl>
+
+<section id="module-tfilterspy.state_estimation.linear_filters">
+<span id="kalman-filter"></span><h3>Kalman Filter<a class="headerlink" href="#module-tfilterspy.state_estimation.linear_filters" title="Link to this heading"></a></h3>
+<dl class="py class">
+<dt class="sig sig-object py" id="tfilterspy.state_estimation.linear_filters.DaskKalmanFilter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tfilterspy.state_estimation.linear_filters.</span></span><span class="sig-name descname"><span class="pre">DaskKalmanFilter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state_transition_matrix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">observation_matrix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">process_noise_cov</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">observation_noise_cov</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_covariance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chunk_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">64</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">estimation_strategy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'residual_analysis'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/state_estimation/linear_filters.html#DaskKalmanFilter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.state_estimation.linear_filters.DaskKalmanFilter" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#tfilterspy.state_estimation.linear_filters.KalmanFilter" title="tfilterspy.state_estimation.linear_filters.KalmanFilter"><code class="xref py py-class docutils literal notranslate"><span class="pre">KalmanFilter</span></code></a></p>
+<p>Backward-compatible Kalman Filter wrapper.</p>
+<p>Accepts the same constructor signature as the original DaskKalmanFilter
+and delegates to the new efficient KalmanFilter implementation.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="tfilterspy.state_estimation.linear_filters.DaskKalmanFilter.predict">
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/state_estimation/linear_filters.html#DaskKalmanFilter.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.state_estimation.linear_filters.DaskKalmanFilter.predict" title="Link to this definition"></a></dt>
+<dd><p>Return filtered states as a Dask array for backward compatibility.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="tfilterspy.state_estimation.linear_filters.KalmanFilter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tfilterspy.state_estimation.linear_filters.</span></span><span class="sig-name descname"><span class="pre">KalmanFilter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">F</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">H</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">R</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">P0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">store_covariances</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/state_estimation/linear_filters.html#KalmanFilter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.state_estimation.linear_filters.KalmanFilter" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#tfilterspy.base_estimator.BaseEstimator" title="tfilterspy.base_estimator.BaseEstimator"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseEstimator</span></code></a></p>
+<p>Kalman Filter for linear Gaussian state-space models.</p>
+<p>Efficient numpy core with optional Dask support for batch processing.
+Implements the full sklearn-compatible API: fit / predict / score.</p>
+<p>State-space model:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">x_</span><span class="p">{</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">}</span> <span class="o">=</span> <span class="n">F</span> <span class="o">@</span> <span class="n">x_k</span> <span class="o">+</span> <span class="n">w_k</span><span class="p">,</span>    <span class="n">w_k</span> <span class="o">~</span> <span class="n">N</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">Q</span><span class="p">)</span>
+<span class="n">z_k</span>     <span class="o">=</span> <span class="n">H</span> <span class="o">@</span> <span class="n">x_k</span> <span class="o">+</span> <span class="n">v_k</span><span class="p">,</span>     <span class="n">v_k</span> <span class="o">~</span> <span class="n">N</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">R</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>F</strong> (<em>ndarray</em><em>, </em><em>shape</em><em> (</em><em>n_state</em><em>, </em><em>n_state</em><em>)</em>) – State transition matrix.</p></li>
+<li><p><strong>H</strong> (<em>ndarray</em><em>, </em><em>shape</em><em> (</em><em>n_obs</em><em>, </em><em>n_state</em><em>)</em>) – Observation matrix mapping state to measurement space.</p></li>
+<li><p><strong>Q</strong> (<em>ndarray</em><em>, </em><em>shape</em><em> (</em><em>n_state</em><em>, </em><em>n_state</em><em>)</em>) – Process noise covariance.</p></li>
+<li><p><strong>R</strong> (<em>ndarray</em><em>, </em><em>shape</em><em> (</em><em>n_obs</em><em>, </em><em>n_obs</em><em>)</em>) – Observation noise covariance.</p></li>
+<li><p><strong>x0</strong> (<em>ndarray</em><em>, </em><em>shape</em><em> (</em><em>n_state</em><em>,</em><em>)</em>) – Initial state estimate.</p></li>
+<li><p><strong>P0</strong> (<em>ndarray</em><em>, </em><em>shape</em><em> (</em><em>n_state</em><em>, </em><em>n_state</em><em>)</em>) – Initial state covariance.</p></li>
+<li><p><strong>store_covariances</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True (default), stores full covariance history. Set to False
+to save memory on very long time series (disables smooth()).</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">tfilterspy</span><span class="w"> </span><span class="kn">import</span> <span class="n">KalmanFilter</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">F</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span> <span class="n">H</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.1</span><span class="p">;</span> <span class="n">R</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">kf</span> <span class="o">=</span> <span class="n">KalmanFilter</span><span class="p">(</span><span class="n">F</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">kf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">states</span> <span class="o">=</span> <span class="n">kf</span><span class="o">.</span><span class="n">predict</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">smoothed</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">kf</span><span class="o">.</span><span class="n">smooth</span><span class="p">()</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="tfilterspy.state_estimation.linear_filters.KalmanFilter.filter_step">
+<span class="sig-name descname"><span class="pre">filter_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/state_estimation/linear_filters.html#KalmanFilter.filter_step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.state_estimation.linear_filters.KalmanFilter.filter_step" title="Link to this definition"></a></dt>
+<dd><p>Single-step online filtering.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>z</strong> (<em>ndarray</em><em>, </em><em>shape</em><em> (</em><em>n_obs</em><em>,</em><em>)</em>) – Single measurement vector.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>x</strong> (<em>ndarray, shape (n_state,)</em>) – Updated state estimate.</p></li>
+<li><p><strong>P</strong> (<em>ndarray, shape (n_state, n_state)</em>) – Updated covariance.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tfilterspy.state_estimation.linear_filters.KalmanFilter.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/state_estimation/linear_filters.html#KalmanFilter.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.state_estimation.linear_filters.KalmanFilter.fit" title="Link to this definition"></a></dt>
+<dd><p>Run the Kalman filter forward pass on measurements.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>X</strong> (<em>ndarray</em><em> or </em><em>dask.array</em><em>, </em><em>shape</em><em> (</em><em>n_timesteps</em><em>, </em><em>n_obs</em><em>)</em>) – Measurement sequence. 1-D arrays are reshaped to (n, 1).</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>self</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tfilterspy.state_estimation.linear_filters.KalmanFilter.forecast">
+<span class="sig-name descname"><span class="pre">forecast</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_steps</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/state_estimation/linear_filters.html#KalmanFilter.forecast"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.state_estimation.linear_filters.KalmanFilter.forecast" title="Link to this definition"></a></dt>
+<dd><p>Forecast future states beyond the observed data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>n_steps</strong> (<em>int</em>) – Number of steps to forecast.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>forecasted_states</strong> (<em>ndarray, shape (n_steps, n_state)</em>)</p></li>
+<li><p><strong>forecasted_covs</strong> (<em>ndarray, shape (n_steps, n_state, n_state)</em>)</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tfilterspy.state_estimation.linear_filters.KalmanFilter.predict">
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/state_estimation/linear_filters.html#KalmanFilter.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.state_estimation.linear_filters.KalmanFilter.predict" title="Link to this definition"></a></dt>
+<dd><p>Return filtered state estimates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filtered_states</strong></p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>ndarray, shape (n_timesteps, n_state)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tfilterspy.state_estimation.linear_filters.KalmanFilter.run_filter">
+<span class="sig-name descname"><span class="pre">run_filter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">measurements</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/state_estimation/linear_filters.html#KalmanFilter.run_filter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.state_estimation.linear_filters.KalmanFilter.run_filter" title="Link to this definition"></a></dt>
+<dd><p>Legacy method. Use fit() + predict() instead.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tfilterspy.state_estimation.linear_filters.KalmanFilter.smooth">
+<span class="sig-name descname"><span class="pre">smooth</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/state_estimation/linear_filters.html#KalmanFilter.smooth"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.state_estimation.linear_filters.KalmanFilter.smooth" title="Link to this definition"></a></dt>
+<dd><p>Rauch-Tung-Striebel (RTS) backward smoothing pass.</p>
+<p>Requires <code class="docutils literal notranslate"><span class="pre">store_covariances=True</span></code> (the default).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><ul class="simple">
+<li><p><strong>smoothed_states</strong> (<em>ndarray, shape (n_timesteps, n_state)</em>)</p></li>
+<li><p><strong>smoothed_covs</strong> (<em>ndarray, shape (n_timesteps, n_state, n_state)</em>)</p></li>
+</ul>
+</p>
 </dd>
 </dl>
 </dd></dl>
@@ -393,12 +827,383 @@ of the observed measurement.</p>
 </dd></dl>
 
 </section>
+<section id="module-tfilterspy.state_estimation.extended_kalman">
+<span id="extended-kalman-filter"></span><h3>Extended Kalman Filter<a class="headerlink" href="#module-tfilterspy.state_estimation.extended_kalman" title="Link to this heading"></a></h3>
+<dl class="py class">
+<dt class="sig sig-object py" id="tfilterspy.state_estimation.extended_kalman.ExtendedKalmanFilter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tfilterspy.state_estimation.extended_kalman.</span></span><span class="sig-name descname"><span class="pre">ExtendedKalmanFilter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">F_jacobian</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">H_jacobian</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">R</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">P0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/state_estimation/extended_kalman.html#ExtendedKalmanFilter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.state_estimation.extended_kalman.ExtendedKalmanFilter" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#tfilterspy.base_estimator.BaseEstimator" title="tfilterspy.base_estimator.BaseEstimator"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseEstimator</span></code></a></p>
+<p>Extended Kalman Filter for nonlinear state-space models.</p>
+<p>Linearizes the dynamics using first-order Taylor expansion (Jacobians)
+around the current state estimate at each time step.</p>
+<p>State-space model:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">x_</span><span class="p">{</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">}</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">x_k</span><span class="p">)</span> <span class="o">+</span> <span class="n">w_k</span><span class="p">,</span>    <span class="n">w_k</span> <span class="o">~</span> <span class="n">N</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">Q</span><span class="p">)</span>
+<span class="n">z_k</span>     <span class="o">=</span> <span class="n">h</span><span class="p">(</span><span class="n">x_k</span><span class="p">)</span> <span class="o">+</span> <span class="n">v_k</span><span class="p">,</span>     <span class="n">v_k</span> <span class="o">~</span> <span class="n">N</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">R</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>f</strong> (<em>callable</em>) – State transition function <code class="docutils literal notranslate"><span class="pre">f(x)</span> <span class="pre">-&gt;</span> <span class="pre">x_next</span></code>.</p></li>
+<li><p><strong>h</strong> (<em>callable</em>) – Observation function <code class="docutils literal notranslate"><span class="pre">h(x)</span> <span class="pre">-&gt;</span> <span class="pre">z</span></code>.</p></li>
+<li><p><strong>F_jacobian</strong> (<em>callable</em>) – Jacobian of f: <code class="docutils literal notranslate"><span class="pre">F_jacobian(x)</span> <span class="pre">-&gt;</span> <span class="pre">ndarray</span> <span class="pre">(n_state,</span> <span class="pre">n_state)</span></code>.</p></li>
+<li><p><strong>H_jacobian</strong> (<em>callable</em>) – Jacobian of h: <code class="docutils literal notranslate"><span class="pre">H_jacobian(x)</span> <span class="pre">-&gt;</span> <span class="pre">ndarray</span> <span class="pre">(n_obs,</span> <span class="pre">n_state)</span></code>.</p></li>
+<li><p><strong>Q</strong> (<em>ndarray</em><em>, </em><em>shape</em><em> (</em><em>n_state</em><em>, </em><em>n_state</em><em>)</em>) – Process noise covariance.</p></li>
+<li><p><strong>R</strong> (<em>ndarray</em><em>, </em><em>shape</em><em> (</em><em>n_obs</em><em>, </em><em>n_obs</em><em>)</em>) – Observation noise covariance.</p></li>
+<li><p><strong>x0</strong> (<em>ndarray</em><em>, </em><em>shape</em><em> (</em><em>n_state</em><em>,</em><em>)</em>) – Initial state estimate.</p></li>
+<li><p><strong>P0</strong> (<em>ndarray</em><em>, </em><em>shape</em><em> (</em><em>n_state</em><em>, </em><em>n_state</em><em>)</em>) – Initial state covariance.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">tfilterspy</span><span class="w"> </span><span class="kn">import</span> <span class="n">ExtendedKalmanFilter</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">):</span> <span class="k">return</span> <span class="n">x</span>  <span class="c1"># identity dynamics</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span><span class="w"> </span><span class="nf">h</span><span class="p">(</span><span class="n">x</span><span class="p">):</span> <span class="k">return</span> <span class="n">x</span><span class="p">[:</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># observe first state only</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span><span class="w"> </span><span class="nf">Fj</span><span class="p">(</span><span class="n">x</span><span class="p">):</span> <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span><span class="w"> </span><span class="nf">Hj</span><span class="p">(</span><span class="n">x</span><span class="p">):</span> <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ekf</span> <span class="o">=</span> <span class="n">ExtendedKalmanFilter</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">Fj</span><span class="p">,</span> <span class="n">Hj</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">Q</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">R</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="mf">0.5</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">x0</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">P0</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ekf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">states</span> <span class="o">=</span> <span class="n">ekf</span><span class="o">.</span><span class="n">predict</span><span class="p">()</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="tfilterspy.state_estimation.extended_kalman.ExtendedKalmanFilter.filter_step">
+<span class="sig-name descname"><span class="pre">filter_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/state_estimation/extended_kalman.html#ExtendedKalmanFilter.filter_step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.state_estimation.extended_kalman.ExtendedKalmanFilter.filter_step" title="Link to this definition"></a></dt>
+<dd><p>Single-step online EKF update.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tfilterspy.state_estimation.extended_kalman.ExtendedKalmanFilter.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/state_estimation/extended_kalman.html#ExtendedKalmanFilter.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.state_estimation.extended_kalman.ExtendedKalmanFilter.fit" title="Link to this definition"></a></dt>
+<dd><p>Run the EKF forward pass on measurements.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>X</strong> (<em>ndarray</em><em>, </em><em>shape</em><em> (</em><em>n_timesteps</em><em>, </em><em>n_obs</em><em>)</em>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>self</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tfilterspy.state_estimation.extended_kalman.ExtendedKalmanFilter.predict">
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/state_estimation/extended_kalman.html#ExtendedKalmanFilter.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.state_estimation.extended_kalman.ExtendedKalmanFilter.predict" title="Link to this definition"></a></dt>
+<dd><p>Return filtered state estimates.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tfilterspy.state_estimation.extended_kalman.ExtendedKalmanFilter.smooth">
+<span class="sig-name descname"><span class="pre">smooth</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/state_estimation/extended_kalman.html#ExtendedKalmanFilter.smooth"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.state_estimation.extended_kalman.ExtendedKalmanFilter.smooth" title="Link to this definition"></a></dt>
+<dd><p>RTS smoother for EKF (re-linearizes at filtered states).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><ul class="simple">
+<li><p><strong>smoothed_states</strong> (<em>ndarray, shape (n_timesteps, n_state)</em>)</p></li>
+<li><p><strong>smoothed_covs</strong> (<em>ndarray, shape (n_timesteps, n_state, n_state)</em>)</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-tfilterspy.state_estimation.unscented_kalman">
+<span id="unscented-kalman-filter"></span><h3>Unscented Kalman Filter<a class="headerlink" href="#module-tfilterspy.state_estimation.unscented_kalman" title="Link to this heading"></a></h3>
+<dl class="py class">
+<dt class="sig sig-object py" id="tfilterspy.state_estimation.unscented_kalman.UnscentedKalmanFilter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tfilterspy.state_estimation.unscented_kalman.</span></span><span class="sig-name descname"><span class="pre">UnscentedKalmanFilter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">R</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">P0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kappa</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/state_estimation/unscented_kalman.html#UnscentedKalmanFilter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.state_estimation.unscented_kalman.UnscentedKalmanFilter" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#tfilterspy.base_estimator.BaseEstimator" title="tfilterspy.base_estimator.BaseEstimator"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseEstimator</span></code></a></p>
+<p>Unscented Kalman Filter for nonlinear state-space models.</p>
+<p>Uses the unscented transform with sigma points to propagate mean and
+covariance through nonlinear functions — no Jacobians required.</p>
+<p>State-space model:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">x_</span><span class="p">{</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">}</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">x_k</span><span class="p">)</span> <span class="o">+</span> <span class="n">w_k</span><span class="p">,</span>    <span class="n">w_k</span> <span class="o">~</span> <span class="n">N</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">Q</span><span class="p">)</span>
+<span class="n">z_k</span>     <span class="o">=</span> <span class="n">h</span><span class="p">(</span><span class="n">x_k</span><span class="p">)</span> <span class="o">+</span> <span class="n">v_k</span><span class="p">,</span>     <span class="n">v_k</span> <span class="o">~</span> <span class="n">N</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">R</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>f</strong> (<em>callable</em>) – State transition function <code class="docutils literal notranslate"><span class="pre">f(x)</span> <span class="pre">-&gt;</span> <span class="pre">x_next</span></code>.</p></li>
+<li><p><strong>h</strong> (<em>callable</em>) – Observation function <code class="docutils literal notranslate"><span class="pre">h(x)</span> <span class="pre">-&gt;</span> <span class="pre">z</span></code>.</p></li>
+<li><p><strong>Q</strong> (<em>ndarray</em><em>, </em><em>shape</em><em> (</em><em>n_state</em><em>, </em><em>n_state</em><em>)</em>) – Process noise covariance.</p></li>
+<li><p><strong>R</strong> (<em>ndarray</em><em>, </em><em>shape</em><em> (</em><em>n_obs</em><em>, </em><em>n_obs</em><em>)</em>) – Observation noise covariance.</p></li>
+<li><p><strong>x0</strong> (<em>ndarray</em><em>, </em><em>shape</em><em> (</em><em>n_state</em><em>,</em><em>)</em>) – Initial state estimate.</p></li>
+<li><p><strong>P0</strong> (<em>ndarray</em><em>, </em><em>shape</em><em> (</em><em>n_state</em><em>, </em><em>n_state</em><em>)</em>) – Initial state covariance.</p></li>
+<li><p><strong>alpha</strong> (<em>float</em><em>, </em><em>optional</em>) – Spread of sigma points around the mean (default 1e-3).</p></li>
+<li><p><strong>beta</strong> (<em>float</em><em>, </em><em>optional</em>) – Prior distribution parameter; 2 is optimal for Gaussian (default 2.0).</p></li>
+<li><p><strong>kappa</strong> (<em>float</em><em>, </em><em>optional</em>) – Secondary scaling parameter (default 0).</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">tfilterspy</span><span class="w"> </span><span class="kn">import</span> <span class="n">UnscentedKalmanFilter</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">):</span> <span class="k">return</span> <span class="n">x</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span><span class="w"> </span><span class="nf">h</span><span class="p">(</span><span class="n">x</span><span class="p">):</span> <span class="k">return</span> <span class="n">x</span><span class="p">[:</span><span class="mi">1</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ukf</span> <span class="o">=</span> <span class="n">UnscentedKalmanFilter</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">Q</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">R</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="mf">0.5</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">x0</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">P0</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ukf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">states</span> <span class="o">=</span> <span class="n">ukf</span><span class="o">.</span><span class="n">predict</span><span class="p">()</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="tfilterspy.state_estimation.unscented_kalman.UnscentedKalmanFilter.filter_step">
+<span class="sig-name descname"><span class="pre">filter_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/state_estimation/unscented_kalman.html#UnscentedKalmanFilter.filter_step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.state_estimation.unscented_kalman.UnscentedKalmanFilter.filter_step" title="Link to this definition"></a></dt>
+<dd><p>Single-step online UKF update.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tfilterspy.state_estimation.unscented_kalman.UnscentedKalmanFilter.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/state_estimation/unscented_kalman.html#UnscentedKalmanFilter.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.state_estimation.unscented_kalman.UnscentedKalmanFilter.fit" title="Link to this definition"></a></dt>
+<dd><p>Run the UKF forward pass.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>X</strong> (<em>ndarray</em><em>, </em><em>shape</em><em> (</em><em>n_timesteps</em><em>, </em><em>n_obs</em><em>)</em>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>self</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tfilterspy.state_estimation.unscented_kalman.UnscentedKalmanFilter.predict">
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/state_estimation/unscented_kalman.html#UnscentedKalmanFilter.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.state_estimation.unscented_kalman.UnscentedKalmanFilter.predict" title="Link to this definition"></a></dt>
+<dd><p>Return filtered state estimates.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-tfilterspy.state_estimation.ensemble_kalman">
+<span id="ensemble-kalman-filter"></span><h3>Ensemble Kalman Filter<a class="headerlink" href="#module-tfilterspy.state_estimation.ensemble_kalman" title="Link to this heading"></a></h3>
+<dl class="py class">
+<dt class="sig sig-object py" id="tfilterspy.state_estimation.ensemble_kalman.EnsembleKalmanFilter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tfilterspy.state_estimation.ensemble_kalman.</span></span><span class="sig-name descname"><span class="pre">EnsembleKalmanFilter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">R</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">P0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_ensemble</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_dask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/state_estimation/ensemble_kalman.html#EnsembleKalmanFilter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.state_estimation.ensemble_kalman.EnsembleKalmanFilter" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#tfilterspy.base_estimator.BaseEstimator" title="tfilterspy.base_estimator.BaseEstimator"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseEstimator</span></code></a></p>
+<p>Ensemble Kalman Filter for high-dimensional state-space models.</p>
+<p>Approximates the Kalman filter using a Monte Carlo ensemble of state
+realizations. Scales to systems with millions of state variables where
+storing full covariance matrices is infeasible.</p>
+<p>Uses Dask for parallel ensemble member propagation when <code class="docutils literal notranslate"><span class="pre">use_dask=True</span></code>.</p>
+<p>State-space model:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">x_</span><span class="p">{</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">}</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">x_k</span><span class="p">)</span> <span class="o">+</span> <span class="n">w_k</span><span class="p">,</span>    <span class="n">w_k</span> <span class="o">~</span> <span class="n">N</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">Q</span><span class="p">)</span>
+<span class="n">z_k</span>     <span class="o">=</span> <span class="n">h</span><span class="p">(</span><span class="n">x_k</span><span class="p">)</span> <span class="o">+</span> <span class="n">v_k</span><span class="p">,</span>     <span class="n">v_k</span> <span class="o">~</span> <span class="n">N</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">R</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>f</strong> (<em>callable</em>) – State transition function <code class="docutils literal notranslate"><span class="pre">f(x)</span> <span class="pre">-&gt;</span> <span class="pre">x_next</span></code>.</p></li>
+<li><p><strong>h</strong> (<em>callable</em>) – Observation function <code class="docutils literal notranslate"><span class="pre">h(x)</span> <span class="pre">-&gt;</span> <span class="pre">z</span></code>.</p></li>
+<li><p><strong>Q</strong> (<em>ndarray</em><em>, </em><em>shape</em><em> (</em><em>n_state</em><em>, </em><em>n_state</em><em>)</em>) – Process noise covariance.</p></li>
+<li><p><strong>R</strong> (<em>ndarray</em><em>, </em><em>shape</em><em> (</em><em>n_obs</em><em>, </em><em>n_obs</em><em>)</em>) – Observation noise covariance.</p></li>
+<li><p><strong>x0</strong> (<em>ndarray</em><em>, </em><em>shape</em><em> (</em><em>n_state</em><em>,</em><em>)</em>) – Initial state estimate.</p></li>
+<li><p><strong>P0</strong> (<em>ndarray</em><em>, </em><em>shape</em><em> (</em><em>n_state</em><em>, </em><em>n_state</em><em>)</em>) – Initial state covariance.</p></li>
+<li><p><strong>n_ensemble</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of ensemble members (default 100).</p></li>
+<li><p><strong>use_dask</strong> (<em>bool</em><em>, </em><em>optional</em>) – Use Dask for parallel ensemble computation (default True).</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">tfilterspy</span><span class="w"> </span><span class="kn">import</span> <span class="n">EnsembleKalmanFilter</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">):</span> <span class="k">return</span> <span class="n">x</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span><span class="w"> </span><span class="nf">h</span><span class="p">(</span><span class="n">x</span><span class="p">):</span> <span class="k">return</span> <span class="n">x</span><span class="p">[:</span><span class="mi">1</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">enkf</span> <span class="o">=</span> <span class="n">EnsembleKalmanFilter</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">Q</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">R</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="mf">0.5</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">x0</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">P0</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">n_ensemble</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">enkf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">states</span> <span class="o">=</span> <span class="n">enkf</span><span class="o">.</span><span class="n">predict</span><span class="p">()</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="tfilterspy.state_estimation.ensemble_kalman.EnsembleKalmanFilter.filter_step">
+<span class="sig-name descname"><span class="pre">filter_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/state_estimation/ensemble_kalman.html#EnsembleKalmanFilter.filter_step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.state_estimation.ensemble_kalman.EnsembleKalmanFilter.filter_step" title="Link to this definition"></a></dt>
+<dd><p>Single-step online EnKF update.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tfilterspy.state_estimation.ensemble_kalman.EnsembleKalmanFilter.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/state_estimation/ensemble_kalman.html#EnsembleKalmanFilter.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.state_estimation.ensemble_kalman.EnsembleKalmanFilter.fit" title="Link to this definition"></a></dt>
+<dd><p>Run the EnKF forward pass.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>X</strong> (<em>ndarray</em><em>, </em><em>shape</em><em> (</em><em>n_timesteps</em><em>, </em><em>n_obs</em><em>)</em>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>self</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tfilterspy.state_estimation.ensemble_kalman.EnsembleKalmanFilter.predict">
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/state_estimation/ensemble_kalman.html#EnsembleKalmanFilter.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.state_estimation.ensemble_kalman.EnsembleKalmanFilter.predict" title="Link to this definition"></a></dt>
+<dd><p>Return filtered state estimates.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-tfilterspy.state_estimation.particle_filters">
+<span id="particle-filter"></span><h3>Particle Filter<a class="headerlink" href="#module-tfilterspy.state_estimation.particle_filters" title="Link to this heading"></a></h3>
+<dl class="py class">
+<dt class="sig sig-object py" id="tfilterspy.state_estimation.particle_filters.DaskParticleFilter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tfilterspy.state_estimation.particle_filters.</span></span><span class="sig-name descname"><span class="pre">DaskParticleFilter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state_transition</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">observation_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">process_noise_cov</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">observation_noise_cov</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_particles</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_dask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">estimation_strategy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'residual_analysis'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/state_estimation/particle_filters.html#DaskParticleFilter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.state_estimation.particle_filters.DaskParticleFilter" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#tfilterspy.state_estimation.particle_filters.ParticleFilter" title="tfilterspy.state_estimation.particle_filters.ParticleFilter"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParticleFilter</span></code></a></p>
+<p>Backward-compatible Particle Filter wrapper.</p>
+<p>Accepts the original DaskParticleFilter constructor signature
+and delegates to the new ParticleFilter implementation.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="tfilterspy.state_estimation.particle_filters.ParticleFilter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tfilterspy.state_estimation.particle_filters.</span></span><span class="sig-name descname"><span class="pre">ParticleFilter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">R</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_particles</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resample_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_dask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/state_estimation/particle_filters.html#ParticleFilter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.state_estimation.particle_filters.ParticleFilter" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#tfilterspy.base_estimator.BaseEstimator" title="tfilterspy.base_estimator.BaseEstimator"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseEstimator</span></code></a></p>
+<p>Sequential Importance Resampling (SIR) Particle Filter.</p>
+<p>Represents the posterior distribution using a set of weighted particles.
+Handles nonlinear, non-Gaussian state-space models where Kalman-based
+approaches fail.</p>
+<p>Supports both callable and matrix-based transition/observation models.
+When matrices are provided, particle propagation is vectorized for speed.</p>
+<p>State-space model:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">x_</span><span class="p">{</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">}</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">x_k</span><span class="p">)</span> <span class="o">+</span> <span class="n">w_k</span><span class="p">,</span>    <span class="n">w_k</span> <span class="o">~</span> <span class="n">N</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">Q</span><span class="p">)</span>
+<span class="n">z_k</span>     <span class="o">=</span> <span class="n">h</span><span class="p">(</span><span class="n">x_k</span><span class="p">)</span> <span class="o">+</span> <span class="n">v_k</span><span class="p">,</span>     <span class="n">v_k</span> <span class="o">~</span> <span class="n">N</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">R</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>f</strong> (<em>callable</em><em> or </em><em>ndarray</em>) – State transition. If callable: <code class="docutils literal notranslate"><span class="pre">f(x)</span> <span class="pre">-&gt;</span> <span class="pre">x_next</span></code>.
+If ndarray (n_state, n_state): linear transition matrix.</p></li>
+<li><p><strong>h</strong> (<em>callable</em><em> or </em><em>ndarray</em>) – Observation model. If callable: <code class="docutils literal notranslate"><span class="pre">h(x)</span> <span class="pre">-&gt;</span> <span class="pre">z</span></code>.
+If ndarray (n_obs, n_state): linear observation matrix.</p></li>
+<li><p><strong>Q</strong> (<em>ndarray</em><em>, </em><em>shape</em><em> (</em><em>n_state</em><em>, </em><em>n_state</em><em>)</em>) – Process noise covariance.</p></li>
+<li><p><strong>R</strong> (<em>ndarray</em><em>, </em><em>shape</em><em> (</em><em>n_obs</em><em>, </em><em>n_obs</em><em>)</em>) – Observation noise covariance.</p></li>
+<li><p><strong>x0</strong> (<em>ndarray</em><em>, </em><em>shape</em><em> (</em><em>n_state</em><em>,</em><em>)</em>) – Initial state estimate.</p></li>
+<li><p><strong>n_particles</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of particles (default 1000).</p></li>
+<li><p><strong>resample_threshold</strong> (<em>float</em><em>, </em><em>optional</em>) – ESS ratio below which resampling triggers (default 0.5).</p></li>
+<li><p><strong>use_dask</strong> (<em>bool</em><em>, </em><em>optional</em>) – Parallelize particle propagation with Dask (default False).</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">tfilterspy</span><span class="w"> </span><span class="kn">import</span> <span class="n">ParticleFilter</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">F</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">H</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pf</span> <span class="o">=</span> <span class="n">ParticleFilter</span><span class="p">(</span><span class="n">F</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">Q</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">R</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="mf">0.5</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">x0</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">n_particles</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">states</span> <span class="o">=</span> <span class="n">pf</span><span class="o">.</span><span class="n">predict</span><span class="p">()</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="tfilterspy.state_estimation.particle_filters.ParticleFilter.filter_step">
+<span class="sig-name descname"><span class="pre">filter_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/state_estimation/particle_filters.html#ParticleFilter.filter_step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.state_estimation.particle_filters.ParticleFilter.filter_step" title="Link to this definition"></a></dt>
+<dd><p>Single-step online particle filter update.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>z</strong> (<em>ndarray</em><em>, </em><em>shape</em><em> (</em><em>n_obs</em><em>,</em><em>)</em>) – Single measurement.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>state</strong> – Weighted mean state estimate.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ndarray, shape (n_state,)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tfilterspy.state_estimation.particle_filters.ParticleFilter.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/state_estimation/particle_filters.html#ParticleFilter.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.state_estimation.particle_filters.ParticleFilter.fit" title="Link to this definition"></a></dt>
+<dd><p>Run the particle filter on measurements.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>X</strong> (<em>ndarray</em><em>, </em><em>shape</em><em> (</em><em>n_timesteps</em><em>, </em><em>n_obs</em><em>)</em>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>self</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tfilterspy.state_estimation.particle_filters.ParticleFilter.predict">
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/state_estimation/particle_filters.html#ParticleFilter.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.state_estimation.particle_filters.ParticleFilter.predict" title="Link to this definition"></a></dt>
+<dd><p>Return filtered state estimates.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+<section id="module-tfilterspy.utils.optimisation_utils">
+<span id="utilities"></span><h2>Utilities<a class="headerlink" href="#module-tfilterspy.utils.optimisation_utils" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="tfilterspy.utils.optimisation_utils.ParameterEstimator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tfilterspy.utils.optimisation_utils.</span></span><span class="sig-name descname"><span class="pre">ParameterEstimator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimation_strategy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'residual_analysis'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/utils/optimisation_utils.html#ParameterEstimator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.utils.optimisation_utils.ParameterEstimator" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#tfilterspy.base_estimator.BaseEstimator" title="tfilterspy.base_estimator.BaseEstimator"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseEstimator</span></code></a></p>
+<p>A class for estimating Kalman Filter parameters, such as process noise covariance (Q)
+and observation noise covariance (R), using different estimation methods.</p>
+<p>Estimation strategies include:
+- Residual Analysis
+- Maximum Likelihood Estimation (MLE)
+- Cross-Validation
+- Adaptive Filtering</p>
+<p>References:
+- Welch, G., &amp; Bishop, G. (1995). An Introduction to the Kalman Filter.
+- Haykin, S. (2001). Kalman Filtering and Neural Networks.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="tfilterspy.utils.optimisation_utils.ParameterEstimator.estimate_parameters">
+<span class="sig-name descname"><span class="pre">estimate_parameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">measurements</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Array</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tfilterspy/utils/optimisation_utils.html#ParameterEstimator.estimate_parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.utils.optimisation_utils.ParameterEstimator.estimate_parameters" title="Link to this definition"></a></dt>
+<dd><p>Estimate the parameters Q and R using the specified estimation strategy.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tfilterspy.utils.optimisation_utils.ParameterEstimator.estimate_with_adaptive_filtering">
+<span class="sig-name descname"><span class="pre">estimate_with_adaptive_filtering</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">measurements</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Array</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="reference internal" href="_modules/tfilterspy/utils/optimisation_utils.html#ParameterEstimator.estimate_with_adaptive_filtering"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.utils.optimisation_utils.ParameterEstimator.estimate_with_adaptive_filtering" title="Link to this definition"></a></dt>
+<dd><p>Estimate Q and R adaptively based on innovations over time.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tfilterspy.utils.optimisation_utils.ParameterEstimator.estimate_with_cross_validation">
+<span class="sig-name descname"><span class="pre">estimate_with_cross_validation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">measurements</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k_folds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="reference internal" href="_modules/tfilterspy/utils/optimisation_utils.html#ParameterEstimator.estimate_with_cross_validation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.utils.optimisation_utils.ParameterEstimator.estimate_with_cross_validation" title="Link to this definition"></a></dt>
+<dd><p>Estimate Q and R using k-fold cross-validation.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tfilterspy.utils.optimisation_utils.ParameterEstimator.estimate_with_mle">
+<span class="sig-name descname"><span class="pre">estimate_with_mle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">measurements</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iterations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="reference internal" href="_modules/tfilterspy/utils/optimisation_utils.html#ParameterEstimator.estimate_with_mle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.utils.optimisation_utils.ParameterEstimator.estimate_with_mle" title="Link to this definition"></a></dt>
+<dd><p>Estimate Q and R using Maximum Likelihood Estimation (MLE).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tfilterspy.utils.optimisation_utils.ParameterEstimator.estimate_with_residual_analysis">
+<span class="sig-name descname"><span class="pre">estimate_with_residual_analysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">measurements</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Array</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="reference internal" href="_modules/tfilterspy/utils/optimisation_utils.html#ParameterEstimator.estimate_with_residual_analysis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tfilterspy.utils.optimisation_utils.ParameterEstimator.estimate_with_residual_analysis" title="Link to this definition"></a></dt>
+<dd><p>Estimate process (Q) and observation (R) noise covariances using residual analysis.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="api_cheatsheet.html" class="btn btn-neutral float-left" title="API Reference" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="literature.html" class="btn btn-neutral float-left" title="Theory" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="CONTRIBUTING.html" class="btn btn-neutral float-right" title="Contributing to TFiltersPy" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
