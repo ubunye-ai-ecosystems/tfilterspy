@@ -1,26 +1,51 @@
-name: Publish to PyPI
+name: Build, Test & Publish to PyPI
 
 on:
   push:
     branches:
       - main
     tags:
-      - 'v*.*.*'  # Only trigger on version tags
+      - 'v*.*.*'
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  build-and-publish:
+  test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.9", "3.10", "3.11", "3.12"]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Python 3.10
-        uses: actions/setup-python@v4
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .[dev]
+          pip install scipy numpy dask
+
+      - name: Run tests
+        run: pytest tests/ -v
+
+  publish:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref_type == 'tag'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
           python-version: "3.10"
-          check-latest: false
-          update-environment: true
-          allow-prereleases: false
 
       - name: Install build tools
         run: |
@@ -30,12 +55,7 @@ jobs:
       - name: Build package
         run: python -m build
 
-      - name: Install Package
-        run: |
-          pip install -e .
-
       - name: Publish to PyPI
-        if: github.ref_type == 'tag'  # Only publish on tag builds
         env:
           TWINE_USERNAME: __token__
           TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
