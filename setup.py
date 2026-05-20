@@ -22,10 +22,12 @@ setup(
 
     packages=find_packages(),
     install_requires=[
-        "dask>=2024.8.0",
+        "numpy>=1.20",
+        "scipy>=1.7",
+        "dask>=2021.1.0",
     ],
     extras_require={
-        "dev": ["pytest", "sphinx"],
+        "dev": ["pytest", "sphinx", "sphinx-rtd-theme", "nbsphinx"],
     },
     keywords="kalman filter, particle filter, Bayesian filtering, distributed computing, Dask, UAIE, Ubunye-AI-Ecosystems",
     python_requires=">=3.8",
