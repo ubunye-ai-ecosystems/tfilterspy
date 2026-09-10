@@ -87,7 +87,7 @@
 <div class="viewcode-block" id="UnscentedKalmanFilter">
 <a class="viewcode-back" href="../../../modules.html#tfilterspy.state_estimation.UnscentedKalmanFilter">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">UnscentedKalmanFilter</span><span class="p">(</span><span class="n">BaseEstimator</span><span class="p">):</span>
-<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">    Unscented Kalman Filter for nonlinear state-space models.</span>
 
 <span class="sd">    Uses the unscented transform with sigma points to propagate mean and</span>
@@ -130,7 +130,7 @@
 <span class="sd">    ...     x0=np.zeros(2), P0=np.eye(2))</span>
 <span class="sd">    &gt;&gt;&gt; ukf.fit(np.random.randn(50, 1))</span>
 <span class="sd">    &gt;&gt;&gt; states = ukf.predict()</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">P0</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">kappa</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
@@ -189,7 +189,7 @@
 <div class="viewcode-block" id="UnscentedKalmanFilter.fit">
 <a class="viewcode-back" href="../../../modules.html#tfilterspy.state_estimation.UnscentedKalmanFilter.fit">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Run the UKF forward pass.</span>
 
 <span class="sd">        Parameters</span>
@@ -199,8 +199,8 @@
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        self</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="s2">&quot;compute&quot;</span><span class="p">):</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="s2">"compute"</span><span class="p">):</span>
             <span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
         <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">X</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
@@ -244,7 +244,7 @@
                 <span class="p">)</span>
 
             <span class="c1"># --- Kalman gain and update ---</span>
-            <span class="n">S_inv</span> <span class="o">=</span> <span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">no</span><span class="p">),</span> <span class="n">assume_a</span><span class="o">=</span><span class="s2">&quot;pos&quot;</span><span class="p">)</span>
+            <span class="n">S_inv</span> <span class="o">=</span> <span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">no</span><span class="p">),</span> <span class="n">assume_a</span><span class="o">=</span><span class="s2">"pos"</span><span class="p">)</span>
             <span class="n">K</span> <span class="o">=</span> <span class="n">Pxz</span> <span class="o">@</span> <span class="n">S_inv</span>
 
             <span class="n">y</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">z_pred</span>
@@ -268,7 +268,7 @@
 <div class="viewcode-block" id="UnscentedKalmanFilter.predict">
 <a class="viewcode-back" href="../../../modules.html#tfilterspy.state_estimation.UnscentedKalmanFilter.predict">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return filtered state estimates.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Return filtered state estimates."""</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_check_fitted</span><span class="p">()</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">filtered_states_</span></div>
 
@@ -276,8 +276,8 @@
 <div class="viewcode-block" id="UnscentedKalmanFilter.filter_step">
 <a class="viewcode-back" href="../../../modules.html#tfilterspy.state_estimation.UnscentedKalmanFilter.filter_step">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">filter_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Single-step online UKF update.&quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_online_x&quot;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Single-step online UKF update."""</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">"_online_x"</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_online_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x0</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_online_P</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">P0</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 

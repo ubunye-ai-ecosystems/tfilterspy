@@ -88,7 +88,7 @@
 <div class="viewcode-block" id="ParameterEstimator">
 <a class="viewcode-back" href="../../../modules.html#tfilterspy.utils.optimisation_utils.ParameterEstimator">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">ParameterEstimator</span><span class="p">(</span><span class="n">BaseEstimator</span><span class="p">):</span>
-<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">    A class for estimating Kalman Filter parameters, such as process noise covariance (Q)</span>
 <span class="sd">    and observation noise covariance (R), using different estimation methods.</span>
 
@@ -101,65 +101,65 @@
 <span class="sd">    References:</span>
 <span class="sd">    - Welch, G., &amp; Bishop, G. (1995). An Introduction to the Kalman Filter.</span>
 <span class="sd">    - Haykin, S. (2001). Kalman Filtering and Neural Networks.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">estimation_strategy</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;residual_analysis&quot;</span><span class="p">):</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">estimation_strategy</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"residual_analysis"</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">        Initialize the ParameterEstimator with the desired estimation strategy.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        estimation_strategy : str, optional</span>
 <span class="sd">            The strategy to use for estimating parameters. Options include:</span>
-<span class="sd">            - &quot;residual_analysis&quot;: Estimate based on residuals after running the filter.</span>
-<span class="sd">            - &quot;mle&quot;: Maximum Likelihood Estimation (iterative approach).</span>
-<span class="sd">            - &quot;cross_validation&quot;: Perform k-fold cross-validation for best Q and R.</span>
-<span class="sd">            - &quot;adaptive_filtering&quot;: Dynamically update Q and R based on measurement residuals.</span>
+<span class="sd">            - "residual_analysis": Estimate based on residuals after running the filter.</span>
+<span class="sd">            - "mle": Maximum Likelihood Estimation (iterative approach).</span>
+<span class="sd">            - "cross_validation": Perform k-fold cross-validation for best Q and R.</span>
+<span class="sd">            - "adaptive_filtering": Dynamically update Q and R based on measurement residuals.</span>
 
 <span class="sd">        Raises</span>
 <span class="sd">        ------</span>
 <span class="sd">        ValueError</span>
 <span class="sd">            If an invalid estimation strategy is specified.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;KalmanFilterParameterEstimator&quot;</span><span class="p">)</span>
+<span class="sd">        """</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"KalmanFilterParameterEstimator"</span><span class="p">)</span>
         <span class="n">valid_strategies</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;residual_analysis&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;mle&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;cross_validation&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;adaptive_filtering&quot;</span><span class="p">,</span>
+            <span class="s2">"residual_analysis"</span><span class="p">,</span>
+            <span class="s2">"mle"</span><span class="p">,</span>
+            <span class="s2">"cross_validation"</span><span class="p">,</span>
+            <span class="s2">"adaptive_filtering"</span><span class="p">,</span>
         <span class="p">}</span>
         <span class="k">if</span> <span class="n">estimation_strategy</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">valid_strategies</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Invalid strategy: </span><span class="si">{</span><span class="n">estimation_strategy</span><span class="si">}</span><span class="s2">. Must be one of </span><span class="si">{</span><span class="n">valid_strategies</span><span class="si">}</span><span class="s2">.&quot;</span>
+                <span class="sa">f</span><span class="s2">"Invalid strategy: </span><span class="si">{</span><span class="n">estimation_strategy</span><span class="si">}</span><span class="s2">. Must be one of </span><span class="si">{</span><span class="n">valid_strategies</span><span class="si">}</span><span class="s2">."</span>
             <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">estimation_strategy</span> <span class="o">=</span> <span class="n">estimation_strategy</span>
 
 <div class="viewcode-block" id="ParameterEstimator.estimate_with_residual_analysis">
 <a class="viewcode-back" href="../../../modules.html#tfilterspy.utils.optimisation_utils.ParameterEstimator.estimate_with_residual_analysis">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">estimate_with_residual_analysis</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">measurements</span><span class="p">:</span> <span class="n">da</span><span class="o">.</span><span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">        Estimate process (Q) and observation (R) noise covariances using residual analysis.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">state_estimates</span><span class="p">,</span> <span class="n">residuals</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_filter</span><span class="p">(</span><span class="n">measurements</span><span class="p">)</span>
         <span class="n">Q</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">cov</span><span class="p">(</span><span class="n">residuals</span><span class="p">,</span> <span class="n">rowvar</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         <span class="c1"># Use auto chunking for the identity matrix</span>
-        <span class="n">R</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">chunks</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">da</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">residuals</span><span class="p">)</span>
+        <span class="n">R</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">chunks</span><span class="o">=</span><span class="s2">"auto"</span><span class="p">)</span> <span class="o">*</span> <span class="n">da</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">residuals</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">Q</span><span class="p">,</span> <span class="n">R</span></div>
 
 
 <div class="viewcode-block" id="ParameterEstimator.estimate_with_mle">
 <a class="viewcode-back" href="../../../modules.html#tfilterspy.utils.optimisation_utils.ParameterEstimator.estimate_with_mle">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">estimate_with_mle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">measurements</span><span class="p">:</span> <span class="n">da</span><span class="o">.</span><span class="n">Array</span><span class="p">,</span> <span class="n">max_iterations</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">        Estimate Q and R using Maximum Likelihood Estimation (MLE).</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">Q</span><span class="p">,</span> <span class="n">R</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Q</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">R</span>
 
         <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_iterations</span><span class="p">):</span>
             <span class="n">state_estimates</span><span class="p">,</span> <span class="n">residuals</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_filter</span><span class="p">(</span><span class="n">measurements</span><span class="p">)</span>
-            <span class="c1"># Use &quot;auto&quot; chunking for the identity matrices</span>
-            <span class="n">Q_new</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">residuals</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">chunks</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">da</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">residuals</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-            <span class="n">R_new</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">chunks</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">da</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">residuals</span><span class="p">)</span>
+            <span class="c1"># Use "auto" chunking for the identity matrices</span>
+            <span class="n">Q_new</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">residuals</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">chunks</span><span class="o">=</span><span class="s2">"auto"</span><span class="p">)</span> <span class="o">*</span> <span class="n">da</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">residuals</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">R_new</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">chunks</span><span class="o">=</span><span class="s2">"auto"</span><span class="p">)</span> <span class="o">*</span> <span class="n">da</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">residuals</span><span class="p">)</span>
             <span class="c1"># Persist intermediate results to avoid recomputation overhead</span>
             <span class="n">Q</span><span class="p">,</span> <span class="n">R</span> <span class="o">=</span> <span class="n">Q_new</span><span class="o">.</span><span class="n">persist</span><span class="p">(),</span> <span class="n">R_new</span><span class="o">.</span><span class="n">persist</span><span class="p">()</span>
 
@@ -169,9 +169,9 @@
 <div class="viewcode-block" id="ParameterEstimator.estimate_with_cross_validation">
 <a class="viewcode-back" href="../../../modules.html#tfilterspy.utils.optimisation_utils.ParameterEstimator.estimate_with_cross_validation">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">estimate_with_cross_validation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">measurements</span><span class="p">:</span> <span class="n">da</span><span class="o">.</span><span class="n">Array</span><span class="p">,</span> <span class="n">k_folds</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">        Estimate Q and R using k-fold cross-validation.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">n_samples</span> <span class="o">=</span> <span class="n">measurements</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">fold_size</span> <span class="o">=</span> <span class="n">n_samples</span> <span class="o">//</span> <span class="n">k_folds</span>
 
@@ -188,7 +188,7 @@
             <span class="n">fold_scores</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">val_score</span><span class="p">)</span>
 
             <span class="n">Q_fold</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">cov</span><span class="p">(</span><span class="n">residuals</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
-            <span class="n">R_fold</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">chunks</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">da</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">residuals</span><span class="p">)</span>
+            <span class="n">R_fold</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">chunks</span><span class="o">=</span><span class="s2">"auto"</span><span class="p">)</span> <span class="o">*</span> <span class="n">da</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">residuals</span><span class="p">)</span>
             <span class="n">fold_Qs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Q_fold</span><span class="p">)</span>
             <span class="n">fold_Rs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">R_fold</span><span class="p">)</span>
 
@@ -201,15 +201,15 @@
 <div class="viewcode-block" id="ParameterEstimator.estimate_with_adaptive_filtering">
 <a class="viewcode-back" href="../../../modules.html#tfilterspy.utils.optimisation_utils.ParameterEstimator.estimate_with_adaptive_filtering">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">estimate_with_adaptive_filtering</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">measurements</span><span class="p">:</span> <span class="n">da</span><span class="o">.</span><span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">        Estimate Q and R adaptively based on innovations over time.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">Q</span><span class="p">,</span> <span class="n">R</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Q</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">R</span>
         <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.01</span>
         <span class="n">innovations</span> <span class="o">=</span> <span class="n">measurements</span> <span class="o">-</span> <span class="n">da</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
-        <span class="n">outer_products</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s2">&quot;ij,ik-&gt;ijk&quot;</span><span class="p">,</span> <span class="n">innovations</span><span class="p">,</span> <span class="n">innovations</span><span class="p">)</span>
-        <span class="n">Q_new</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">outer_products</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">rechunk</span><span class="p">(</span><span class="s2">&quot;auto&quot;</span><span class="p">)</span>
-        <span class="n">R_new</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">innovations</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">rechunk</span><span class="p">(</span><span class="s2">&quot;auto&quot;</span><span class="p">)</span>
+        <span class="n">outer_products</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s2">"ij,ik-&gt;ijk"</span><span class="p">,</span> <span class="n">innovations</span><span class="p">,</span> <span class="n">innovations</span><span class="p">)</span>
+        <span class="n">Q_new</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">outer_products</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">rechunk</span><span class="p">(</span><span class="s2">"auto"</span><span class="p">)</span>
+        <span class="n">R_new</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">innovations</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">rechunk</span><span class="p">(</span><span class="s2">"auto"</span><span class="p">)</span>
 
         <span class="n">Q</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">)</span> <span class="o">*</span> <span class="n">Q</span> <span class="o">+</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">Q_new</span>
         <span class="n">R</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">)</span> <span class="o">*</span> <span class="n">R</span> <span class="o">+</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">R_new</span>
@@ -219,10 +219,10 @@
 <div class="viewcode-block" id="ParameterEstimator.estimate_parameters">
 <a class="viewcode-back" href="../../../modules.html#tfilterspy.utils.optimisation_utils.ParameterEstimator.estimate_parameters">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">estimate_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">measurements</span><span class="p">:</span> <span class="n">da</span><span class="o">.</span><span class="n">Array</span><span class="p">):</span>
-<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">        Estimate the parameters Q and R using the specified estimation strategy.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;estimate_with_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">estimation_strategy</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)(</span><span class="n">measurements</span><span class="p">)</span></div>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"estimate_with_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">estimation_strategy</span><span class="si">}</span><span class="s2">"</span><span class="p">)(</span><span class="n">measurements</span><span class="p">)</span></div>
 </div>
 
 </pre></div>

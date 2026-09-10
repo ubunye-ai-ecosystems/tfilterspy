@@ -88,7 +88,7 @@
 <div class="viewcode-block" id="KalmanFilter">
 <a class="viewcode-back" href="../../../modules.html#tfilterspy.state_estimation.KalmanFilter">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">KalmanFilter</span><span class="p">(</span><span class="n">BaseEstimator</span><span class="p">):</span>
-<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">    Kalman Filter for linear Gaussian state-space models.</span>
 
 <span class="sd">    Efficient numpy core with optional Dask support for batch processing.</span>
@@ -127,7 +127,7 @@
 <span class="sd">    &gt;&gt;&gt; kf.fit(np.random.randn(100, 2))</span>
 <span class="sd">    &gt;&gt;&gt; states = kf.predict()</span>
 <span class="sd">    &gt;&gt;&gt; smoothed, _ = kf.smooth()</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">F</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">P0</span><span class="p">,</span> <span class="n">store_covariances</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
@@ -135,17 +135,17 @@
 
         <span class="n">n_state</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">F</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="p">(</span><span class="n">n_state</span><span class="p">,</span> <span class="n">n_state</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;State transition matrix (F) must be square.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"State transition matrix (F) must be square."</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">H</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">n_state</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Observation matrix (H) columns must match state dimension.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Observation matrix (H) columns must match state dimension."</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">Q</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="p">(</span><span class="n">n_state</span><span class="p">,</span> <span class="n">n_state</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Process noise covariance (Q) dimensions must match F.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Process noise covariance (Q) dimensions must match F."</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">R</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">R</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">or</span> <span class="n">R</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">H</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Observation noise covariance (R) must be square with dimension matching H rows.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Observation noise covariance (R) must be square with dimension matching H rows."</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">x0</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="p">(</span><span class="n">n_state</span><span class="p">,):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Initial state (x0) must have length n_state.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Initial state (x0) must have length n_state."</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">P0</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="p">(</span><span class="n">n_state</span><span class="p">,</span> <span class="n">n_state</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Initial covariance (P0) dimensions must match F.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Initial covariance (P0) dimensions must match F."</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">F</span> <span class="o">=</span> <span class="n">F</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">H</span> <span class="o">=</span> <span class="n">H</span>
@@ -161,7 +161,7 @@
 <div class="viewcode-block" id="KalmanFilter.fit">
 <a class="viewcode-back" href="../../../modules.html#tfilterspy.state_estimation.KalmanFilter.fit">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Run the Kalman filter forward pass on measurements.</span>
 
 <span class="sd">        Parameters</span>
@@ -172,7 +172,7 @@
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        self</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">da</span><span class="o">.</span><span class="n">Array</span><span class="p">):</span>
             <span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
         <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
@@ -180,7 +180,7 @@
             <span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_obs</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Expected </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">n_obs</span><span class="si">}</span><span class="s2"> observation dimensions, got </span><span class="si">{</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">.&quot;</span>
+                <span class="sa">f</span><span class="s2">"Expected </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">n_obs</span><span class="si">}</span><span class="s2"> observation dimensions, got </span><span class="si">{</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">."</span>
             <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">measurements_</span> <span class="o">=</span> <span class="n">X</span>
@@ -227,7 +227,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">innovation_covs_</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">S</span>
 
             <span class="c1"># --- Update (Joseph form for numerical stability) ---</span>
-            <span class="n">S_inv</span> <span class="o">=</span> <span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">no</span><span class="p">),</span> <span class="n">assume_a</span><span class="o">=</span><span class="s2">&quot;pos&quot;</span><span class="p">)</span>
+            <span class="n">S_inv</span> <span class="o">=</span> <span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">no</span><span class="p">),</span> <span class="n">assume_a</span><span class="o">=</span><span class="s2">"pos"</span><span class="p">)</span>
             <span class="n">K</span> <span class="o">=</span> <span class="n">P_pred</span> <span class="o">@</span> <span class="n">H</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">S_inv</span>
 
             <span class="n">x</span> <span class="o">=</span> <span class="n">x_pred</span> <span class="o">+</span> <span class="n">K</span> <span class="o">@</span> <span class="n">y</span>
@@ -250,13 +250,13 @@
 <div class="viewcode-block" id="KalmanFilter.predict">
 <a class="viewcode-back" href="../../../modules.html#tfilterspy.state_estimation.KalmanFilter.predict">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Return filtered state estimates.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        filtered_states : ndarray, shape (n_timesteps, n_state)</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_check_fitted</span><span class="p">()</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">filtered_states_</span></div>
 
@@ -264,7 +264,7 @@
 <div class="viewcode-block" id="KalmanFilter.smooth">
 <a class="viewcode-back" href="../../../modules.html#tfilterspy.state_estimation.KalmanFilter.smooth">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">smooth</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Rauch-Tung-Striebel (RTS) backward smoothing pass.</span>
 
 <span class="sd">        Requires ``store_covariances=True`` (the default).</span>
@@ -273,10 +273,10 @@
 <span class="sd">        -------</span>
 <span class="sd">        smoothed_states : ndarray, shape (n_timesteps, n_state)</span>
 <span class="sd">        smoothed_covs : ndarray, shape (n_timesteps, n_state, n_state)</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_check_fitted</span><span class="p">()</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">store_covariances</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;smooth() requires store_covariances=True.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">"smooth() requires store_covariances=True."</span><span class="p">)</span>
 
         <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filtered_states_</span><span class="p">)</span>
         <span class="n">ns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_state</span>
@@ -304,7 +304,7 @@
 <div class="viewcode-block" id="KalmanFilter.filter_step">
 <a class="viewcode-back" href="../../../modules.html#tfilterspy.state_estimation.KalmanFilter.filter_step">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">filter_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Single-step online filtering.</span>
 
 <span class="sd">        Parameters</span>
@@ -318,8 +318,8 @@
 <span class="sd">            Updated state estimate.</span>
 <span class="sd">        P : ndarray, shape (n_state, n_state)</span>
 <span class="sd">            Updated covariance.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_online_x&quot;</span><span class="p">):</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">"_online_x"</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_online_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x0</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_online_P</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">P0</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 
@@ -343,7 +343,7 @@
 <div class="viewcode-block" id="KalmanFilter.forecast">
 <a class="viewcode-back" href="../../../modules.html#tfilterspy.state_estimation.KalmanFilter.forecast">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">forecast</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_steps</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Forecast future states beyond the observed data.</span>
 
 <span class="sd">        Parameters</span>
@@ -355,7 +355,7 @@
 <span class="sd">        -------</span>
 <span class="sd">        forecasted_states : ndarray, shape (n_steps, n_state)</span>
 <span class="sd">        forecasted_covs : ndarray, shape (n_steps, n_state, n_state)</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_check_fitted</span><span class="p">()</span>
         <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filtered_states_</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="n">P</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filtered_covs_</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">store_covariances</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">P0</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
@@ -375,7 +375,7 @@
 <div class="viewcode-block" id="KalmanFilter.run_filter">
 <a class="viewcode-back" href="../../../modules.html#tfilterspy.state_estimation.KalmanFilter.run_filter">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">run_filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">measurements</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Legacy method. Use fit() + predict() instead.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Legacy method. Use fit() + predict() instead."""</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">measurements</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">filtered_states_</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">innovations_</span></div>
 </div>
@@ -385,12 +385,12 @@
 <div class="viewcode-block" id="DaskKalmanFilter">
 <a class="viewcode-back" href="../../../modules.html#tfilterspy.state_estimation.DaskKalmanFilter">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">DaskKalmanFilter</span><span class="p">(</span><span class="n">KalmanFilter</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Backward-compatible Kalman Filter wrapper.</span>
 
 <span class="sd">    Accepts the same constructor signature as the original DaskKalmanFilter</span>
 <span class="sd">    and delegates to the new efficient KalmanFilter implementation.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -401,7 +401,7 @@
         <span class="n">initial_state</span><span class="p">,</span>
         <span class="n">initial_covariance</span><span class="p">,</span>
         <span class="n">chunk_size</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span>
-        <span class="n">estimation_strategy</span><span class="o">=</span><span class="s2">&quot;residual_analysis&quot;</span><span class="p">,</span>
+        <span class="n">estimation_strategy</span><span class="o">=</span><span class="s2">"residual_analysis"</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
             <span class="n">F</span><span class="o">=</span><span class="n">state_transition_matrix</span><span class="p">,</span>
@@ -417,9 +417,9 @@
 <div class="viewcode-block" id="DaskKalmanFilter.predict">
 <a class="viewcode-back" href="../../../modules.html#tfilterspy.state_estimation.DaskKalmanFilter.predict">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return filtered states as a Dask array for backward compatibility.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Return filtered states as a Dask array for backward compatibility."""</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_check_fitted</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">da</span><span class="o">.</span><span class="n">from_array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filtered_states_</span><span class="p">,</span> <span class="n">chunks</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">da</span><span class="o">.</span><span class="n">from_array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filtered_states_</span><span class="p">,</span> <span class="n">chunks</span><span class="o">=</span><span class="s2">"auto"</span><span class="p">)</span></div>
 </div>
 
 </pre></div>

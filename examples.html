@@ -207,7 +207,7 @@ UKF filtered:   33.66 m  (21% improvement)
 <span class="p">)</span>
 <span class="n">pf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">measurements</span><span class="p">)</span>
 <span class="n">states</span> <span class="o">=</span> <span class="n">pf</span><span class="o">.</span><span class="n">predict</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Mean ESS: </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">pf</span><span class="o">.</span><span class="n">effective_sample_sizes_</span><span class="p">)</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Mean ESS: </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">pf</span><span class="o">.</span><span class="n">effective_sample_sizes_</span><span class="p">)</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>PARTICLE FILTER RESULTS

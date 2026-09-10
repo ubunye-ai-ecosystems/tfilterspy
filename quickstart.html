@@ -133,7 +133,7 @@ We use a constant-velocity model to estimate the true trajectory.</p>
 
 <span class="c1"># Evaluate against ground truth</span>
 <span class="n">score</span> <span class="o">=</span> <span class="n">kf</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">true_states</span><span class="p">)</span>      <span class="c1"># negative MSE (higher = better)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Log-likelihood: </span><span class="si">{</span><span class="n">kf</span><span class="o">.</span><span class="n">log_likelihood_</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Log-likelihood: </span><span class="si">{</span><span class="n">kf</span><span class="o">.</span><span class="n">log_likelihood_</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </pre></div>
 </div>
 <p><strong>Result:</strong> 86% noise reduction (filtered), 96% (smoothed).</p>
@@ -145,11 +145,11 @@ bearing – a nonlinear observation model. The EKF linearizes using Jacobians.</
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">tfilterspy</span><span class="w"> </span><span class="kn">import</span> <span class="n">ExtendedKalmanFilter</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">f_aircraft</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Constant-velocity transition.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Constant-velocity transition."""</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">dt</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">dt</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="mi">3</span><span class="p">]])</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">h_radar</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Radar: [range, bearing] from origin.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Radar: [range, bearing] from origin."""</span>
     <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
     <span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">r</span><span class="p">,</span> <span class="n">theta</span><span class="p">])</span>
@@ -234,7 +234,7 @@ Handles nonlinear observations and multimodal distributions.</p>
 <span class="p">)</span>
 <span class="n">pf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">range_measurements</span><span class="p">)</span>
 <span class="n">states</span> <span class="o">=</span> <span class="n">pf</span><span class="o">.</span><span class="n">predict</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Mean ESS: </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">pf</span><span class="o">.</span><span class="n">effective_sample_sizes_</span><span class="p">)</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Mean ESS: </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">pf</span><span class="o">.</span><span class="n">effective_sample_sizes_</span><span class="p">)</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
