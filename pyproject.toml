@@ -7,8 +7,11 @@ name = "tfilterspy"
 dynamic = ["version"]
 description = "A Python package for state estimation using Kalman and Particle Filters"
 authors = [
-    { name = "Thabang Mashinini-Sekhoto", email = "thabangline@gmail.com" }
+    { name = "Thabang L. Mashinini-Sekgoto", email = "thabangline@gmail.com" },
+    { name = "Lebogang L. Sekgoto" },
+    { name = "Palesa L. Sekgoto" }
 ]
+keywords = ["kalman-filter", "particle-filter", "ensemble-kalman-filter", "unscented-kalman-filter", "state-estimation", "bayesian-filtering", "time-series", "sensor-fusion", "dask", "scikit-learn"]
 license = { file = "LICENSE" }
 readme = "README.md"
 dependencies = [
@@ -39,3 +42,4 @@ Documentation = "https://ubunye-ai-ecosystems.github.io/tfilterspy/"
 Repository = "https://github.com/ubunye-ai-ecosystems/tfilterspy.git"
 Tracker = "https://github.com/ubunye-ai-ecosystems/tfilterspy/issues"
 Author = "https://www.tmashininisekgoto.com"
+"Project page" = "https://www.tmashininisekgoto.com/work/tfilterspy"
